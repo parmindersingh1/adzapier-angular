@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { faChrome, faEdge, faFirefox, faSafari, faOpera } from '@fortawesome/free-brands-svg-icons';
 import { Subscription } from 'rxjs';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
-import { AuthenticationService, OrganizationService } from 'src/app/_services';
+import { AuthenticationService, OrganizationService, UserService } from 'src/app/_services';
 import { featuresName } from '../_constant/features-name.constant';
 import { moduleName } from '../_constant/module-name.constant';
 import { DataService } from '../_services/data.service';
@@ -45,6 +45,7 @@ export class AnalyticsComponent implements OnInit {
     private orgService: OrganizationService,
     private dataService: DataService,
     private loading: NgxUiLoaderService,
+    private userService:UserService,
     private cdRef: ChangeDetectorRef
   ) {
     this.authService.currentUser.subscribe(x => this.currentUser = x);
@@ -58,6 +59,7 @@ export class AnalyticsComponent implements OnInit {
 
 
   ngOnInit() {
+    this.userService.addUserActionOnActualButton.next({quickstartid:8,isclicked:null,isactualbtnclicked:false});
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     if(this.queryOID !== null && this.queryOID !== undefined){
     const obj = {
@@ -121,16 +123,16 @@ export class AnalyticsComponent implements OnInit {
       isLicensepurchased: this.isLicenseAssignedtoProperty,
       title: "Banner Configuration",
       iconcss: "fas fa-layer-group tx-primary temp-blue center tx-64 margin-15",
-      content: "Configure geo specific cookie banner, language and preference center.",
+      content: "Configure geo-specific cookie banner, language and preference center.",
       tooltipcontent: this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
-      routerlinktext: this.isLicenseAssignedtoProperty ? '/cookie-consent/cookie-banner' : '/settings/billing/manage',
+      routerlinktext: this.isLicenseAssignedtoProperty ? '/cookie-consent/banner-configuration' : '/settings/billing/manage',
       buttonText: this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
     }, {
       id: 3,
       isLicensepurchased: this.isLicenseAssignedtoProperty,
       title: "Setup",
       iconcss: "fas fa-wrench tx-primary temp-blue fa-3x center tx-64 margin-15",
-      content: "Setup consent banner Javascript CDN into your application",
+      content: "Setup consent banner JavaScript CDN into your application",
       tooltipcontent: this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
       routerlinktext: this.isLicenseAssignedtoProperty ? '/cookie-consent/cookie-banner/setup' : '/settings/billing/manage',
       buttonText: this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
@@ -148,7 +150,7 @@ export class AnalyticsComponent implements OnInit {
       isLicensepurchased: this.isConsentPreferenceLicenseAssignedToProperty,
       title: "Consent Preference",
       iconcss: "fas fa-file-signature tx-primary temp-blue center tx-64 margin-15",
-      content: "Collect user preference consent, document opt-ins/out via your web forms and systems.",
+      content: "Collect user preference consent, document opt-ins/opt-outs via your web forms and systems.",
       tooltipcontent: this.isConsentPreferenceLicenseAssignedToProperty ? '' : this.consentTooltipText,
       routerlinktext: this.isConsentPreferenceLicenseAssignedToProperty ? ['/home/dashboard/consent-preference'] : ['/settings/billing/manage'],
       buttonText: this.isConsentPreferenceLicenseAssignedToProperty ? 'Go Now' : 'Try Now'
@@ -167,6 +169,7 @@ export class AnalyticsComponent implements OnInit {
       if (this.noOfLicensePurchased == 5) {
         this.appsPositionRowOne.length = 0;
         this.appsPositionRowTwo.length = 0;
+        this.appsPositionRowThree.length = 0;
         this.appsPositionRowOne = this.appsContent.filter((item) => item.isLicensepurchased == true).slice(0, 3);
         this.appsPositionRowTwo = this.appsContent.filter((item) => item.isLicensepurchased == true).slice(3, 5);
         this.skeletonLoading = false;
@@ -181,6 +184,7 @@ export class AnalyticsComponent implements OnInit {
       } else if (this.noOfLicensePurchased == 3) {
         this.appsPositionRowOne.length = 0;
         this.appsPositionRowThree.length = 0;
+        this.appsPositionRowTwo.length = 0;
         this.appsPositionRowOne = this.appsContent.filter((item) => item.isLicensepurchased == true);
         this.appsPositionRowThree = this.appsContent.filter((item) => item.isLicensepurchased == false);
         this.skeletonLoading = false;
@@ -281,7 +285,6 @@ export class AnalyticsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    console.log('analytics ngdestroy..');
     if (this.sub !== undefined) {
       this.sub.unsubscribe();
     }

@@ -1,4 +1,4 @@
-<div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+<div class="pd-x-0 pd-lg-x-10 pd-xl-x-0">
   <div class="d-sm-flex align-items-center justify-content-between mg-b-5 mg-lg-b-10 mg-xl-b-15">
     <div>
       <nav aria-label="breadcrumb">
@@ -8,14 +8,27 @@
           <li class="breadcrumb-item active">Consent Analytics</li>
         </ol>
       </nav>
-      <h4 class="mg-b-0 tx-spacing--1"></h4>
+      <h4 class="mg-b-0 tx-spacing--1 pl-1">Cookie Consent Dashboard</h4>
     </div>
     <div class="d-none d-md-block">
       <div class="d-flex flex-column flex-sm-row mg-t-20 mg-md-t-0">
         <!--        <button class="btn btn-sm btn-white btn-uppercase pd-x-15"><i data-feather="download" class="mg-r-5"></i> Export-->
         <!--          CSV-->
         <!--        </button>-->
-        <button (click)="onRefreshAll()" class="btn btn-sm btn-white btn-uppercase pd-x-15 mg-t-5 mg-sm-t-0  mg-sm-l-5">
+
+        <div class="pr-0 d-flex row-reverse" style="margin-right: 20px;">
+          <div class="input-group-prepend"  (click)="dp.show()">
+            <span class="input-group-text rounded-right border-left-0 bg-white" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i></span>
+          </div>
+          <input type="text" [(ngModel)]="searchbydaterange" style="border-radius: 0"
+                 class="form-control date-input border-left-0  border-right-0 rounded-right"
+                 bsDaterangepicker [bsConfig]="bsConfig"  #dp="bsDaterangepicker" placement="bottom right" (onHidden)="onRefreshAll()">
+          <div class="input-group-prepend border-left-0"  (click)="dp.show()">
+            <span class="input-group-text rounded-left border-right-0 bg-white" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
+          </div>
+        </div>
+
+        <button (click)="onRefreshAll()" class="btn btn-sm btn-white btn-uppercase pd-x-15 mg-t-5 mg-sm-t-0  mg-sm-l-5" style="text-transform: none;font-size: 12px;">
           <i data-feather="eye"
              class="mg-r-5"></i>
           Refresh
@@ -32,7 +45,7 @@
         <div class="col-4 col-sm-2 col-md-2 ">
           <h4 class="tx-normal tx-rubik mg-b-10">{{dashboardCount.totalConsent}}</h4>
 
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Total Consents</h6>
+          <h6 class="tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-2">Total Consents</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg bd-l">
@@ -44,7 +57,7 @@
           </div>
 
           <h6
-            class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">
+            class="tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-2">
             Accept All</h6>
 
         </div><!-- col -->
@@ -55,7 +68,7 @@
                  role="progressbar" attr.aria-valuenow="{{dashboardCount.saveSetting}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Save Settings</h6>
+          <h6 class=" tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-2">Save Settings</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-md-t-0 bd-l">
@@ -65,7 +78,7 @@
                  role="progressbar" attr.aria-valuenow="{{dashboardCount.rejectAll}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Reject ALL</h6>
+          <h6 class="tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-2">Reject All</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-lg-t-0 bd-l">
@@ -75,7 +88,7 @@
                  role="progressbar" attr.aria-valuenow="{{dashboardCount.close}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Close</h6>
+          <h6 class="tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-2">Close</h6>
 
         </div><!-- col -->
         <div class="col-6 col-sm-4 col-md-3 col-lg mg-t-20 mg-lg-t-0 bd-l">
@@ -85,7 +98,7 @@
                  role="progressbar" attr.aria-valuenow="{{dashboardCount.doNotSale}}" aria-valuemin="0"
                  aria-valuemax="100"></div>
           </div>
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-2">Do not Sell</h6>
+          <h6 class="tx-spacing-1 tx-semibold tx-11 tx-color-02 mg-b-2">Do not Sell</h6>
 
         </div><!-- col -->
 
@@ -99,10 +112,10 @@
   <div class="row row-xs">
 
 
-    <div class="col-md-6 col-xl-4  order-md-1 order-xl-0">
+    <div class="col-md-5 col-xl-5  order-md-1 order-xl-0">
       <div class="card ">
         <div class="card-header req-header d-flex align-items-center justify-content-between">
-          <h6 class="mg-b-0">Request By State</h6>
+          <h6 class="mg-b-0" style="text-transform: none;font-size: 14px;">Requests by State</h6>
           <div class="dropdown dp-safari">
             <select (change)="onSelectCountryMap($event)" class="form-control" id="sel1">
               <option value="us">USA</option>
@@ -123,195 +136,216 @@
         </div><!-- card-body -->
       </div><!-- card -->
     </div><!-- col -->
-    <div class="col-md-4 mg-t-10 mg-md-t-0">
-      <div class="card">
-        <div class="card-header pd-t-20 ">
-          <h6 class="mg-b-0">Opt In Activities</h6>
-        </div><!-- card-header -->
-        <div class="card-body activity-card  pd-y-10">
-          <div  *ngIf="!loadingSkeleton.two">
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-15">Performance Score</h6>
-          <div class="progress bg-transparent op-7 ht-10 mg-b-15">
-            <div class="progress-bar bg-primary"
-                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_essantial, optIn.total_consents)+'%'}"
-                 role="progressbar" aria-valuenow="30" aria-valuemin="0"
-                 aria-valuemax="100"></div>
-            <div class="progress-bar bg-success bd-l bd-white"
-                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_analytics, optIn.total_consents)+'%'}"
-                 role="progressbar" aria-valuenow="15"
-                 aria-valuemin="0" aria-valuemax="100"></div>
-            <div class="progress-bar bg-warning bd-l bd-white"
-                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_advertising, optIn.total_consents)+'%'}"
-                 role="progressbar" aria-valuenow="5"
-                 aria-valuemin="0" aria-valuemax="100"></div>
-            <div class="progress-bar bg-pink  bd-l bd-white"
-                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_socialmedia, optIn.total_consents)+'%'}"
-                 role="progressbar" aria-valuenow="5" aria-valuemin="0"
-                 aria-valuemax="100"></div>
-            <div class="progress-bar bg-purple  bd-l bd-white"
-                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_functional, optIn.total_consents)+'%'}"
-                 role="progressbar" aria-valuenow="5" aria-valuemin="0"
-                 aria-valuemax="100"></div>
-            <div class="progress-bar bg-teal  bd-l bd-white"
-                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_unknown, optIn.total_consents)+'%'}"
-                 role="progressbar" aria-valuenow="5" aria-valuemin="0"
-                 aria-valuemax="100"></div>
-          </div>
-          <table class="table-dashboard-two">
-            <tbody>
-            <tr>
-              <td>
-                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-primary"></div>
-              </td>
-              <td class="tx-medium">Necessary Cookies</td>
-              <td class="text-right">{{optIn.allow_essantial}}</td>
-              <td class="text-right">{{onCalculateOptValue(optIn.allow_essantial, optIn.total_consents)}}%</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-success"></div>
-              </td>
-              <td class="tx-medium">Analytics</td>
-              <td class="text-right">{{optIn.allow_analytics}}</td>
-              <td class="text-right">{{onCalculateOptValue(optIn.allow_analytics, optIn.total_consents)}}%</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-warning"></div>
-              </td>
-              <td class="tx-medium">Advertising</td>
-              <td class="text-right">{{optIn.allow_advertising}}</td>
-              <td class="text-right">{{onCalculateOptValue(optIn.allow_advertising, optIn.total_consents)}}%</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-pink"></div>
-              </td>
-              <td class="tx-medium">Social Media</td>
-              <td class="text-right">{{optIn.allow_socialmedia}}</td>
-              <td class="text-right">{{onCalculateOptValue(optIn.allow_socialmedia, optIn.total_consents)}}%</td>
-            </tr>
+        <div class="col-md-7 col-xl-7  mg-t-10 mg-md-t-0">
+                <div class="card">
+                  <div class="card-header pd-t-20 ">
+                    <h6 class="mg-b-0">Activities</h6>
+                  </div>
+                  <div  class="card-body activity-card  pd-y-10">
+                    <canvas *ngIf="!loadingSkeleton.two" baseChart
+                            height="145" width="400"
+                            [datasets]="barChartData"
+                            [labels]="barChartLabels"
+                            [options]="barChartOptions"
+                            [plugins]="barChartPlugins"
+                            [legend]="barChartLegend"
+                            [colors]="chartColors"
+                            [chartType]="barChartType">
+                    </canvas>
+                    <ngx-skeleton-loader *ngIf="loadingSkeleton.two" [theme]="{height: '28px'}" count="6"></ngx-skeleton-loader>
+                  </div>
+                </div>
 
-            <tr>
-              <td>
-                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-purple"></div>
-              </td>
-              <td class="tx-medium">Functional</td>
-              <td class="text-right">{{optIn.allow_functional}}</td>
-              <td class="text-right">{{onCalculateOptValue(optIn.allow_functional, optIn.total_consents)}}%</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-teal"></div>
-              </td>
-              <td class="tx-medium">Unknown</td>
-              <td class="text-right">{{optIn.allow_unknown}}</td>
-              <td class="text-right">{{onCalculateOptValue(optIn.allow_unknown, optIn.total_consents)}}%</td>
-            </tr>
-            </tbody>
-          </table>
-          </div>
-          <ngx-skeleton-loader *ngIf="loadingSkeleton.two" count="5"></ngx-skeleton-loader>
-        </div><!-- card-body -->
-
-      </div><!-- card -->
-
-
-    </div>
-    <div class="col-md-4 mg-t-10 mg-md-t-0">
-      <div class="card">
-        <div class="card-header pd-t-20 ">
-          <h6 class="mg-b-0">Optout Activities</h6>
-        </div><!-- card-header -->
-        <div class="card-body activity-card  pd-y-10">
-          <div *ngIf="!loadingSkeleton.three">
-          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-15">Performance Score</h6>
-          <div class="progress bg-transparent op-7 ht-10 mg-b-15">
-            <div class="progress-bar bg-gray-900"
-                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_essantial, optOut.total_consents)+'%'}"
-                 role="progressbar" aria-valuenow="30" aria-valuemin="0"
-                 aria-valuemax="100"></div>
-            <div class="progress-bar bg-gray-800 bd-l bd-white"
-                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_advertising, optOut.total_consents)+'%'}"
-                 role="progressbar" aria-valuenow="15"
-                 aria-valuemin="0" aria-valuemax="100"></div>
-            <div class="progress-bar bg-gray-700 bd-l bd-white"
-                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_advertising, optOut.total_consents)+'%'}"
-                 role="progressbar" aria-valuenow="5"
-                 aria-valuemin="0" aria-valuemax="100"></div>
-            <div class="progress-bar bg-gray-600 bd-l bd-white"
-                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_socialmedia, optOut.total_consents)+'%'}"
-                 role="progressbar" aria-valuenow="5"
-                 aria-valuemin="0" aria-valuemax="100"></div>
-            <div class="progress-bar bg-gray-600 bd-l bd-white"
-                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_functional, optOut.total_consents)+'%'}"
-                 role="progressbar" aria-valuenow="5"
-                 aria-valuemin="0" aria-valuemax="100"></div>
-            <div class="progress-bar bg-gray-600 bd-l bd-white"
-                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_unknown, optOut.total_consents)+'%'}"
-                 role="progressbar" aria-valuenow="5"
-                 aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-
-          <table class="table-dashboard-two">
-            <tbody>
-            <tr>
-              <td>
-                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-900"></div>
-              </td>
-              <td class="tx-medium">Necessary Cookies</td>
-              <td class="text-right">{{optOut.allow_essantial}}</td>
-              <td class="text-right">{{onCalculateOptValue(optOut.allow_essantial, optOut.total_consents)}}%</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-800"></div>
-              </td>
-              <td class="tx-medium">Analytics</td>
-              <td class="text-right">{{optOut.allow_analytics}}</td>
-              <td class="text-right">{{onCalculateOptValue(optOut.allow_analytics, optOut.total_consents)}}%</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-700"></div>
-              </td>
-              <td class="tx-medium">Advertising</td>
-              <td class="text-right">{{optOut.allow_advertising}}</td>
-              <td class="text-right">{{onCalculateOptValue(optOut.allow_advertising, optOut.total_consents)}}%</td>
-            </tr>
-            <tr>
-              <td>
-                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-600"></div>
-              </td>
-              <td class="tx-medium">Social Media</td>
-              <td class="text-right">{{optOut.allow_socialmedia}}</td>
-              <td class="text-right">{{onCalculateOptValue(optOut.allow_socialmedia, optOut.total_consents)}}%</td>
-            </tr>
-
-            <tr>
-              <td>
-                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-600"></div>
-              </td>
-              <td class="tx-medium">Functional</td>
-              <td class="text-right">{{optOut.allow_functional}}</td>
-              <td class="text-right">{{onCalculateOptValue(optOut.allow_functional, optOut.total_consents)}}%</td>
-            </tr>
-
-            <tr>
-              <td>
-                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-600"></div>
-              </td>
-              <td class="tx-medium">Unknown</td>
-              <td class="text-right">{{optOut.allow_socialmedia}}</td>
-              <td class="text-right">{{onCalculateOptValue(optOut.allow_unknown, optOut.total_consents)}}%</td>
-            </tr>
-            </tbody>
-          </table>
         </div>
-          <ngx-skeleton-loader *ngIf="loadingSkeleton.three" count="5"></ngx-skeleton-loader>
-        </div><!-- card-body -->
-      </div><!-- card -->
-    </div>
+<!--    <div class="col-md-4 mg-t-10 mg-md-t-0">-->
+<!--      <div class="card">-->
+<!--        <div class="card-header pd-t-20 ">-->
+<!--          <h6 class="mg-b-0">Opt In Activities</h6>-->
+<!--        </div>&lt;!&ndash; card-header &ndash;&gt;-->
+<!--        <div class="card-body activity-card  pd-y-10">-->
+<!--          <div  *ngIf="!loadingSkeleton.two">-->
+<!--          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-15">Performance Score</h6>-->
+<!--          <div class="progress bg-transparent op-7 ht-10 mg-b-15">-->
+<!--            <div class="progress-bar bg-primary"-->
+<!--                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_essantial, optIn.total_consents)+'%'}"-->
+<!--                 role="progressbar" aria-valuenow="30" aria-valuemin="0"-->
+<!--                 aria-valuemax="100"></div>-->
+<!--            <div class="progress-bar bg-success bd-l bd-white"-->
+<!--                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_analytics, optIn.total_consents)+'%'}"-->
+<!--                 role="progressbar" aria-valuenow="15"-->
+<!--                 aria-valuemin="0" aria-valuemax="100"></div>-->
+<!--            <div class="progress-bar bg-warning bd-l bd-white"-->
+<!--                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_advertising, optIn.total_consents)+'%'}"-->
+<!--                 role="progressbar" aria-valuenow="5"-->
+<!--                 aria-valuemin="0" aria-valuemax="100"></div>-->
+<!--            <div class="progress-bar bg-pink  bd-l bd-white"-->
+<!--                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_socialmedia, optIn.total_consents)+'%'}"-->
+<!--                 role="progressbar" aria-valuenow="5" aria-valuemin="0"-->
+<!--                 aria-valuemax="100"></div>-->
+<!--            <div class="progress-bar bg-purple  bd-l bd-white"-->
+<!--                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_functional, optIn.total_consents)+'%'}"-->
+<!--                 role="progressbar" aria-valuenow="5" aria-valuemin="0"-->
+<!--                 aria-valuemax="100"></div>-->
+<!--            <div class="progress-bar bg-teal  bd-l bd-white"-->
+<!--                 [ngStyle]="{'width': onCalculateOptValue(optIn.allow_unknown, optIn.total_consents)+'%'}"-->
+<!--                 role="progressbar" aria-valuenow="5" aria-valuemin="0"-->
+<!--                 aria-valuemax="100"></div>-->
+<!--          </div>-->
+<!--          <table class="table-dashboard-two">-->
+<!--            <tbody>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-primary"></div>-->
+<!--              </td>-->
+<!--              <td class="tx-medium">Necessary Cookies</td>-->
+<!--              <td class="text-right">{{optIn.allow_essantial}}</td>-->
+<!--              <td class="text-right">{{onCalculateOptValue(optIn.allow_essantial, optIn.total_consents)}}%</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-success"></div>-->
+<!--              </td>-->
+<!--              <td class="tx-medium">Analytics</td>-->
+<!--              <td class="text-right">{{optIn.allow_analytics}}</td>-->
+<!--              <td class="text-right">{{onCalculateOptValue(optIn.allow_analytics, optIn.total_consents)}}%</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-warning"></div>-->
+<!--              </td>-->
+<!--              <td class="tx-medium">Advertising</td>-->
+<!--              <td class="text-right">{{optIn.allow_advertising}}</td>-->
+<!--              <td class="text-right">{{onCalculateOptValue(optIn.allow_advertising, optIn.total_consents)}}%</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-pink"></div>-->
+<!--              </td>-->
+<!--              <td class="tx-medium">Social Media</td>-->
+<!--              <td class="text-right">{{optIn.allow_socialmedia}}</td>-->
+<!--              <td class="text-right">{{onCalculateOptValue(optIn.allow_socialmedia, optIn.total_consents)}}%</td>-->
+<!--            </tr>-->
+
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-purple"></div>-->
+<!--              </td>-->
+<!--              <td class="tx-medium">Functional</td>-->
+<!--              <td class="text-right">{{optIn.allow_functional}}</td>-->
+<!--              <td class="text-right">{{onCalculateOptValue(optIn.allow_functional, optIn.total_consents)}}%</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-teal"></div>-->
+<!--              </td>-->
+<!--              <td class="tx-medium">Unknown</td>-->
+<!--              <td class="text-right">{{optIn.allow_unknown}}</td>-->
+<!--              <td class="text-right">{{onCalculateOptValue(optIn.allow_unknown, optIn.total_consents)}}%</td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--          </table>-->
+<!--          </div>-->
+<!--          <ngx-skeleton-loader *ngIf="loadingSkeleton.two" count="5"></ngx-skeleton-loader>-->
+<!--        </div>&lt;!&ndash; card-body &ndash;&gt;-->
+
+<!--      </div>&lt;!&ndash; card &ndash;&gt;-->
+
+
+<!--    </div>-->
+<!--    <div class="col-md-4 mg-t-10 mg-md-t-0">-->
+<!--      <div class="card">-->
+<!--        <div class="card-header pd-t-20 ">-->
+<!--          <h6 class="mg-b-0">Optout Activities</h6>-->
+<!--        </div>&lt;!&ndash; card-header &ndash;&gt;-->
+<!--        <div class="card-body activity-card  pd-y-10">-->
+<!--          <div *ngIf="!loadingSkeleton.three">-->
+<!--          <h6 class="tx-uppercase tx-spacing-1 tx-semibold tx-10 tx-color-02 mg-b-15">Performance Score</h6>-->
+<!--          <div class="progress bg-transparent op-7 ht-10 mg-b-15">-->
+<!--            <div class="progress-bar bg-gray-900"-->
+<!--                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_essantial, optOut.total_consents)+'%'}"-->
+<!--                 role="progressbar" aria-valuenow="30" aria-valuemin="0"-->
+<!--                 aria-valuemax="100"></div>-->
+<!--            <div class="progress-bar bg-gray-800 bd-l bd-white"-->
+<!--                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_advertising, optOut.total_consents)+'%'}"-->
+<!--                 role="progressbar" aria-valuenow="15"-->
+<!--                 aria-valuemin="0" aria-valuemax="100"></div>-->
+<!--            <div class="progress-bar bg-gray-700 bd-l bd-white"-->
+<!--                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_advertising, optOut.total_consents)+'%'}"-->
+<!--                 role="progressbar" aria-valuenow="5"-->
+<!--                 aria-valuemin="0" aria-valuemax="100"></div>-->
+<!--            <div class="progress-bar bg-gray-600 bd-l bd-white"-->
+<!--                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_socialmedia, optOut.total_consents)+'%'}"-->
+<!--                 role="progressbar" aria-valuenow="5"-->
+<!--                 aria-valuemin="0" aria-valuemax="100"></div>-->
+<!--            <div class="progress-bar bg-gray-600 bd-l bd-white"-->
+<!--                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_functional, optOut.total_consents)+'%'}"-->
+<!--                 role="progressbar" aria-valuenow="5"-->
+<!--                 aria-valuemin="0" aria-valuemax="100"></div>-->
+<!--            <div class="progress-bar bg-gray-600 bd-l bd-white"-->
+<!--                 [ngStyle]="{'width': onCalculateOptValue(optOut.allow_unknown, optOut.total_consents)+'%'}"-->
+<!--                 role="progressbar" aria-valuenow="5"-->
+<!--                 aria-valuemin="0" aria-valuemax="100"></div>-->
+<!--          </div>-->
+
+<!--          <table class="table-dashboard-two">-->
+<!--            <tbody>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-900"></div>-->
+<!--              </td>-->
+<!--              <td class="tx-medium">Necessary Cookies</td>-->
+<!--              <td class="text-right">{{optOut.allow_essantial}}</td>-->
+<!--              <td class="text-right">{{onCalculateOptValue(optOut.allow_essantial, optOut.total_consents)}}%</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-800"></div>-->
+<!--              </td>-->
+<!--              <td class="tx-medium">Analytics</td>-->
+<!--              <td class="text-right">{{optOut.allow_analytics}}</td>-->
+<!--              <td class="text-right">{{onCalculateOptValue(optOut.allow_analytics, optOut.total_consents)}}%</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-700"></div>-->
+<!--              </td>-->
+<!--              <td class="tx-medium">Advertising</td>-->
+<!--              <td class="text-right">{{optOut.allow_advertising}}</td>-->
+<!--              <td class="text-right">{{onCalculateOptValue(optOut.allow_advertising, optOut.total_consents)}}%</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-600"></div>-->
+<!--              </td>-->
+<!--              <td class="tx-medium">Social Media</td>-->
+<!--              <td class="text-right">{{optOut.allow_socialmedia}}</td>-->
+<!--              <td class="text-right">{{onCalculateOptValue(optOut.allow_socialmedia, optOut.total_consents)}}%</td>-->
+<!--            </tr>-->
+
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-600"></div>-->
+<!--              </td>-->
+<!--              <td class="tx-medium">Functional</td>-->
+<!--              <td class="text-right">{{optOut.allow_functional}}</td>-->
+<!--              <td class="text-right">{{onCalculateOptValue(optOut.allow_functional, optOut.total_consents)}}%</td>-->
+<!--            </tr>-->
+
+<!--            <tr>-->
+<!--              <td>-->
+<!--                <div class="wd-12 ht-12 rounded-circle bd bd-3 bd-gray-600"></div>-->
+<!--              </td>-->
+<!--              <td class="tx-medium">Unknown</td>-->
+<!--              <td class="text-right">{{optOut.allow_socialmedia}}</td>-->
+<!--              <td class="text-right">{{onCalculateOptValue(optOut.allow_unknown, optOut.total_consents)}}%</td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--          </table>-->
+<!--        </div>-->
+<!--          <ngx-skeleton-loader *ngIf="loadingSkeleton.three" count="5"></ngx-skeleton-loader>-->
+<!--        </div>&lt;!&ndash; card-body &ndash;&gt;-->
+<!--      </div>&lt;!&ndash; card &ndash;&gt;-->
+<!--    </div>-->
 
 
     <div class="col-12 mg-t-10">
@@ -323,12 +357,12 @@
           <div class="row w-100 mb-2">
             <div class="col-md-11">
               <h6 class="mg-b-5">Consent Details</h6>
-              <p class="tx-13 tx-color-03 mg-b-0">Your cookie consent detail</p>
+<!--              <p class="tx-13 tx-color-03 mg-b-0">Your cookie consent detail</p>-->
             </div>
             <div class="col-md-1 dp-safari">
-              <select (change)="onSelectCountry($event)" class="form-control" id="sel1">
-                <option *ngFor="let country of countryList" [value]="country.country">{{country.country}}</option>
-              </select>
+<!--              <select (change)="onSelectCountry($event)" class="form-control" id="sel1">-->
+<!--                <option *ngFor="let country of countryList" [value]="country.country">{{country.country}}</option>-->
+<!--              </select>-->
             </div>
           </div>
         </div>
@@ -338,8 +372,7 @@
             <table class="table table-dashboard mg-b-0">
               <thead>
               <tr>
-                <th>Country</th>
-                <th>Action</th>
+                <th class="pl-4">Status</th>
                 <th class="text-right"> Necessary Cookies</th>
                 <th class="text-right"> Analytics</th>
                 <th class="text-right">Advertising</th>
@@ -350,14 +383,13 @@
               </thead>
               <tbody>
               <tr *ngFor="let obj of consentDetails">
-                <td class="tx-normal ">{{obj.country}}</td>
-                <td class="tx-normal ">{{obj.action}}</td>
-                <td class="tx-normal text-right">{{obj.allow_essantial ? obj.allow_essantial : 0}}</td>
-                <td class="tx-medium text-right"> {{obj.allow_analytics ? obj.allow_analytics : 0}}</td>
-                <td class="tx-medium text-right"> {{obj.allow_advertising ? obj.allow_advertising : 0}}</td>
-                <td class="tx-medium text-right"> {{obj.allow_socialmedia ? obj.allow_socialmedia : 0}}</td>
-                <td class="tx-medium text-right"> {{obj.allow_functional ? obj.allow_functional : 0}}</td>
-                <td class="tx-medium text-right"> {{obj.allow_unknown ? obj.allow_unknown : 0}}</td>
+                <td class="tx-normal text-capitalize pl-4">{{obj.status.replaceAll('_', ' ')}}</td>
+                <td class="tx-normal text-right">{{obj.allow_essantial_count ? obj.allow_essantial_count : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_analytics_count ? obj.allow_analytics_count : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_advertising_count ? obj.allow_advertising_count : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_social_media_count ? obj.allow_social_media_count : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_functional_count ? obj.allow_functional_count : 0}}</td>
+                <td class="tx-medium text-right"> {{obj.allow_unknown_count ? obj.allow_unknown_count : 0}}</td>
               </tr>
               </tbody>
 

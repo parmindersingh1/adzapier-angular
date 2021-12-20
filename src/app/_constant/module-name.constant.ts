@@ -28,4 +28,5 @@ export const moduleName = {
   manageSubscriptionsModule: 'ManageSubscriptionModule',
   consentSolutionModule: 'ConsentSolutionModule',
   inviteUserModule:'InviteuserpasswordModule',
+  systemIntegrationModule: 'SystemIntegrationModule'
 };

@@ -1,0 +1,315 @@
+/*
+ * Dashforge Auth Pages (Signin, Signup, etc.)
+ *
+ * This style is use in auth pages.
+ *
+ */
+ .content-auth {
+    min-height: calc(100vh - 106px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center; }
+    .content-auth > .container {
+      padding: 0; }
+      @media (max-width: 1139px) {
+        .content-auth > .container {
+          max-width: none;
+          padding: 0 20px; } }
+      .content-auth > .container:first-child {
+        flex: 1; }
+
+  .content-auth-alt {
+    min-height: calc(100vh - 106px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center; }
+    .content-auth-alt .container {
+      padding: 0; }
+      @media (max-width: 1139px) {
+        .content-auth-alt .container {
+          max-width: none; } }
+
+  .sign-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 340px; }
+    @media (min-width: 1200px) {
+      .sign-wrapper {
+        width: 340px; } }
+    .sign-wrapper .form-group label {
+      display: block;
+      margin-bottom: 5px; }
+
+.alert-success {
+  background-color: #5cb85c;
+ border-color: #4cae4c;
+ color: #fff;
+ padding: 12px 32px 12px 12px !important;
+}
+
+.alert-danger {
+ color: #721c24;
+ background-color: #f8d7da;
+ border-color: #f5c6cb;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+  display: none;
+}
+
+.flotingdiv {
+	position: fixed;
+	bottom: 0;
+	top: 84%;
+	right:0;
+	overflow-x: hidden;
+  overflow-y: auto;
+}
+
+::ng-deep .alert {
+  padding: 12px 35px 12px 12px;
+}
+
+
+#spinner {
+	-webkit-animation: frames 1s infinite linear;
+	animation: frames 2s infinite linear;
+	background: transparent;
+	border: 0.7vw solid white;
+	border-radius: 100%;
+	border-top-color: #000000;
+	width: 5vw;
+	height: 5vw;
+	// opacity: .6;
+	padding: 0;
+	position: absolute;
+	z-index: 999;
+}
+@keyframes frames {
+  0% {
+	-webkit-transform: rotate(0deg);
+	transform: rotate(0deg);
+  }
+  100% {
+	-webkit-transform: rotate(359deg);
+	transform: rotate(359deg);
+  }
+}
+
+#pause {
+	display: block;
+	background:
+		rgba(0, 0, 0, 0.66)
+		no-repeat
+		0 0;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	z-index: 1000;
+}
+
+.login-background {
+  background-image: linear-gradient(#042b60, #004097);
+  height: 105%;
+  margin: 0px;
+  padding-bottom: 200px;
+  position: fixed;
+  overflow: scroll;
+}
+.login-form{
+  width: 700px;
+  padding: 25px 30px 30px 30px;
+  min-height: calc(100% - 265px);
+}
+.input-lg {
+  height: 55px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.logo-group{
+text-align: center;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+.az-logo{
+  height: 65px;
+}
+
+.required-asterisk{
+  color: red;
+  font-weight: bold;
+  margin-left: 2px;
+  font-size: 1.0em;
+}
+.register-btn {
+  background-color: #243553;
+  font-size: 20px;
+  width: 335px;
+  height: 50px;
+  border: none;
+}
+.forgot-password{
+  float: right;
+  margin-right: 15px;
+  margin-top: 11px;
+  font-size: 15px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.forgot-password a{
+  color: #555
+}
+
+/*email verification*/
+
+.email-verification-panel {
+  position: relative;
+  top: -10px;
+  height: 100px;
+  z-index: 1500;
+  background: #ffffff;
+}
+
+.hide-emailpanel {
+  display: none;
+}
+
+.show-emailpanel {
+  display:block;
+}
+
+.hide-resend {
+  display: none;
+}
+
+.showlogin {
+  display: block;
+}
+
+.confirm-msg {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: green;
+  font-size: 16px;
+}
+
+.relative-txt-center {
+  position: relative;
+  text-align: center;
+}
+
+.img-zindex {
+  z-index: 2500;
+}
+
+.back-arrow {
+  position: absolute;
+  left: 0;
+  top: 4px;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.back-arrow:hover {
+  color:blue;
+}
+
+svg {
+  width: 40px;
+  display: block;
+  margin: 10px;
+}
+.path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+}
+.path.circle {
+  -webkit-animation: dash 0.9s ease-in-out;
+  animation: dash 0.9s ease-in-out;
+}
+.path.line {
+  stroke-dashoffset: 1000;
+  -webkit-animation: dash 0.9s 0.35s ease-in-out forwards;
+  animation: dash 0.9s 0.35s ease-in-out forwards;
+}
+.path.check {
+  stroke-dashoffset: -100;
+  -webkit-animation: dash-check 0.9s 0.35s ease-in-out forwards;
+  animation: dash-check 0.9s 0.35s ease-in-out forwards;
+}
+.msg {
+  text-align: center;
+  margin: 0 auto;
+  display: flex;
+  font-size: 15px;
+  background: #fff;
+  color: #0168fa;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  align-items: center;
+  justify-content: right;
+  width: 730px;
+}
+
+.msg span a {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.msg.success {
+  color: #73af55;
+}
+p.error {
+  color: #d06079;
+}
+
+.verification-msg{
+  color:#fff;
+  min-height:calc(100vh - 265px)
+}
+
+.min-calcheight {
+  min-height: calc(100vh - 20px);
+}
+
+@-webkit-keyframes dash {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 1000;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@-webkit-keyframes dash-check {
+  0% {
+    stroke-dashoffset: -100;
+  }
+  100% {
+    stroke-dashoffset: 900;
+  }
+}
+@keyframes dash-check {
+  0% {
+    stroke-dashoffset: -100;
+  }
+  100% {
+    stroke-dashoffset: 900;
+  }
+}
+

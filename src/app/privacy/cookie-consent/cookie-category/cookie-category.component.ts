@@ -1,10 +1,10 @@
-import {ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnInit, TemplateRef, AfterViewChecked, ViewEncapsulation} from '@angular/core';
 import {CookieCategoryService} from '../../../_services/cookie-category.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
-import {AuthenticationService, OrganizationService} from '../../../_services';
+import {AuthenticationService, OrganizationService, UserService} from '../../../_services';
 import {ConfirmationService, MessageService, SortEvent} from 'primeng/api';
 import {moduleName} from '../../../_constant/module-name.constant';
 import {cookieName} from '../../../_constant/cookies-name.constant';
@@ -12,6 +12,11 @@ import {ChartOptions} from 'chart.js';
 import {DataService} from 'src/app/_services/data.service';
 import {featuresName} from 'src/app/_constant/features-name.constant';
 import {ActivatedRoute, Router} from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import { forkJoin, Observable, Subject } from 'rxjs';
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
+import { QuickStart } from 'src/app/_models/quickstart';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 const colorCodes = ['#f77eb9', '#fdb16d', '#c693f9', '#65e0e0', '#69b2f8', '#6fd39b'];
 
@@ -28,7 +33,9 @@ interface ColInterface {
   encapsulation: ViewEncapsulation.None
 })
 
-export class CookieCategoryComponent implements OnInit {
+export class CookieCategoryComponent implements OnInit {//AfterViewChecked
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
+  private unsubscribeAfterQSMenuClick$: Subject<any> = new Subject<any>();
   skeletonLoading = {
     one: false,
     two: false
@@ -96,16 +103,29 @@ export class CookieCategoryComponent implements OnInit {
   scanError = false;
   queryOID;
   queryPID;
+  isqsmenuscan:any;
+  isqsmenubanner:any;
+  quickDivID;
+  quickDivIDBanner;
+  isRevistedLinkCS:boolean;
+  currentLinkIDCS:any;
+  isRevistedLinkCB:boolean;
+  currentLinkIDCB:any;
+  actuallinkstatusCS:boolean = false;
+  actuallinkstatusCB:boolean = false;
   constructor(private service: CookieCategoryService,
               private cd: ChangeDetectorRef,
               private dataService: DataService,
               private modalService: BsModalService,
+              private ngbModal: NgbModal,
               private loading: NgxUiLoaderService,
               private orgservice: OrganizationService,
               public dialog: MatDialog,
               private formBuilder: FormBuilder,
               private messageService: MessageService, private confirmationService: ConfirmationService,
               private authService: AuthenticationService,
+              private userService: UserService,
+              private quickmenuService: QuickmenuService,
               private activateRoute: ActivatedRoute,
               private router: Router
   ) {
@@ -116,6 +136,8 @@ export class CookieCategoryComponent implements OnInit {
     // setInterval( () => {
     //   this.onGetScanningStatus();
     // }, 30000);
+    this.quickDivID = 7;
+   
     this.activateRoute.queryParamMap
       .subscribe(params => {
         this.queryOID = params.get('oid');
@@ -267,8 +289,10 @@ export class CookieCategoryComponent implements OnInit {
     }
     if (this.isUpdate) {
       this.onUpdate(catForm);
+      this.ngbModal.dismissAll('Canceled');
     } else {
       this.saveProduct(catForm);
+      this.ngbModal.dismissAll('Canceled');
     }
   }
 
@@ -286,12 +310,13 @@ export class CookieCategoryComponent implements OnInit {
     this.productDialog = true;
   }
 
-  editProduct(product) {
+  editProduct(content,product) {
     this.catId = product.id;
     this.isUpdate = true;
     this.addCookieForm.patchValue(product);
     this.cookieCategory = {...product};
     this.productDialog = true;
+    this.ngbModal.open(content, { ariaLabelledBy: 'modal-basic-title' });
   }
 
   onGetChartData() {
@@ -382,6 +407,7 @@ export class CookieCategoryComponent implements OnInit {
   hideDialog() {
     this.productDialog = false;
     this.submitted = false;
+    this.ngbModal.dismissAll('Canceled');
   }
 
   onUpdate(catForm) {
@@ -397,6 +423,7 @@ export class CookieCategoryComponent implements OnInit {
         this.onGetChartData();
         this.onGetDataFromServer();
         this.productDialog = false;
+        this.submitted = false;
         // this.onGetCatList();
       }, error => {
         this.tLoading = false;
@@ -405,6 +432,7 @@ export class CookieCategoryComponent implements OnInit {
         this.alertMsg = error;
         this.alertType = 'error';
         this.cookieCategory = {};
+        this.submitted = false;
       });
 
   }
@@ -422,6 +450,7 @@ export class CookieCategoryComponent implements OnInit {
         this.onGetDataFromServer();
         this.cookieCategory = {};
         this.productDialog = false;
+        this.submitted = false;
         // this.onGetCatList();
       }, error => {
         this.isOpen = true;
@@ -430,6 +459,7 @@ export class CookieCategoryComponent implements OnInit {
         this.tLoading = false;
         this.productDialog = false;
         this.cookieCategory = {};
+        this.submitted = false;
       });
 
   }
@@ -660,6 +690,64 @@ export class CookieCategoryComponent implements OnInit {
     return result;
   }
   onNavigate(url, queryParams) {
-    this.router.navigate([url], {queryParams});
+    if (url.indexOf('scan-details') !== -1) {
+      this.quickDivID = 7;
+      let quickLinkObj: QuickStart = {
+        linkid: 7,
+        indexid: 3,
+        isactualbtnclicked: true,
+        islinkclicked: true,
+        divguidetext: "cookiescan-addcookies",
+        linkdisplaytext: "Cookie Scan and Add Cookies",
+        link: "/cookie-consent/cookie-category"
+      };
+      this.quickmenuService.updateQuerymenulist(quickLinkObj);
+      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      this.router.navigate([url], { queryParams });
+
+    } else {
+      this.quickDivIDBanner = 8;
+      let quickLinkObj: QuickStart = {
+        linkid: 8,
+        indexid: 3,
+        isactualbtnclicked: true,
+        islinkclicked: true,
+        divguidetext: "configure-cookie-banner",
+        linkdisplaytext: "Configure Cookie Banner",
+        link: "/cookie-consent/cookie-category"
+      };
+      this.quickmenuService.updateQuerymenulist(quickLinkObj);
+      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      this.router.navigate([url], { queryParams });
+
+    }
+
+  }
+
+  quickStartDivStatus():Observable<any[]> {
+    let userAction = this.userService.onClickActualBtnByUser;
+    let qsMenuResult = this.userService.isClickedOnQSMenu;
+
+    return forkJoin([userAction, qsMenuResult])
+  }
+
+  openCookieModal(content){
+    this.isUpdate = false;
+    this.addCookieForm.reset();
+    this.ngbModal.open(content, { ariaLabelledBy: 'modal-basic-title' });
+  }
+
+  positionObjForCookieScan(){
+    return {
+      "left": "685px",
+      "top":"-50px"
+    }
+  }
+
+  positionObjForConfigBanner(){
+    return {
+      "left": "400px",
+      "top":"-50px"
+    }
   }
 }

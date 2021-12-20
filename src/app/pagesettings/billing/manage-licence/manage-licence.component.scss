@@ -3,7 +3,7 @@
   font-weight: 500;
 }
 
-.fa-check-circle {
+.activeplan > .fa-check-circle {
   color: #29c429;
   position: absolute;
   left: 5px;
@@ -33,6 +33,10 @@
 
 }
 
+.btn-qs-hightlight{
+  border: 1px solid #2446a4;
+  box-shadow: 0px 0px 5px #2446a4;
+}
 
 
 
@@ -126,7 +130,7 @@
   left: 35%;
   top: 0 !important;
   text-shadow: 1px 1px 0px #11188f;
-  z-index: 1000;
+  z-index: 980;
   font-weight: 600;
   font-size: 13px;
 }
@@ -135,6 +139,7 @@
   display: flex;
   flex-direction: column;
   font-size: 13px;
+  width: 100% !important;
 }
 
 .activeplan {

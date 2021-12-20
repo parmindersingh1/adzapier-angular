@@ -1,0 +1,22 @@
+    <div class="container-fluid">
+      <div class="row justify-content-center min-calcheight">
+    <div class="">
+      <div class="logo-group">
+        <img src="assets/imgs/az-logo.png" class="az-logo mb-2" alt="adzapier logo" />
+        <h4 class="tx-white">Trusted Data Privacy Solutions</h4>
+      </div>
+      <div *ngIf="message" style="color:#fff">
+        <p class="confirm-msg">
+          <svg *ngIf="isInvitedUserVerified" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+            <circle class="path circle" fill="none" stroke="#73AF55" stroke-width="6" stroke-miterlimit="10"
+                    cx="65.1" cy="65.1" r="62.1" />
+            <polyline class="path check" fill="none" stroke="#73AF55" stroke-width="6"
+                      stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+          </svg>
+          <i *ngIf="!isInvitedUserVerified" class="fas fa-times-circle tx-danger tx-24 pr-3"></i>
+          <span style="color:#fff">{{message}}</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

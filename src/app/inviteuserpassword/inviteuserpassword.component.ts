@@ -58,7 +58,6 @@ export class InviteuserpasswordComponent implements OnInit {
     element.classList.remove('site-content');
     element.classList.add('container-fluid');
     element.style.padding = '0px';
-    element.style.margin = '0px';
     this.userid = this.activatedRoute.snapshot.paramMap.get('userid');
     this.ConfirmPasswordForm = this.formBuilder.group({
       token:[this.userid],

@@ -10,6 +10,8 @@ import {DataService} from '../../../_services/data.service';
 import { LazyLoadEvent } from 'primeng/api';
 import { BsDatepickerConfig, DatepickerDateCustomClasses } from 'ngx-bootstrap/datepicker';
 import { ActivatedRoute } from '@angular/router';
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
+import { QuickStart } from 'src/app/_models/quickstart';
 
 class FilterType {
   consentType = '';
@@ -97,22 +99,22 @@ export class CookieTrackingComponent implements OnInit {
     },
   ];
 
-
   constructor(private cookieConsentService: CookieTrackingService,
               private  orgservice: OrganizationService,
               private loading: NgxUiLoaderService,
               private activateRoute: ActivatedRoute,
               private gdprService: GdprService,
-              private dataService: DataService
+              private dataService: DataService,
+              private quickmenuService: QuickmenuService
   ) {
     this.dateCustomClasses = [
       { date: new Date(), classes: ['theme-dark-blue'] },
     ];
     this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
-    this.activateRoute.queryParamMap
-      .subscribe(params => {
-        this.queryOID = params.get('oid');
-        this.queryPID = params.get('pid');
+    this.activateRoute.queryParams
+      .subscribe((params: any) => {
+        this.queryOID = params.oid;
+        this.queryPID = params.pid;
       });
   }
 
@@ -120,8 +122,7 @@ export class CookieTrackingComponent implements OnInit {
     this.onGetPropsAndOrgId();
     this.onGetFilterData();
     this.onCheckSubscription();
-    this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton:true, ranges: this.ranges  });
-
+    this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton: true, ranges: this.ranges });
   }
 
   onCheckSubscription() {
@@ -170,9 +171,9 @@ export class CookieTrackingComponent implements OnInit {
         this.currentManagedOrgID = response.organization_id || response.response.oid;
         this.currrentManagedPropID = response.property_id || response.response.id;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
-        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id;
+        //const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        this.currentManagedOrgID = this.queryOID;// orgDetails.organization_id || orgDetails.response.oid;
+        this.currrentManagedPropID = this.queryPID;// orgDetails.property_id || orgDetails.response.id;
       }
     });
   }
@@ -205,7 +206,7 @@ export class CookieTrackingComponent implements OnInit {
       page: this.firstone
     };
 
-    this.cookieConsentService.getConsent(this.currrentManagedPropID, filter, this.constructor.name, moduleName.cookieTrackingModule)
+    this.cookieConsentService.getConsent(this.queryPID, filter, this.constructor.name, moduleName.cookieTrackingModule)
       .subscribe(res => {
         this.loading.stop();
         this.tLoading = false;
@@ -221,7 +222,7 @@ export class CookieTrackingComponent implements OnInit {
 
   onGetFilterData() {
     this.loading.start();
-    this.cookieConsentService.onGetFilter(this.currrentManagedPropID, this.constructor.name, moduleName.cookieTrackingModule)
+    this.cookieConsentService.onGetFilter(this.queryPID, this.constructor.name, moduleName.cookieTrackingModule)
       .subscribe((res: any) => {
         this.loading.stop();
         if (res['status'] === 200) {

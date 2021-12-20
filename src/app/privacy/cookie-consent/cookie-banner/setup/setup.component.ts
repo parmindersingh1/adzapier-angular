@@ -53,10 +53,10 @@ export class SetupComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.activateRoute.queryParamMap
-      .subscribe(params => {
-        this.queryOID = params.get('oid');
-        this.queryPID = params.get('pid');
+    this.activateRoute.queryParams
+      .subscribe((params: any) => {
+        this.queryOID = params.oid;
+        this.queryPID = params.pid;
       });
     this.onGetPropsAndOrgId();
     this.onGetCookieBannerData();
@@ -77,7 +77,7 @@ export class SetupComponent implements OnInit {
   onGetCookieBannerData() {
     this.loading.start('2');
     this.loadingSkeleton = true;
-    this.cookieBannerService.onGetCookieBannerData(this.currentManagedOrgID , this.currrentManagedPropID, this.constructor.name, moduleName.setUpModule)
+    this.cookieBannerService.onGetCookieBannerData(this.queryOID , this.queryPID, this.constructor.name, moduleName.setUpModule)
       .subscribe(res => {
         this.loadingSkeleton = false;
         this.loading.stop('2');
@@ -146,7 +146,7 @@ export class SetupComponent implements OnInit {
   navigate() {
     this.modalRef.hide();
    // this.router.navigateByUrl('/cookie-consent/cookie-banner');
-    this.router.navigate(['/cookie-consent/cookie-banner'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
+    this.router.navigate(['/cookie-consent/banner-configuration'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   onClosed(alertMsg: any) {

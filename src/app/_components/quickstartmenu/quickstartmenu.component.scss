@@ -1,0 +1,194 @@
+$guidancediv-bgcolor: #385a8e;
+$guidancediv-bgcolor-two: #385a8e;
+
+
+.quickclosebtn {
+  float: right;
+  top: -29px;
+  position: absolute;
+  z-index: 1200;
+  line-height: 23px;
+  height: 26px;
+  width: 26px;
+  font-size: 20px;
+  background: #ffffff;
+  border: 1px solid #1b365d;
+  right: -1px;
+  border-radius: 30px;
+}
+
+.quickclosebtn:focus {
+  outline: none;
+}
+
+.qsmtop-draghandle {
+  top: -28px;
+  left: 10px;
+  position: absolute;
+  z-index: 100;
+  line-height: 23px;
+  padding: 4px;
+  height: 30px;
+  width: 35px;
+  font-size: 20px;
+  background: #ffffff;
+  border-bottom: 2px solid #fff !important;
+  border: 1px solid #b2b8c5;
+  right: -2px;
+}
+
+
+.qsm-btm-draghandle {
+  position: relative;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.quickstart-wrapper {
+    width: 300px;
+    border: 1px solid #b2b8c5;
+    box-shadow: 2px 2px 3px #c7c7c7;
+    border-top: 0;
+    background: #ffffff;
+    position: fixed;
+    bottom: 55px;
+    flex-direction: column;
+    display: flex;
+    right: 0;
+    
+}
+
+.quickstart-btn {
+  z-index: 1200;
+  right: 10px;
+  position: fixed;
+  border: 1px solid #123bbb;
+  box-shadow: 1px 2px 2px #0028a3;
+  text-shadow: 1px 1px 0px #0735c1;
+  border-radius: 50px;
+  bottom: 10px;
+  font-weight: 500;
+  font-size: 16px;
+  top: auto;
+  padding: 2px 10px 0 0px;
+}
+
+.quickstart-btn :focus,.quickstart-btn:active {
+  box-shadow: 0 0 0 0.2rem rgb(255 255 255 / 50%) !important;
+}
+
+.qs-arrow-icon {
+  width: 30px;
+  margin: 5px 0px 5px 4px;
+  height: 30px;
+}
+
+.quickstart-icon {
+  width: 24px;
+  height: 40px;
+  background-image: url('../../../assets/imgs/rocket-icon.svg') no-repeat 0px 55% !important;
+}
+
+// .quickstart-wrapper > .panel-group > .panel  > .panel-heading{
+//     padding: 0;
+// }
+
+// .quickstart-wrapper > .panel-group > .panel > .card-header  {
+//     padding: 0 !important;
+//     background: #ccc;
+// }
+
+.customClass {
+    padding: 0 !important;
+    background: #770 !important;
+    border: 0px !important;
+    border-left: 0 !important;
+    border-top: 0 !important;
+    border-radius: 0 !important;
+    border-right: 0 !important;
+}
+
+.checkedlink {
+    color:green;
+}
+
+.uncheckedlink {
+    color:gray
+}
+
+.guidencediv{
+  width: 250px;
+  border: 1px solid $guidancediv-bgcolor;
+  border-radius: 6px;
+  box-shadow: 0px 0px 7px #000000;
+  position: fixed;
+  background-color: $guidancediv-bgcolor;
+  box-sizing: content-box;
+  /* height: 70px; */
+  padding: 10px;
+  top: 20px;
+  color: #ffffff;
+  z-index: 1200;
+}
+
+
+.flotingdiv{
+	position: fixed;
+	top: 84%;
+	right:310px;
+	overflow-x: hidden;
+  overflow-y: auto;
+  z-index: 1200;
+}
+
+.hideqsmalert {
+  display: none;
+}
+
+.dismiss-top-border {
+  border-top:1px solid rgba(72, 94, 144, 0.16);
+  border-top: 1px solid rgba(72, 94, 144, 0.16);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+accordion-group {
+    ::ng-deep {
+      div {
+        border-right: 0;
+        border-left: 0;
+        border-radius: 0px  !important;
+        border-bottom: 0px solid #000;        
+        & > ul{
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }  li {
+           padding: 0;
+           margin: 0;
+        }  a {
+          display: flex;
+          flex-direction: row;
+          padding: 2px 0;
+        }
+        &>div.panel-heading.card-header.panel-enabled {
+            padding: 0;
+            background-color: rgba(255, 255, 255, 0.15); // change the background of every accordion heading
+  
+          .btn-link {
+            color: rgb(6, 10, 9); // change the accordion heading buttons style
+          }
+        }
+  
+        &>div.panel-collapse.collapse.in.show>div {
+          border-top: 1px solid rgba(72, 94, 144, 0.16);
+          background-color: hsla(210, 10%, 83%, 0.10); // change the expanded content style
+        }
+
+        
+      }
+    }
+}

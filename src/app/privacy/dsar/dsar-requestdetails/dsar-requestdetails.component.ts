@@ -19,6 +19,7 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from '../../../_constant/module-name.constant';
 import { formatDate } from '@angular/common';
+import {SystemIntegrationService} from '../../../_services/system_integration.service';
 @Component({
   selector: 'app-dsar-requestdetails',
   templateUrl: './dsar-requestdetails.component.html',
@@ -223,8 +224,11 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   duplicateRequestStatus;
   isSubmitBtnClickedOnce;
   //isduplicatedIdSelected = false;
+  isExtendDaysExceeded = false;
   queryOID;
   queryPID;
+  formID;
+  requestForm;
   constructor(private activatedRoute: ActivatedRoute,
               private router: Router,
               private orgService: OrganizationService,
@@ -239,7 +243,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
               private loading: NgxUiLoaderService,
               private cdRef: ChangeDetectorRef,
               private userService: UserService,
-              private authService: AuthenticationService
+              private authService: AuthenticationService,
+              private systemIntegrationService: SystemIntegrationService
   ) {
     // this.renderer2.listen('window', 'click', (e: Event) => {
     //   if (e.target !== this.toggleDayleftdiv.nativeElement &&
@@ -264,6 +269,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   //  this.bsValue = new Date();
     this.activatedRoute.paramMap.subscribe(params => {
       this.requestID = params.get('reqid');
+      this.formID = params.get('formID');
       this.queryCompanyID = params.get('companyid');
       this.queryOrgID = params.get('orgid');
       this.queryPropID = params.get('propid');
@@ -331,6 +337,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     this.minDate = new Date();
     this.loadReasonList();
   }
+
   get addActivity() { return this.quillEditorText.controls; }
   get addEmailPost() { return this.quillEditorEmailText.controls; }
   get editRequest() { return this.editRequestDetailForm.controls; }
@@ -365,6 +372,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
   onRefresh(){
     this.loadDataRequestDetails();
+    this.loadEmailLog(this.requestID);
+    this.loadActivityLog(this.requestID);
   }
 
 
@@ -389,6 +398,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       if (data.response !== "No data found.") {
         this.requestDetails.push(data.response);
         this.customFields = data.response.custom_data;
+        this.requestForm = data.response.request_form;
         this.respApprover = data.response.approver_firstname + ' ' + data.response.approver_lastname;
         this.respState = data.response.custom_data.state;
         this.respCity = data.response.custom_data.city;
@@ -401,8 +411,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         this.respEmailID = data.response.custom_data.email;
         this.respCDID = data.response.id;
         this.formName = data.response.form_name;
-        this.requestType = data.response.request_type;
-        this.subjectType = data.response.subject_type;
+        this.requestType =  this.getCustomRequestType("requesttype",data.response.custom_data.request_type);
+        this.subjectType =  this.getCustomSubjectType("subjecttype",data.response.custom_data.subject_type);
         this.request_typeid = data.response.request_type_id;
         this.subject_typeid = data.response.subject_type_id;
         this.workflowName = data.response.workflow_name;
@@ -424,7 +434,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
           this.showReqData(this.duplicateRequest[0]);
         } else{
           this.duplicateRequest.length = 0;
-        } 
+        }
         //        this.selectStageOnPageLoad(this.currentWorkflowStageID);
 
         this.editRequestDetailForm.controls['country'].setValue(this.respCountry);
@@ -447,7 +457,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     let approverList;
     this.orgService.getOrgTeamMembers(this.currentManagedOrgID).subscribe((data) => {
       approverList = data.response;
-      let filterdList = approverList.filter((t) => t.user_name !== ' ');
+      let filterdList = approverList.filter((t) => t.user_name !== ' ' && t.role_name.indexOf('View') == -1 && t.email_verified);
       this.ApproverList = filterdList;
     }, (error) => {
       this.alertMsg = error;
@@ -473,12 +483,23 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       this.isEmailLogOpen = true;
       this.isActivityLogOpen = false;
       this.isTaskTabOpen = false;
-    } else if (changeEvent.activeId === 1 && changeEvent.nextId === 3) {
+    } else if (changeEvent.nextId === 4) {
+      this.isEmailLogOpen = false;
+      this.isActivityLogOpen = false;
+      this.isTaskTabOpen = false;
+    } else if (changeEvent.activeId === 4 && changeEvent.nextId === 1) {
+      this.isActivityLogOpen = true;
+    }
+    else if (changeEvent.activeId === 4 && changeEvent.nextId === 2) {
+      this.isEmailLogOpen = true;
+    }
+    else if (changeEvent.activeId === 1 && changeEvent.nextId === 3) {
       this.isActivityLogOpen = false;
       this.isEmailLogOpen = false;
       this.isTaskTabOpen = true;
       this.getSubTaskList();
-    } else if (changeEvent.activeId === 2 && changeEvent.nextId === 3) {
+    }
+    else if (changeEvent.activeId === 2 && changeEvent.nextId === 3) {
       this.isActivityLogOpen = false;
       this.isEmailLogOpen = false;
       this.isTaskTabOpen = true;
@@ -533,10 +554,12 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     if (data !== undefined) {
       // tslint:disable-next-line: forin
       for (const k in data) {
-        let value = data[k];
-        let key = k.replace('_', ' ');
-        let updatedKey = this.capitalizeFirstLetter(key);
-        this.customFieldObj[updatedKey] = value;
+        if (k !== "request_type" && k !== "subject_type") {
+          let value = data[k];
+          let key = k.replace('_', ' ');
+          let updatedKey = this.capitalizeFirstLetter(key);
+          this.customFieldObj[updatedKey] = value;
+        }
       }
 
     }
@@ -738,6 +761,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   decline(): void {
     this.isConfirmed = false;
     this.modalRef.hide();
+    this.quillEditorExtendDays.reset();
   }
 
 
@@ -889,6 +913,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
           this.alertType = 'success';
           this.loadActivityLog(requestID);
           this.quillEditorText.get('editor').setValue('');
+          this.quillEditorExtendDays.reset();
           this.isActivitysubmitted = false;
         }
       }, (error) => {
@@ -938,7 +963,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       "Consumer Name":this.firstName,
       "Company name":this.currentSelectedOrgname,
       "Company name privacy team":this.currentSelectedOrgname,
-      "Company Name":this.currentSelectedOrgname   
+      "Company Name":this.currentSelectedOrgname
    };
     var re = new RegExp(Object.keys(mapObj).join("|"),"gi");
     str = str.replace(re, function(matched){
@@ -1266,9 +1291,13 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
   onSubmitExtendDays() {
     this.isExtenddasysubmitted = true;
+    this.isExtendDaysExceeded = this.quillEditorExtendDays.controls["customdays"].value < 1 || this.quillEditorExtendDays.controls["customdays"].value > 45;
     if (this.quillEditorExtendDays.invalid) {
       return false;
     } else {
+      if(this.isExtendDaysExceeded){
+        return false;
+      }
       this.onClickEndDays(this.quillEditorExtendDays.get('customdays').value);
       if (this.selectedStages.length !== 0) {
         const reqObj = {
@@ -1628,7 +1657,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
         this.alertMsg = data.response;
         this.isOpen = true;
         this.alertType = 'success';
-        this.router.navigate(['privacy/dsar/requests']);
+        this.router.navigate(['privacy/dsar/requests'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
       }, (err) => {
         this.alertMsg = 'error';
         this.isOpen = true;
@@ -1782,7 +1811,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   showCustomFieldValues(){
-    let fname; 
+    let fname;
     let lname;
     if(this.customFieldObj !== undefined){
       for(const key in this.customFieldObj){
@@ -1827,6 +1856,8 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   ngAfterViewInit() {
+    this.loadEmailLog(this.requestID);
+    this.loadActivityLog(this.requestID);
     this.cdRef.detectChanges();
   }
 
@@ -1842,7 +1873,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       if(this.duplicateRequest[0].request_data){
          if(this.subject_typeid == JSON.parse(this.duplicateRequest[0].request_data).subject_type[0]){
            this.duplicateReqType = this.subjectType;
-         } 
+         }
          if(this.request_typeid == JSON.parse(this.duplicateRequest[0].request_data).request_type[0]){
           this.duplicateSubType = this.requestType;
          }
@@ -1865,7 +1896,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
 
     this.duplicateRequestStatus = this.getStatusStyle(selectedData.request_status);
     let data = JSON.parse(selectedData.request_data);
-    
+
     let result = Object.keys(data).map((key) => [key, data[key]]);
     this.capitalizatFirstLetterForDuplicate(Object.keys(JSON.parse(selectedData.request_data)));
     return this.displayCurrentRequestData = result;
@@ -1881,7 +1912,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
       let key = data.replace('_', ' ');
       return key.charAt(0).toUpperCase() + key.slice(1);
     }
-   
+
   }
 
   getStatusStyle(status){
@@ -1896,7 +1927,7 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
   }
 
   reOpenrequest(){
-   
+
     this.dsarRequestService.reopenDeletedDSARRequest( this.currentManagedOrgID,this.currrentManagedPropID, this.requestID,this.constructor.name, moduleName.dsarRequestModule).subscribe((data)=>{
      if(data.status == 200){
       if (this.selectedStages.length !== 0) {
@@ -1929,6 +1960,50 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     })
 
   }
+
+  onKeyChanges($event) {
+    if ($event.target.value >= 1 && $event.target.value <= 45) {
+      this.isExtendDaysExceeded = false;
+    } else {
+      this.isExtendDaysExceeded = true;
+    }
+  }
+
+  getCustomSubjectType(currenttype, requestorsubjectids) {
+    const requestForm = JSON.parse(this.requestForm);
+    const requesttypeindex = requestForm.findIndex((t) => t.controlId == currenttype);
+    let filltypes = [];
+    for (let i = 0; i < Object.values(requestorsubjectids).length; i++) {
+
+      requestForm[requesttypeindex].selectOptions.filter((t) => {
+        if (t.subject_type_id == Object.values(requestorsubjectids)[i]) {
+          const idx = filltypes.includes(t.name);
+          if (!idx) {
+            filltypes.push(t.name);
+          }
+        }
+      });
+    }
+    return filltypes;
+  }
+
+  getCustomRequestType(currenttype, requestorsubjectids) {
+    const requestForm = JSON.parse(this.requestForm);
+    const requesttypeindex = requestForm.findIndex((t) => t.controlId == currenttype);
+    let filltypes = [];
+    for (let i = 0; i < Object.values(requestorsubjectids).length; i++) {
+      requestForm[requesttypeindex].selectOptions.filter((t) => {
+         if (t.request_type_id == Object.values(requestorsubjectids)[i]) {
+         const idx = filltypes.includes(t.name);
+          if (!idx) {
+            filltypes.push(t.name);
+          }
+        }
+      });
+    }
+    return filltypes;
+  }
+
 }
 
 interface SubTaskList {

@@ -1,7 +1,20 @@
-  .site-content {
+@import "../scss/variables";
+
+.site-content {
     flex: 1;
-    padding: 20px 0;
+    padding: 20px 0px 20px 30px;// 20px 15px;
     margin-top: 60px;
+    min-height: calc(100vh + (-164px)); //calc(100vh + (-164px));
+    // min-height: 415px;
+  }
+
+  .site-content-rm-left-padding {
+    padding: 20px 0px 20px 0px;
+    min-height: calc(100vh + (-44px));
+  }
+
+  .site-content-add-left-padding {
+    padding: 20px 0px 20px 30px !important;
   }
 
   .btn-default{
@@ -339,3 +352,63 @@
     font-size: 17px;
     margin-top: 7px;
   }
+
+  .change-margin {
+    margin-left:10px;
+    max-width:1040px;
+  }
+
+.back-drop-two {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 990;
+}
+
+.remove-btm-margin {
+  margin-bottom: 0;
+  // overflow: hidden;
+}
+
+.remove-top-margin {
+  margin-top: 0;
+  // min-height: calc(100vh - 20px);
+}
+
+.loginbg {
+  margin-top: 0 !important;
+  background: linear-gradient(#042b60, #004097);
+  // min-height: calc(100% - 44px);
+}
+
+.blue-back {
+  background: linear-gradient(180deg, rgba(27,54,93,1) 50%, rgba(255,255,255,1) 50%, rgba(255,255,255,1) 100%);
+  width: 100%;
+}
+
+.center-div {
+  width: 100%;
+  margin: 0 auto;
+  min-width: 100%;
+  max-width: 1300px;
+}
+
+//.full-height {
+  // height: calc(100vh - 90px); 
+  //calc(100vh + 131px);
+//}
+// #main .container-fluid {
+//   margin-bottom: 0 !important;
+// }
+:host {
+  display: flex;
+  min-height: 100%; // used percent instead of vh due to safari bug.
+  flex-direction: column;
+}
+
+app-footer {
+  z-index: 1;
+}

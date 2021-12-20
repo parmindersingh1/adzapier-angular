@@ -1,0 +1,313 @@
+<div class="preference-main">
+  <div class="ccpa" *ngIf="formData.LivePreviewType === 'ccpa'">
+      <div class="card"  [ngStyle]="{'background': formData.PreferenceBackgroundColor, 'color': formData.PreferenceTextColor}">
+        <div class="card-body preference-wrap"  [ngStyle]="{'background': formData.PreferenceBackgroundColor, 'color': formData.PreferenceTextColor}">
+          <div class="btn-group-action-purpose" [ngClass]="{'text-center' : !customerBrandLogo}">
+           <div  class="company-logo">
+             <img *ngIf="customerBrandLogo" [src]="customerBrandLogo" />
+           </div>
+            <button type="button" style="font-size: 12px;" class="btn btn-link " [ngStyle]="{'color' :  preferenceStep === 1 ? '#2196f3' : formData.PreferenceTextColor,
+      'border-bottom' : preferenceStep === 1 ? '2px solid' : null
+      }" (click)="preferenceStep = 1">Purpose</button>
+            <button type="button"  style="font-size: 12px;" class="btn btn-link " [ngStyle]="{'color' :  preferenceStep === 2 ? '#2196f3' : formData.PreferenceTextColor,
+            'border-bottom' : preferenceStep === 2 ? '2px solid' : null
+      }"   (click)="preferenceStep = 2">Privacy</button>
+          </div>
+          <div class="ccpa-purpose" *ngIf="preferenceStep === 1">
+              <p class="tx-11 pt-3">{{formData.PreferencePurposeCcpaAndGenericDescriptionText}}</p>
+              <ng-container *ngFor="let purpose of purposesList; let i = index">
+                <ng-container *ngIf="purpose.id === '101'">
+                <div class="card-body purpose-body" [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                <div class="row m-0">
+                    <div class="col-md-8 purpose-text" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
+                     {{purpose.title}}
+                    </div>
+                  <div class="col-md-3 text-right tx-12">
+                    Always allow
+                  </div>
+                  <div class="col-md-1">
+                    <span (click)="onShowDesc(purpose.id)" class="float-right tx-18"><i class="fas fa-chevron-right"></i></span>
+                  </div>
+                </div>
+              </div>
+                <div clas="card-body" *ngIf="currentPurposeID === purpose.id">
+                  <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
+                </div>
+                </ng-container>
+                <ng-container *ngIf="purpose.id !== '101'">
+                  <div class="card-body purpose-body" [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                    <div class="row m-0">
+                      <div class="col-md-9 purpose-text" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
+                        {{purpose.title}}
+                      </div>
+                      <div class="col-md-3">
+                        <label class="switch mb-2 mt-2">
+                          <input type="checkbox"  (change)="onSelectSwitch(i, $event)" checked>
+                          <span [ngStyle]="{background: switchButton.includes(i) ? formData.PreferenceSwitchColor: ''}"
+                                class="slider round"></span>
+                        </label>
+                        <!--                      <p-inputSwitch styleClass="background: red"></p-inputSwitch>-->
+                        <span (click)="onShowDesc(purpose.id)" class="float-right tx-18"><i class="fas fa-chevron-right"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div clas="card-body" *ngIf="currentPurposeID === purpose.id">
+                    <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
+                  </div>
+                </ng-container>
+              </ng-container>
+          </div>
+          <div class="ccpa-privacy" *ngIf="preferenceStep === 2">
+              <p class="tx-11 pt-2">{{formData.PreferencePrivacyCcpaAndGenericDescriptionText}}</p>
+              <div class="row w-100 no-gutters" style=" align-items: center;">
+
+                <ng-container *ngFor="let content of privacyContent; let i = index">
+                  <div class="col-md-12 card-body purpose-body"  [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                      <div class=" purpose-text"   [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(i+ 200)">
+                        <span (click)="onShowDesc(i + 200)" class="mr-4 tx-18">
+                          <i *ngIf="currentPurposeID !== i + 200" class="fas fa-chevron-right"></i>
+                          <i *ngIf="currentPurposeID === i + 200" class="fas fa-chevron-down"></i>
+                        </span>
+                        {{content.title}}
+                      </div>
+                  </div>
+                  <div class="col-md-12 card-body row" *ngIf="currentPurposeID === i + 200">
+                    <p class="tx-11 mt-2 p-2 ml-3 mr-3">{{content.desc}}</p>
+                  </div>
+                </ng-container>
+              </div>
+          </div>
+
+        </div>
+        <div class="card-body footer-body pb-1 pt-3">
+          <button pButton pRipple type="button" [label]="formData.PreferenceDoNotSellMyDataText" class="p-button-secondary mr-3 donotsellbtn"  style="font-size: 13px"
+                  [ngStyle]="{'background': formData.PreferenceDoNotSellBackgroundColor, 'border-color': formData.PreferenceDoNotSellBackgroundColor, 'color': formData.PreferenceDoNotSellTextColor}"></button>
+          <button pButton pRipple type="button" [label]="formData.PreferenceAcceptAllText" class="aceept-all-btn"  style="font-size: 13px"
+                  [ngStyle]="{'background': formData.PreferenceAcceptAllBackgroundColor, 'border-color': formData.PreferenceAcceptAllBackgroundColor, 'color': formData.PreferenceAcceptAllTextColor}"></button>
+          <div class="row mr-3 mt-1 float-right " *ngIf="formData.ShowWatermark">
+              <p class="power-by-tx" style="color: gray">Powered by: <span>Adzapier</span></p>
+          </div>
+        </div>
+      </div>
+  </div>
+
+
+  <div class="generic" *ngIf="formData.LivePreviewType === 'generic' ">
+    <div class="card"  [ngStyle]="{'background': formData.PreferenceBackgroundColor, 'color': formData.PreferenceTextColor}">
+      <div class="card-body preference-wrap"  [ngStyle]="{'background': formData.PreferenceBackgroundColor, 'color': formData.PreferenceTextColor}">
+        <div class="btn-group-action-purpose" [ngClass]="{'text-center' : !customerBrandLogo}">
+          <div  class="company-logo">
+            <img *ngIf="customerBrandLogo" [src]="customerBrandLogo" />
+          </div>
+          <button type="button"  style="font-size: 12px;" class="btn btn-link " [ngStyle]="{'color' :  preferenceStep === 1 ? '#2196f3' : formData.PreferenceTextColor,
+      'border-bottom' : preferenceStep === 1 ? '2px solid' : null
+      }" (click)="preferenceStep = 1">Purpose</button>
+          <button type="button"  style="font-size: 12px;" class="btn btn-link " [ngStyle]="{'color' :  preferenceStep === 2 ? '#2196f3' : formData.PreferenceTextColor,
+            'border-bottom' : preferenceStep === 2 ? '2px solid' : null
+      }"   (click)="preferenceStep = 2">Privacy</button>
+        </div>
+        <div class="generic-purpose" *ngIf="preferenceStep === 1">
+            <p class="tx-11 pt-2">{{formData.PreferencePurposeCcpaAndGenericDescriptionText}}</p>
+            <ng-container *ngFor="let purpose of purposesList; let i =index">
+              <ng-container *ngIf="purpose.id === '101'">
+              <div class="card-body purpose-body" [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                <div class="row m-0">
+                  <div class="col-md-8 purpose-text"  [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
+                    {{purpose.title}}
+                  </div>
+                  <div class="col-md-3 text-right tx-12">
+                    Always allow
+                  </div>
+                  <div class="col-md-1">
+                    <span (click)="onShowDesc(purpose.id)" class="float-right tx-18"><i class="fas fa-chevron-right"></i></span>
+                  </div>
+                </div>
+              </div>
+              <div clas="card-body" *ngIf="currentPurposeID === purpose.id">
+                <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
+              </div>
+              </ng-container>
+
+              <ng-container *ngIf="purpose.id !== '101'">
+                <div class="card-body purpose-body" [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                  <div class="row m-0">
+                    <div class="col-md-9 purpose-text"  [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
+                      {{purpose.title}}
+                    </div>
+                    <div class="col-md-3">
+                      <label class="switch mb-2 mt-2">
+                        <input type="checkbox"  (change)="onSelectSwitch(i, $event)" checked>
+                        <span [ngStyle]="{background: switchButton.includes(i) ? formData.PreferenceSwitchColor: ''}"
+                              class="slider round"></span>
+                      </label>
+                      <span (click)="onShowDesc(purpose.id)" class="float-right tx-18"><i class="fas fa-chevron-right"></i></span>
+                    </div>
+                  </div>
+                </div>
+                <div clas="card-body" *ngIf="currentPurposeID === purpose.id">
+                  <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
+                </div>
+              </ng-container>
+            </ng-container>
+        </div>
+        <div class="generic-privacy" *ngIf="preferenceStep === 2">
+            <p class="tx-11 mt-2">{{formData.PreferencePrivacyCcpaAndGenericDescriptionText}}</p>
+            <div class="row w-100 no-gutters" style=" align-items: center;">
+              <ng-container *ngFor="let content of privacyContent; let i = index">
+                <div class="col-md-12 card-body purpose-body"  [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                  <div class=" purpose-text"   [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(i+ 200)">
+                        <span (click)="onShowDesc(i + 200)" class="mr-4 tx-18">
+                          <i *ngIf="currentPurposeID !== i + 200" class="fas fa-chevron-right"></i>
+                          <i *ngIf="currentPurposeID === i + 200" class="fas fa-chevron-down"></i>
+                        </span>
+                    {{content.title}}
+                  </div>
+                </div>
+                <div class="col-md-12 card-body row" *ngIf="currentPurposeID === i + 200">
+                  <p class="tx-11 mt-2 p-2 ml-3 mr-3">{{content.desc}}</p>
+                </div>
+              </ng-container>
+            </div>
+        </div>
+
+      </div>
+      <div class="card-body footer-body pb-1 pt-3">
+        <button *ngIf="preferenceStep === 1" pButton pRipple type="button" [label]="formData.PreferenceSaveMyChoiceText" class="p-button-warning mr-3 donotsellbtn" style="font-size: 13px"
+                [ngStyle]="{'background': formData.PreferenceSaveMyChoiceBackgroundColor, 'border-color': formData.PreferenceSaveMyChoiceBackgroundColor, 'color': formData.PreferenceSaveMyChoiceTextColor}"></button>
+        <button *ngIf="preferenceStep === 2" pButton pRipple type="button" [label]="formData.PreferenceDisableAllText" class="p-button-secondary mr-3 donotsellbtn"  style="font-size: 13px"
+                [ngStyle]="{'background': formData.PreferenceDisableAllBackgroundColor, 'border-color': formData.PreferenceDisableAllBackgroundColor, 'color': formData.PreferenceDisableAllTextColor}"></button>
+        <button pButton pRipple type="button" [label]="formData.PreferenceAcceptAllText" class="aceept-all-btn"  style="font-size: 13px"
+                [ngStyle]="{'background': formData.PreferenceAcceptAllBackgroundColor, 'border-color': formData.PreferenceAcceptAllBackgroundColor, 'color': formData.PreferenceAcceptAllTextColor}"></button>
+        <div class="row mr-3 mt-1 float-right "  *ngIf="formData.ShowWatermark">
+          <p class="power-by-tx"  style="color: gray">Powered by: <span>Adzapier</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="gdpr" *ngIf="formData.LivePreviewType === 'gdpr' ">
+    <div class="card" [ngStyle]="{'background': formData.PreferenceBackgroundColor}">
+      <div class="card-body preference-wrap"  [ngStyle]="{'background': formData.PreferenceBackgroundColor, 'color': formData.PreferenceTextColor}">
+        <div class="btn-group-action-purpose" [ngClass]="{'text-center' : !customerBrandLogo}">
+          <div  class="company-logo">
+            <img *ngIf="customerBrandLogo" [src]="customerBrandLogo" />
+          </div>
+          <button type="button"  style="font-size: 12px;" class="btn btn-link " [ngStyle]="{'color' :  preferenceStep === 1 ? '#2196f3' : formData.PreferenceTextColor,
+      'border-bottom' : preferenceStep === 1 ? '2px solid' : null
+      }" (click)="preferenceStep = 1">Purposes</button>
+          <button type="button"  style="font-size: 12px;" class="btn btn-link " [ngStyle]="{'color' :  preferenceStep === 2 ? '#2196f3' : formData.PreferenceTextColor,
+            'border-bottom' : preferenceStep === 2 ? '2px solid' : null
+      }"   (click)="preferenceStep = 2">Vendors</button>
+        </div>
+
+        <div class="purpose" *ngIf="preferenceStep === 1">
+            <p class="tx-11 pt-2">{{formData.PreferencePurposeGdprDescriptionText}}</p>
+            <ng-container *ngFor="let purpose of purposesList; let i = index">
+            <ng-container  *ngIf="purpose.id === '101'">
+              <div class="card-body purpose-body"  [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                <div class="row m-0">
+                  <div class="col-md-8 purpose-text"   [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
+                    {{purpose.title}}
+                  </div>
+                  <div class="col-md-3 text-right tx-12">
+                      Always allow
+                  </div>
+                  <div class="col-md-1">
+                    <span (click)="onShowDesc(purpose.id)" class="float-right tx-18"><i class="fas fa-chevron-right"></i></span>
+                  </div>
+                </div>
+              </div>
+              <div claas="card-body" *ngIf="currentPurposeID === purpose.id">
+                <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
+              </div>
+            </ng-container>
+
+            <ng-container  *ngIf="purpose.id !== '101'">
+              <div class="card-body purpose-body" [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}" >
+                <div class="row m-0">
+                  <div class="col-md-9 purpose-text"   [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
+                    {{purpose.title}}
+                  </div>
+                  <div class="col-md-3">
+                    <label class="switch mb-2 mt-2">
+                      <input type="checkbox"  (change)="onSelectSwitch(i, $event)" checked>
+                      <span [ngStyle]="{background: switchButton.includes(i) ? formData.PreferenceSwitchColor: ''}"
+                            class="slider round"></span>
+                    </label>
+                    <span (click)="onShowDesc(purpose.id)" class="float-right tx-18"><i class="fas fa-chevron-right"></i></span>
+                  </div>
+                </div>
+              </div>
+              <div clas="card-body" *ngIf="currentPurposeID === purpose.id">
+                <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
+              </div>
+            </ng-container>
+            </ng-container>
+
+            <ng-container *ngFor="let purpose of gdprPurposeList; let i = index">
+              <div class="card-body purpose-body" [ngStyle]="{'background': formData.PreferencePurposeBackgroundColor, 'color': formData.PreferencePurposeTextColor}">
+                <div class="row m-0">
+                  <div class="col-md-9 purpose-text"  [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}"  (click)="onShowDesc(purpose.id)">
+                    {{purpose.name}}
+                  </div>
+                  <div class="col-md-3">
+                    <label class="switch mb-2 mt-2">
+                      <input type="checkbox"  (change)="onSelectSwitch(i + 5, $event)" checked>
+                      <span [ngStyle]="{background: switchButton.includes(i + 5) ? formData.PreferenceSwitchColor: ''}"
+                            class="slider round"></span>
+                    </label>
+                    <span (click)="onShowDesc(purpose.id)" class="float-right tx-18"><i class="fas fa-chevron-right"></i></span>
+                  </div>
+                </div>
+              </div>
+              <div clas="card-body" *ngIf="currentPurposeID === purpose.id">
+                <p class="tx-11 mt-2 p-2">{{purpose.description}}</p>
+              </div>
+            </ng-container>
+        </div>
+
+        <div class="vendor" *ngIf="preferenceStep === 2">
+            <p class="tx-11">{{formData.PreferenceVendorGdprDescriptionText}}</p>
+            <div class="row" style="align-items: center;">
+              <h6 class="tx-10 col-md-5 col-5" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}" ><b>Company</b></h6>
+              <h6 class="tx-10 col-md-5 col-5" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}" ><b>Privacy</b></h6>
+              <h6 class="tx-10 col-md-2 col-2" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}" ><b>
+                Off / ON</b></h6>
+            </div>
+            <ng-container *ngFor="let vendor of iabVendorsList; let i =index">
+            <hr class="mt-1 mb-1" />
+            <div class="row" style="align-items: center;">
+              <h6 class="tx-10 col-md-5 col-5" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}" >{{vendor.name}}</h6>
+              <h6   class="tx-10 col-md-5 col-5" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}" >{{vendor.policyUrl}}</h6>
+              <h6 class="tx-10 col-md-2 col-2 mb-0">
+                <label class="switch mb-2 mt-2">
+                  <input type="checkbox"  (change)="onSelectSwitch(i + 5, $event)" checked>
+                  <span [ngStyle]="{background: switchButton.includes(i + 5) ? formData.PreferenceSwitchColor: ''}"
+                        class="slider round"></span>
+                </label>
+              </h6>
+            </div>
+            </ng-container>
+        </div>
+
+      </div>
+      <div class="card-body footer-body pb-1 pt-3">
+        <button pButton pRipple type="button" [label]="formData.PreferenceDisableAllText" class="p-button-secondary mr-3 gdpr-disable"  style="font-size: 13px"
+                [ngStyle]="{'background': formData.PreferenceDisableAllBackgroundColor, 'border-color': formData.PreferenceDisableAllBackgroundColor, 'color': formData.PreferenceDisableAllTextColor}"></button>
+
+        <button pButton pRipple type="button" [label]="formData.PreferenceSaveMyChoiceText" class="p-button-warning mr-3 gdpr-save-my-choice"  style="font-size: 13px"
+                [ngStyle]="{'background': formData.PreferenceSaveMyChoiceBackgroundColor, 'border-color': formData.PreferenceSaveMyChoiceBackgroundColor, 'color': formData.PreferenceSaveMyChoiceTextColor}"></button>
+        <button pButton pRipple type="button" [label]="formData.PreferenceAcceptAllText" class="gdpr-accept-all"  style="font-size: 13px"
+                [ngStyle]="{'background': formData.PreferenceAcceptAllBackgroundColor, 'border-color': formData.PreferenceAcceptAllBackgroundColor, 'color': formData.PreferenceAcceptAllTextColor}"></button>
+        <div class="row mr-3 mt-1 float-right "  *ngIf="formData.ShowWatermark">
+          <p class="power-by-tx" style="color: gray">Powered by: <span>Adzapier</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>

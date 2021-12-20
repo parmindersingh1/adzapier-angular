@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, TemplateRef, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 // import { OrganizationService, UserService } from '../_services';
 import { FormGroup, FormBuilder, Validators, FormControl, FormArray } from '@angular/forms';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -15,6 +15,9 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
 
+import { QuickmenuService } from 'src/app/_services/quickmenu.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 // import { CompanyService } from '../company.service';
 @Component({
   selector: 'app-organizationdetails',
@@ -22,6 +25,7 @@ import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
   styleUrls: ['./organizationdetails.component.scss']
 })
 export class OrganizationdetailsComponent implements OnInit {
+  private unsubscribeAfterUserAction$: Subject<any> = new Subject<any>();
   @ViewChild('propertyModal', { static: true }) propertyModal: TemplateRef<any>;
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChild('deletePropertyAlert') deleteAlertModal: TemplateRef<any>;
@@ -93,6 +97,12 @@ export class OrganizationdetailsComponent implements OnInit {
   selectusertype = true;
   queryOID;
   queryPID;
+  quickDivID;
+  isRevistedLink:boolean;
+  currentLinkID:any;
+  iswindowclicked:boolean;
+  currentRouteURL;
+  changedRouteURL;
   constructor(private activatedRoute: ActivatedRoute,
               private orgService: OrganizationService,
               private modalService: NgbModal,
@@ -104,6 +114,7 @@ export class OrganizationdetailsComponent implements OnInit {
               private bsmodalService: BsModalService,
               private loading: NgxUiLoaderService,
               private location: Location,
+              private quickmenuService: QuickmenuService,
               private cdref: ChangeDetectorRef) {
     // this.orgService.currentProperty.subscribe((data) => {
     //   this.currentManagedOrgID = data.organization_id || data.response.oid;
@@ -114,9 +125,14 @@ export class OrganizationdetailsComponent implements OnInit {
       itemsPerPage: this.propertyPgSize, currentPage: this.p2,
       totalItems: this.propertyTotalCount, id: 'propertyPagination'
     };
+   
+
   }
 
   ngOnInit() {
+    //this.currentRouteURL = this.location.path();
+    this.showQuickstartTooltip();
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; });
     this.orgService.currentProperty.subscribe((response) => {
       if (response !== '') {
         this.currentManagedOrgID = response.organization_id || response.response.oid;
@@ -179,7 +195,7 @@ export class OrganizationdetailsComponent implements OnInit {
       state: ['', [Validators.required, Validators.pattern(strRegx)]],
       zipcode: ['', [Validators.required, Validators.pattern(zipRegex)]],
       email: ['', [Validators.required, Validators.pattern]],
-      phone: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(15), Validators.pattern(phoneNumRegx)]]
+      phone: ['', [Validators.maxLength(15), Validators.pattern(phoneNumRegx)]]
     });
     this.confirmationForm = this.formBuilder.group({
       userInput: ['', [Validators.required]]
@@ -244,8 +260,16 @@ export class OrganizationdetailsComponent implements OnInit {
     });
   }
 
- async open(content, type) {
-    if(type === 'invite' ) {
+  async open(content, type) {
+
+    let quickLinkObj = {
+      linkid: this.quickDivID,
+      indexid: 1,
+      isactualbtnclicked: true,
+      islinkclicked: true
+    };
+    
+    if (type === 'invite') {
       if (! await this.onCheckSubscription()) {
         return false;
       }
@@ -262,6 +286,9 @@ export class OrganizationdetailsComponent implements OnInit {
     }, (reason) => {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
+
   }
 
   editModalPopup(content, data) {
@@ -322,7 +349,7 @@ export class OrganizationdetailsComponent implements OnInit {
       //  if (!this.isEditOrganization) {
       const updateObj = {
         orgname: this.editOrganisationForm.value.organizationName,
-        taxID: this.editOrganisationForm.value.taxID,
+        tax_id: this.editOrganisationForm.value.taxID,
         address1: this.editOrganisationForm.value.addressOne,
         address2: this.editOrganisationForm.value.addressTwo,
         city: this.editOrganisationForm.value.city,
@@ -427,7 +454,7 @@ export class OrganizationdetailsComponent implements OnInit {
         this.submitted = false;
         this.organisationPropertyForm.reset();
         this.modalService.dismissAll('Data Saved!');
-
+        this.checkForQsTooltip();
       } else {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
@@ -455,12 +482,14 @@ export class OrganizationdetailsComponent implements OnInit {
           this.organisationPropertyForm.reset();
           this.modalService.dismissAll();
           this.submitted = false;
+          this.checkForQsTooltip();
         }, (error) => {
           this.alertMsg = error;
           this.isOpen = true;
           this.alertType = 'danger';
           this.onCancelClickProperty();
         });
+        this.checkForQsTooltip();
       }
     }
 
@@ -566,12 +595,17 @@ export class OrganizationdetailsComponent implements OnInit {
             this.onCancelClick();
           });
       } else {
+        let useremail = this.inviteUserOrgForm.getRawValue().emailid;
         const requestObj = {
           id: this.recordID,
           user_id: this.approverID,
+          email: useremail,
           role_id: this.inviteUserOrgForm.value.permissions,
           firstname: this.inviteUserOrgForm.value.firstname,
-          lastname: this.inviteUserOrgForm.value.lastname
+          lastname: this.inviteUserOrgForm.value.lastname,
+          orgid: this.organizationID,
+          user_level: 'organization',
+          action:'edit'
         };
         this.companyService.updateUserRole(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
@@ -597,7 +631,8 @@ export class OrganizationdetailsComponent implements OnInit {
       if (data) {
         const key = 'response';
         // const roleid = data[key];
-        this.roleList = data[key];
+        const organizationLevelRoles = data[key].filter((t) => t.role_name.indexOf('Org') != -1);
+        this.roleList = organizationLevelRoles
       }
     });
   }
@@ -655,6 +690,7 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   removeTeamMember(obj, control: string) {
+    obj['user_level']='organization';
     this.confirmTeammember = obj;
     this.controlname = control;
     this.selectedTeamMember = obj.user_email;
@@ -721,6 +757,8 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   onCancelClickProperty() {
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true, urlchanged:false });
+    this.quickDivID = "";
     this.submitted = false;
     this.modalService.dismissAll('Canceled');
     this.organisationPropertyForm.patchValue({
@@ -828,12 +866,14 @@ export class OrganizationdetailsComponent implements OnInit {
 
   loadOrganizationLicenseNameByID(orgid,licenseID){
    this.orgService.getOrganizationLicenseNameByID(orgid,licenseID).subscribe((data)=>{
-    this.orgLicensedPlanName = data.response[0].name + " " + data.response[0].cycle;
+     if( data.response[0] !== undefined && data.response[0].name !== undefined && data.response[0].cycle !== undefined){
+      this.orgLicensedPlanName = data.response[0].name + " " + data.response[0].cycle;
+     }
    })
   }
 
   redirectToManageLicense(){
-    this.router.navigate(['/settings/billing/manage']);
+    this.router.navigate(['/settings/billing/manage'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   changeValidators() {
@@ -847,6 +887,41 @@ export class OrganizationdetailsComponent implements OnInit {
     this.inviteUserOrgForm.get("firstname").updateValueAndValidity();
     this.inviteUserOrgForm.get("lastname").updateValueAndValidity();
   }
+
+  showQuickstartTooltip(){
+    const a = this.quickmenuService.getQuerymenulist();
+    this.quickmenuService.onClickEmitQSLinkobj.pipe(
+      takeUntil(this.unsubscribeAfterUserAction$)
+    ).subscribe((res) => { 
+      if (a.length !== 0) {
+        const idx = a.findIndex((t) => t.index == 1);
+        if (a[idx].quicklinks.some((t) => t.linkid == res.linkid && t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid;
+        } else if(a[idx].quicklinks.some((t) => t.linkid == res.linkid && !t.isactualbtnclicked)) {
+          this.quickDivID = res.linkid; // for revisited link
+        }
+      }
+    });
+    this.unsubscribeAfterUserAction$.next();
+    this.unsubscribeAfterUserAction$.complete();
+  }
+
+  checkForQsTooltip(){
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:this.quickDivID,reclickqslink:true,urlchanged:true}); 
+    this.quickDivID = "";
+  }
+
+  ngAfterViewInit(){
+    this.showQuickstartTooltip();
+    this.userService.isRevisitedQSMenuLink.subscribe((status) => { this.isRevistedLink = status.reclickqslink; this.currentLinkID = status.quickstartid; this.iswindowclicked = status.urlchanged  });
+    this.cdref.detectChanges();
+  }
+
+  ngOnDestroy(){
+    this.quickDivID = "";
+    this.unsubscribeAfterUserAction$.unsubscribe();
+  }
+
   // ngAfterContentChecked() {
   //   this.cdref.detectChanges();
   // }

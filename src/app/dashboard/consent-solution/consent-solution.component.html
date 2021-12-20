@@ -1,4 +1,4 @@
-<div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+<div class="pl-0 pr-0">
   <div class="d-sm-flex align-items-center justify-content-between mg-b-5 mg-lg-b-10 mg-xl-b-15">
     <div>
       <nav aria-label="breadcrumb">
@@ -21,7 +21,7 @@
       </span>
 
       <button style="width: 110px" (click)="onGetConsentData()"
-              class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5"><i class="fas fa-sync"></i> Refresh
+              class="btn btn-sm pd-x-15 btn-white btn-uppercase mg-l-5" style="text-transform: none;font-size: 12px;"><i class="fas fa-sync"></i> Refresh
       </button>
     </div>
   </div>
@@ -29,7 +29,7 @@
   <div class="row row-xs">
     <div class="col-sm-6 col-lg-2">
       <div class="card card-body">
-        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Total Consent</h6>
+        <h6 class="tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Total Consent</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{consentData?.totalConsent}}</h3>
           <!--           <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">100 <i class="icon ion-md-arrow-up"></i></span> than last week</p>-->
@@ -38,7 +38,7 @@
     </div><!-- col -->
     <div class="col-sm-6 col-lg-2 mg-t-10 mg-sm-t-0">
       <div class="card card-body">
-        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Total Legal Notices</h6>
+        <h6 class="tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Total Legal Notices</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">
 
@@ -52,7 +52,7 @@
     </div><!-- col -->
     <div class="col-sm-6 col-lg-2 mg-t-10 mg-lg-t-0">
       <div class="card card-body">
-        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Total Proofs</h6>
+        <h6 class="tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Total Proofs</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{consentData?.proofs}}</h3>
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-danger">0.3% <i class="icon ion-md-arrow-down"></i></span> than last week</p> -->
@@ -61,7 +61,7 @@
     </div><!-- col -->
     <div class="col-sm-6 col-lg-2 mg-t-10 mg-lg-t-0">
       <div class="card card-body">
-        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">NewsLetter</h6>
+        <h6 class="tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">NewsLetter</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{consentData?.preference.newsLetter}}</h3>
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">2.1% <i class="icon ion-md-arrow-up"></i></span> than last week</p> -->
@@ -72,7 +72,7 @@
 
     <div class="col-sm-6 col-lg-2 mg-t-10 mg-lg-t-0">
       <div class="card card-body">
-        <h6 class="tx-uppercase tx-10 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Terms and Conditions</h6>
+        <h6 class="tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Terms and Conditions</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{consentData?.preference.termOfService}}</h3>
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">2.1% <i class="icon ion-md-arrow-up"></i></span> than last week</p> -->
@@ -83,7 +83,7 @@
 
     <div class="col-sm-6 col-lg-2 mg-t-10 mg-lg-t-0">
       <div class="card card-body">
-        <h6 class="tx-uppercase tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Privacy Policy</h6>
+        <h6 class="tx-11 tx-spacing-1 tx-color-02 tx-semibold mg-b-8">Privacy Policy</h6>
         <div class="d-flex d-lg-block d-xl-flex align-items-end">
           <h3 class="tx-normal tx-rubik mg-b-0 mg-r-5 lh-1">{{consentData?.preference.privacyInfo}}</h3>
           <!-- <p class="tx-11 tx-color-03 mg-b-0"><span class="tx-medium tx-success">2.1% <i class="icon ion-md-arrow-up"></i></span> than last week</p> -->
@@ -119,7 +119,7 @@
                 <div class="d-flex align-items-center">
                   <div [ngStyle]="{backgroundColor: consentColor[0]}"
                        class="wd-10 ht-10 rounded-circle pos-relative t--1"></div>
-                  <span class="tx-medium mg-l-10">NewsLetter</span>
+                  <span class="tx-medium mg-l-10">Newsletter</span>
                   <span class="tx-rubik mg-l-auto">{{consentData?.preference?.newsLetter}}</span>
                 </div>
                 <div class="d-flex align-items-center mg-t-10">
@@ -161,7 +161,7 @@
     <div class="col-md-6 col-lg-6 col-xl-5 mg-t-10">
       <div class="card">
         <div class="card-header">
-          <h6 class="mg-b-0">Received Consent</h6>
+          <h6 class="mg-b-0">Consents Received</h6>
         </div><!-- card-header -->
         <div class="card-body pd-lg-25" *ngIf="consentData.legalNotice || consentData.proofs || consentData.totalConsent; else noConsent ">
           <div class="chart" >
@@ -190,7 +190,7 @@
         <div class="card-footer pd-20"  *ngIf="consentData.legalNotice || consentData.proofs || consentData.totalConsent ">
           <div class="row">
             <div class="col-4">
-              <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 tx-nowrap mg-b-5">Total Consent
+              <p class="tx-10 tx-medium tx-color-03 tx-spacing-1 tx-nowrap mg-b-5">Total Consent
               </p>
               <div class="d-flex align-items-center">
                 <div [ngStyle]="{backgroundColor: consentColor[0]}" class="wd-10 ht-10 rounded-circle  mg-r-5"></div>
@@ -198,7 +198,7 @@
               </div>
             </div><!-- col -->
             <div class="col-4">
-              <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Legal Notice</p>
+              <p class="tx-10 tx-medium tx-color-03 tx-spacing-1 mg-b-5">Legal Notice</p>
               <div class="d-flex align-items-center">
                 <div [ngStyle]="{backgroundColor: consentColor[1]}" class="wd-10 ht-10 rounded-circle  mg-r-5"></div>
                 <h5 class="tx-normal tx-rubik mg-b-0">
@@ -209,7 +209,7 @@
               </div>
             </div><!-- col -->
             <div class="col-4">
-              <p class="tx-10 tx-uppercase tx-medium tx-color-03 tx-spacing-1 mg-b-5">Proofs</p>
+              <p class="tx-10 tx-medium tx-color-03 tx-spacing-1 mg-b-5">Proofs</p>
               <div class="d-flex align-items-center">
                 <div [ngStyle]="{backgroundColor: consentColor[2]}" class="wd-10 ht-10 rounded-circle  mg-r-5"></div>
                 <h5 class="tx-normal tx-rubik mg-b-0">{{consentData?.proofs}} </h5>

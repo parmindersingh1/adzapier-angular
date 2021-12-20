@@ -1,4 +1,4 @@
-<div class="container">
+<div class="my-0 mx-2">
     <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
         <div>
             <nav aria-label="breadcrumb">
@@ -20,56 +20,56 @@
                             class="btn btn-sm btn-outline-secondary btn-uppercase mr-0">
                             <!-- <i-feather name="edit-2" class="feather-16"></i-feather> -->
                             <i class="fa fa-pen mr-1" aria-hidden="true"></i>
-                            <span class="d-none d-sm-inline mg-l-0"> Edit</span>
+                            <span class="d-none d-sm-inline mg-l-0" style="text-transform: none;font-size: 12px;"> Edit</span>
                         </button>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="row row-sm">
                         <div class="col-sm-5 mg-t-5 mg-sm-t-5">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Email
-                                Address</label>
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03  tx-sans mg-b-10">Email
+                                ID</label>
                             <p class="tx-primary mg-b-0">{{newemail}}</p>
                         </div>
                         <div class="col-sm-3 mg-t-5 mg-sm-t-5">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">First
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03  tx-sans mg-b-10">First
                                 name</label>
                             <p class=" mg-b-0">{{firstName}}</p>
                         </div>
 
                         <div class="col-sm-4 mg-t-5 mg-sm-t-5">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Last
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03  tx-sans mg-b-10">Last
                                 name</label>
                             <p class=" mg-b-0">{{lastName}}</p>
                         </div>
 
                         <div class="col-sm-5 mg-t-20 mg-sm-t-30">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Company
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03  tx-sans mg-b-10">Company
                                 name</label>
                             <p class=" mg-b-0">{{companyname}}</p>
                         </div>
 
                         <div class="col-sm-3 mg-t-20 mg-sm-t-30">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03  tx-sans mg-b-10">Address</label>
                             <p class="mg-b-0">{{addressone}}</p>
                         </div>
 
                         <div class="col-sm-4 mg-t-20 mg-sm-t-30">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">City</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03  tx-sans mg-b-10">City</label>
                             <p class="mg-b-0">{{city}}</p>
                         </div>
 
                         <div class="col-sm-5 mg-t-20 mg-sm-t-30">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">State</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03  tx-sans mg-b-10">State</label>
                             <p class="mg-b-0">{{state}}</p>
                         </div>
 
                         <div class="col-sm-4 mg-t-20 mg-sm-t-30">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Zipcode</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03  tx-sans mg-b-10">ZIP code</label>
                             <p class="mg-b-0">{{zipcode}}</p>
                         </div>
 
@@ -137,7 +137,7 @@
 
     <ng-template #editUserModal let-modal>
         <div class="modal-header">
-            <h4 class="modal-title" id="modal-basic-title">Edit User Preferences</h4>
+            <h4 class="modal-title" id="modal-basic-title">Edit User Details</h4>
             <button type="button" class="close" aria-label="Close" (click)="onResetProfile()">
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -252,7 +252,7 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <label for="zipcode">Zipcode</label>
+                            <label for="zipcode">ZIP code</label>
                             <input type="text" formControlName="zipcode" class="form-control"
                                 [ngClass]="{ 'is-invalid': submitted && f.zipcode.errors }"
                                 placeholder="Enter your zipcode" />

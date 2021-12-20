@@ -4,25 +4,31 @@ import {environment} from '../../environments/environment';
 import {LokiService} from './loki.service';
 import {catchError, map} from 'rxjs/operators';
 import {LokiFunctionality, LokiStatusType} from '../_constant/loki.constant';
-import {throwError} from 'rxjs';
+import {BehaviorSubject, throwError} from 'rxjs';
 import {apiConstant} from '../_constant/api.constant';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BillingService {
+  private PlanData = new BehaviorSubject([]);
+  public PlanDetails = this.PlanData.asObservable();
 
   constructor(private http: HttpClient,
               private loki: LokiService
               ) { }
-  getSessionId(data, componentName, moduleName) {
+  getSessionId(data, queryParams, componentName, moduleName) {
     const path = apiConstant.BILLING_CREATE_SESSION_ID;
-    return this.http.post(environment.apiUrl + path, data).pipe(map(res => res),
+    return this.http.post(environment.apiUrl + path, data, {params: queryParams}).pipe(map(res => res),
       catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.billing, componentName, moduleName, path);
         return throwError(error);
       }),
     );
+  }
+
+  onPushPlanData(consentData) {
+    this.PlanData.next(consentData);
   }
 
   getCurrentPlan(componentName, moduleName) {
@@ -56,6 +62,55 @@ export class BillingService {
     );
   }
 
+  AddToCart(componentName, moduleName, payload){
+    const path = apiConstant.ADDTOCART;
+    return this.http.post(environment.apiUrl + path, payload).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  UpdateCart(componentName, moduleName, payload){
+    const path = apiConstant.UPDATECART;
+    return this.http.post(environment.apiUrl + path, payload).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  DeleteCart(componentName, moduleName, id){
+    const path = apiConstant.ADDTOCART + '/' + id;
+    return this.http.delete(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  GetCart(componentName, moduleName){
+    const path = apiConstant.ADDTOCART;
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  getPlanInfo(componentName, moduleName, planID){
+    const path = apiConstant.BILLING_ACTIVE_PLAN + '/' + planID;
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.updateBilling, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
 
   getAllPropertyList(componentName, moduleName, payload){
     const path = apiConstant.BILLING_LIST_ALL_PROPERTY;
@@ -165,6 +220,7 @@ export class BillingService {
       }),
     );
   }
+
   upGradePlan(data, componentName, moduleName) {
   const path = apiConstant.BILLING_UPGRADE_PLAN;
   return this.http.post(environment.apiUrl + path, data).pipe(map(res => res),

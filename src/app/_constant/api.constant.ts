@@ -86,6 +86,20 @@ export const apiConstant = {
   EXPORT_CONSENT_LEGAL_NOTICES: '/consent-preference/legal-notices/export/:pid',
   EXPORT_CONSENT_PROOFS: '/consent-preference/proofs/export/:pid',
   EXPORT_CONSENT_PREFERENCE: '/consent-preference/preference/export/:pid',
+
+  // System Integration
+  SYSTEM_INTEGRATION_LIST: '/integration/system-list',
+  CONNECTION_INTEGRATION_LIST: '/integration/connection',
+  GET_CONNECTION_IDS: '/integration/get-configured-query-builder-ids',
+  SQL_TABLES_LIST: '/integration/get-tables',
+  SQL_TABLE_COLUMNS_LIST: '/integration/get-table-columns',
+  INTEGRATION_SYSTEM: '/integration/connection/:oid/:pid/:connectionID',
+  //Login Registration
+  REGISTRATION_ADD_COMPANY_ORG_PROP:'/billing/checkout/trialsession',
+
+  //Cart
+  ADDTOCART : '/cart',
+  UPDATECART : '/cart/update'
 };
 
 // {

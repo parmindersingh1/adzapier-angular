@@ -10,7 +10,7 @@ import { OrganizationService, UserService } from 'src/app/_services';
 import { CompanyService } from 'src/app/company.service';
 import { DsarRequestService } from 'src/app/_services/dsar-request.service';
 import { CCPAFormConfigurationService } from 'src/app/_services/ccpaform-configuration.service';
-import { LazyLoadEvent } from 'primeng/api';
+import { LazyLoadEvent, SortEvent } from 'primeng/api';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -36,6 +36,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   propertyname: any;
   reloadRequestList = [];
   requestsList = [];
+  searchrequestList = [];
+  storeSearchList = [];
   website: any;
   logourl: any;
   organizationname: any;
@@ -56,6 +58,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   eventRows: number;
   currrentManagedPropID: any;
   public inputValue = '';
+  public inputValueDueIn = '';
   public debouncedInputValue = this.inputValue;
   private searchDecouncer$: Subject<string> = new Subject();
   subjectType = '';
@@ -105,7 +108,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       label: "Last 30 Days"
     },
     {
-      value: [new Date(new Date().setDate(new Date().getMonth())), new Date()],
+      value: [new Date(new Date().getFullYear(), new Date().getMonth(), 1), new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)],
       label: "This Month"
     },
     {
@@ -129,6 +132,16 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   ];
   queryOID;
   queryPID;
+  issearchfilteractive:boolean = false;
+  issearchfilterForReq:boolean = false;
+  issearchfilterForSub:boolean = false;
+  issearchfilterForStatus:boolean = false;
+  dprequestStatus;
+  dpsubjectType;
+  dprequestType;
+  isSelected:boolean = true;
+  lazyEvent;
+  selectedDateRange;
   constructor(
     private orgservice: OrganizationService,
     private userService: UserService,
@@ -143,14 +156,19 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     private formBuilder: FormBuilder,
     private dataService: DataService,
     private billingService: BillingService
-  ) { 
+  ) {
     this.dateCustomClasses = [
       { date: new Date(), classes: ['theme-dark-blue'] },
     ];
-    this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
+  //  this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
+    this.isSelected = true;
     }
 
   ngOnInit() {
+    this.isSelected = true;
+    this.dprequestStatus = "";
+    this.dprequestType = "";
+    this.dpsubjectType = "";
     this.activateRoute.queryParamMap
       .subscribe(params => {
         this.queryOID = params.get('oid');
@@ -165,7 +183,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       webformselection: ['', [Validators.required]]
     });
     this.bsConfig = Object.assign({}, { containerClass: 'theme-dark-blue', showClearButton: true, returnFocusToInput: true, dateInputFormat: 'yyyy-mm-dd', adaptivePosition : true, showTodayButton:true, ranges: this.ranges  });
-    
+
   }
 
   get dsar() { return this.createDSARWebFormRequest.controls; }
@@ -193,36 +211,56 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   loadrequestsListLazy(event: LazyLoadEvent) {
-    this.isloading = true;
-    this.eventRows = event.rows;
-    let selectedDateRange;
-    if (this.requestsList) {
+    this.lazyEvent = event;
+    if (!this.issearchfilteractive) {
+      this.isloading = true;
+      this.eventRows = event.rows;
+      if (this.requestsList !== undefined) {
 
-      if (event.first === 0) {
-        this.firstone = 1;
-      } else {
-        this.firstone = (event.first / event.rows) + 1;
+        if (event.first === 0) {
+          this.firstone = 1;
+        } else {
+          this.firstone = (event.first / event.rows) + 1;
+        }
+        const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
+        const sortOrder = event.sortOrder === -1 ? 'asc' : 'desc';
+        // const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
+        const orderBy = '&order_by_date=' + sortOrder;
+        this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
+        this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
+        this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
+          this.currrentManagedPropID, pagelimit, orderBy)
+          .subscribe((data) => {
+            this.isloading = false;
+            const key = 'response';
+            if (Object.values(data[key]).length > 0 && data[key] !== "No data found.") {
+              this.requestsList = Object.values(data[key]);
+              this.reloadRequestList = [...this.requestsList];
+              this.totalRecords = data.count;
+              // this.rows = Object.values(data[key]).length;
+            }
+            this.totalRecords = data.count;
+          }, error => {
+            this.loading.stop();
+            this.alertMsg = error;
+            this.isOpen = true;
+            this.alertType = 'danger';
+          });
       }
-      const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
-      const sortOrder = event.sortOrder === -1 ? 'asc' : 'desc';
-      // const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
-      const orderBy = '&order_by_date=' + sortOrder;
-
-      this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
-        this.currrentManagedPropID, pagelimit, orderBy)
-        .subscribe((data) => {
-          this.isloading = false;
-          const key = 'response';
-          this.requestsList = data[key];
-          this.reloadRequestList = [...this.requestsList];
-          this.rows = data[key].length;
-          this.totalRecords = data.count;
-        }, error => {
-          this.loading.stop();
-          this.alertMsg = error;
-          this.isOpen = true;
-          this.alertType = 'danger';
-        });
+    } else {//in case of filter applied subject/request type/status/duein
+     // if (this.searchbydaterange !== '' || this.searchbydaterange !== null) {
+        if (event.first === 0) {
+          this.firstone = 1;
+        } else {
+          this.firstone = (event.first / event.rows) + 1;
+        }
+        if (this.firstone > 1 && event.first !== 0) {
+          this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+        } else {
+          // this.requestsList = this.storeSearchList.slice(0, event.rows); //event.first
+          this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+        }
+     // }
     }
 
     this.cols = [
@@ -235,6 +273,38 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
 
     this.selectedCols = this.cols;
   }
+
+  customSort(event: SortEvent) {
+    if(event.field ==  "created_at"){
+      const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
+      const sortOrder = event.order === -1 ? 'asc' : 'desc';
+      const orderBy = '&order_by_date=' + sortOrder;
+      this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
+      this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
+      this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
+        this.currrentManagedPropID, pagelimit, orderBy)
+        .subscribe((res) => {
+          this.isloading = false;
+          this.issearchfilteractive = true;
+          const key = 'response';
+          if (Object.values(res[key]).length > 0 && res[key] !== "No data found.") {
+            this.storeSearchList = Object.values(res[key]);
+            this.totalRecords = res['count'];
+            this.loadrequestsListLazy(this.lazyEvent);
+          }
+          else {
+            this.requestsList = [];
+            this.totalRecords = 0;
+          }
+        }, error => {
+          this.loading.stop();
+          this.alertMsg = error;
+          this.isOpen = true;
+          this.alertType = 'danger';
+        });
+    }     
+}
+
 
   onGetRequestListFilter() {
     this.loading.start();
@@ -261,6 +331,13 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   public clearSearchfield() {
     this.inputValue = '';
     this.searchDecouncer$.next(this.inputValue);
+    this.issearchfilteractive = false;
+  }
+
+  public clearDueInSearchfield() { //for later use
+    this.inputValueDueIn = '';
+    this.searchDecouncer$.next(this.inputValueDueIn);
+    this.issearchfilteractive = false;
   }
 
   private setupSearchDebouncer(): void {
@@ -274,22 +351,35 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   private searchFilter(): void {
-    const params = '?limit=' + this.eventRows + '&page=' + this.firstone
-      + '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
+    let params;
+    if(this.selectedDateRange !== undefined){
+    params = '?limit=' + this.eventRows + '&page=' + this.firstone +
+      '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
+      + '&status=' + this.status + '&due_in=' + this.dueIn + this.selectedDateRange;
+    }else{
+      params = '?limit=' + this.eventRows + '&page=' + this.firstone +
+      '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
       + '&status=' + this.status + '&due_in=' + this.dueIn;
+    }
     this.isloading = true;
     this.dsarRequestService.getDsarRequestFilterList(this.currentManagedOrgID, this.currrentManagedPropID, params,
       this.constructor.name, moduleName.dsarRequestModule)
       .subscribe(res => {
         this.isloading = false;
+        this.issearchfilteractive = true;
         const key = 'response';
-        if (res[key]) {
-          this.requestsList = res[key];
-        } else{
-          this.requestsList = this.reloadRequestList;
+        if (Object.values(res[key]).length > 0 && res[key] !== "No data found.") {
+          this.storeSearchList = Object.values(res[key]);
+          this.totalRecords = res['count'];
+          this.loadrequestsListLazy(this.lazyEvent);
+        }
+        else {
+          this.requestsList = [];
+          this.totalRecords = 0
         }
       }, error => {
         this.isloading = false;
+        this.issearchfilteractive = false;
         this.alertMsg = error;
         this.isOpen = true;
         this.alertType = 'danger';
@@ -297,26 +387,70 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onChangeRequestType(event) {
+    if(event.target.value !== ""){
     this.requestType = event.target.value;
+    this.issearchfilterForReq = true;
     this.searchFilter();
+    }else{
+      this.requestType = "";
+      this.issearchfilterForReq = false;
+      this.issearchfilteractive = false;
+      if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
+        this.searchFilter();
+      }else{
+        this.onRefreshDSARList();
+      }
+    }
   }
 
   onChangeStatus(event) {
-    this.status = event.target.value;
-    this.searchFilter();
+    if(event.target.value !== ""){
+      this.status = event.target.value;
+      this.issearchfilterForStatus = true;
+      this.searchFilter();
+    }else{
+      this.status = "";
+      this.issearchfilterForStatus = false;
+      this.issearchfilteractive = false;
+      if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
+        this.searchFilter();
+      }else{
+        this.onRefreshDSARList();
+      }
+    }
   }
 
   onChangeDueIn(event) {
-    this.dueIn = event.target.value;
-    this.searchFilter();
+    if(event !== "" && typeof event !== "object"){
+      this.dueIn = event;
+      this.searchFilter();
+    } else if (event !== undefined && event.target.value !== '') {
+      this.dueIn = event.target.value;
+      this.searchFilter();
+    }else{
+      this.clearDueInSearchfield();
+    }
   }
+
   onChangeSubjectType(event) {
-    this.subjectType = event.target.value;
-    this.searchFilter();
+    if(event.target.value !== ""){
+      this.subjectType = event.target.value;
+      this.issearchfilterForSub = true;
+      this.searchFilter();
+    }else{
+      this.subjectType = "";
+      this.issearchfilteractive = false;
+      this.issearchfilterForSub = false;
+      if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
+        this.searchFilter();
+      }else{
+        this.onRefreshDSARList();
+      }
+    }
   }
 
   viewDSARRequestDetails(res) {
-    this.router.navigate(['privacy/dsar/requests-details', res.id,res.cid,this.currentManagedOrgID,this.currrentManagedPropID],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
+    this.router.navigate(['privacy/dsar/requests-details', res.id,res.cid,this.currentManagedOrgID,this.currrentManagedPropID, res.web_form_id],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   navigateToWebForm(obj) {
@@ -362,7 +496,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.isOpen = true;
       this.alertType = 'info';
     }
-    
+
   }
 
   onCancelClick() {
@@ -413,7 +547,37 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onRefresh(){
-    this.pTable.reset();
+    this.dprequestStatus = "";
+    this.dprequestType = "";
+    this.dpsubjectType = "";
+    this.isSelected = true;
+    this.selectedDateRange = "";
+    this.searchbydaterange = "";    
+    this.onRefreshDSARList();
+  }
+
+  onRefreshDSARList(){
+    const pagelimit = '?limit=' + 10 + '&page=' + 1;
+    const sortOrder = 'desc';
+    const orderBy = '&order_by_date=' + sortOrder + this.selectedDateRange;
+    this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
+    this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
+    this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
+      this.currrentManagedPropID, pagelimit, orderBy)
+      .subscribe((data) => {
+        this.isloading = false;
+        const key = 'response';
+        if (Object.values(data[key]).length > 0 && data[key] !== "No data found.") {
+          this.requestsList = Object.values(data[key]);
+          this.reloadRequestList = [...this.requestsList];
+        }
+        this.totalRecords = data.count;
+      }, error => {
+        this.loading.stop();
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      });
   }
 
   previewCCPAForm() {
@@ -467,14 +631,17 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         }
       }
     });
- 
+
   }
 
   onDateSelection(){
+    if(this.searchbydaterange !== null && this.searchbydaterange !== ""){
       let date1 = this.searchbydaterange[0].toJSON().split('T')[0];
-      let date2 = this.searchbydaterange[1].toJSON().split('T')[0]; 
+      let date2 = this.searchbydaterange[1].toJSON().split('T')[0];
+      this.issearchfilteractive = true;
       let pageLimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
       let selectedDateRange = '&start_date=' + date1 +  '&end_date=' + date2;
+      this.selectedDateRange = selectedDateRange;
       this.isloading = true;
       this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
         this.currrentManagedPropID, pageLimit, '', selectedDateRange)
@@ -482,9 +649,11 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.isloading = false;
           const key = 'response';
           if(data[key] !== "No data found."){
-            this.requestsList = data[key];
+            this.requestsList = Object.values(data[key]);
+            this.storeSearchList = this.requestsList;
             this.rows = data[key].length;
             this.totalRecords = data.count;
+            this.loadrequestsListLazy(this.lazyEvent);
           }else{
             this.requestsList = [];
           }
@@ -494,7 +663,9 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.isOpen = true;
           this.alertType = 'danger';
         });
-     
+      }else{
+        this.clearDatePicker();
+      }
   }
 
   clearDateRangePicker(){
@@ -504,5 +675,54 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
 
   isLicenseLimitAvailable(): boolean {
       return this.dataService.isLicenseLimitAvailableForOrganization('request',this.dataService.getAvailableLicenseForFormAndRequestPerOrg());
+  }
+
+  onCheckRequesttype(requesttype, request_form, customobj) {
+    if (request_form !== undefined) {
+      const requestForm = JSON.parse(request_form);
+      const cdata = JSON.parse(customobj).request_type;
+      const requesttypeindex = requestForm.findIndex((t) => t.controlId == requesttype);
+      let filltypes = [];
+      filltypes.length = 0;
+      for (let i = 0; i < Object.values(cdata).length; i++) {
+        requestForm[requesttypeindex].selectOptions.filter((t) => {
+          if (t.request_type_id == Object.values(cdata)[i]) {
+            const idx = filltypes.includes(t.name);
+            if (!idx) {
+              filltypes.push(t.name);
+            }
+          }
+        });
+      }
+      return filltypes;
+    }
+  }
+
+  onCheckSubjecttype(subjecttype, request_form, customobj) {
+    if (request_form !== undefined) {
+      const requestForm = JSON.parse(request_form);
+      const cdata = JSON.parse(customobj).subject_type;
+      const requesttypeindex = requestForm.findIndex((t) => t.controlId == subjecttype);
+      let filltypes = [];
+      filltypes.length = 0;
+      for (let i = 0; i < Object.values(cdata).length; i++) {
+        requestForm[requesttypeindex].selectOptions.filter((t) => {
+          if (t.subject_type_id == Object.values(cdata)[i]) {
+            const idx = filltypes.includes(t.name);
+            if (!idx) {
+              filltypes.push(t.name);
+            }
+          }
+        });
+      }
+      return filltypes;
+    }
+  }
+
+  clearDatePicker(){
+    this.issearchfilteractive = false;
+    this.selectedDateRange = "";
+    this.searchbydaterange = "";    
+    this.onRefreshDSARList();
   }
 }

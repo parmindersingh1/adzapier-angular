@@ -37,6 +37,11 @@ export class ResetpasswordComponent implements OnInit {
   }
 
   ngOnInit() {
+    const element = document.getElementById('main');
+    element.classList.remove('container');
+    element.classList.remove('site-content');
+    element.classList.add('container-fluid');
+    element.style.padding = '0px';
 
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
     this.resetpasswordForm = this.formBuilder.group({
@@ -54,6 +59,14 @@ export class ResetpasswordComponent implements OnInit {
     // }, {
     //   validator: MustMatch('newPassword', 'confirmPassword')
     // });
+  }
+
+  ngOnDestroy() {
+    const element = document.getElementById('main');
+    element.classList.remove('container-fluid');
+    element.style.padding = null;
+   // element.classList.add('container');
+    element.classList.add('site-content');
   }
 
 

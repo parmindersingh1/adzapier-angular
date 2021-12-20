@@ -3,6 +3,7 @@ import { CanActivate, Router } from '@angular/router';
 import { DataService } from '../_services/data.service';
 import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from '../_helpers/common-utility'
+import { take } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -21,11 +22,11 @@ export class LicenseguardService implements CanActivate {
         isorgplanExist = true;
       }
     }
-    this.dataService.isLicenseApplied.subscribe((status) => {
+    this.dataService.isLicenseApplied.pipe(take(1)).subscribe((status) => {
       licenseStatus = status;
     });
 
-    if (licenseStatus.hasaccess) { // || isorgplanExist
+    if (licenseStatus.hasaccess || isorgplanExist) { 
       return true;
     } else {
       let oIDPIDFromURL = findPropertyIDFromUrl(this.location.path())
@@ -40,9 +41,13 @@ export class LicenseguardService implements CanActivate {
           if (finalObj !== null && Object.keys(finalObj).length !== 0) {
             return true;
           } else {
-            this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, skipLocationChange: false });
-            this.dataService.openUpgradeModalForDsar(results);
-            return false;
+            if (this.router.url.indexOf('/welcome') === -1) {
+              this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }, skipLocationChange: false });
+              this.dataService.openUpgradeModalForDsar(results);
+              return false;
+            } else {
+              return false;
+            }
           }
         }
       }

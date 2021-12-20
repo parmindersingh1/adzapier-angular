@@ -23,6 +23,8 @@ import {NgbCollapseModule, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import {TimeagoModule} from 'ngx-timeago';
 import { SubscriptionPopupComponent } from './_components/subscription-popup/subscription-popup.component';
+import { QuickstartmenuComponent } from './_components/quickstartmenu/quickstartmenu.component';
+import { SidemenuModule } from 'src/app/_components/sidemenu/sidemenu.module';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { SubscriptionPopupComponent } from './_components/subscription-popup/sub
    // VerifyemailComponent,
    //  CheckoutConfirmationComponent,
     WelcomeComponent,
-    SubscriptionPopupComponent
+    SubscriptionPopupComponent,
+    QuickstartmenuComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -72,7 +76,8 @@ import { SubscriptionPopupComponent } from './_components/subscription-popup/sub
     // TabsModule.forRoot(),
     // AccordionModule.forRoot(),
     NgbCollapseModule,
-    NgbModule
+    NgbModule,
+    SidemenuModule
   ],
   providers: [
     NgxUiLoaderService,

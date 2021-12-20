@@ -1,12 +1,12 @@
-<div class="content pt-0">
-  <div class="container pd-x-0 pd-lg-x-10 pd-xl-x-0">
+<div>
+  <div class="pd-x-0 pd-lg-x-10 pd-xl-x-0">
     <div class="d-sm-flex align-items-center justify-content-between mg-b-5 mg-lg-b-10 mg-xl-b-15">
       <div>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item">Privacy</li>
-            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Cookie Consent</a></li>
-            <li class="breadcrumb-item"><a routerLink="/cookie-consent/cookie-tracking"> Tracking</a></li>
+            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent" [queryParams]="{oid: queryOID, pid: queryPID}">Cookie Consent</a></li>
+            <li class="breadcrumb-item"><a routerLink="/cookie-consent/cookie-tracking" [queryParams]="{oid: queryOID, pid: queryPID}"> Tracking</a></li>
             <li class="breadcrumb-item active">Details</li>
           </ol>
         </nav>
@@ -14,7 +14,7 @@
       </div>
     </div>
 
-    <div class="row mb-4">
+    <div class="mb-4">
       <div *ngIf="!loading.one" class="w-100 card">
 
         <div class="card-body">
@@ -208,7 +208,7 @@
 
               <div class="row">
                 <div class="col-md-4">
-                  <h6>Created Date</h6>
+                  <h6>Created</h6>
                 </div>
                 <div class="col-md-8">
                   <p>{{decodeStringData?.created | date:'medium'}}</p>
@@ -301,7 +301,7 @@
               <div class="row">
                 <div class="col-md-8">
                   <h6>
-                    Special Feature Optins
+                    Special Feature Opt-ins
                   </h6>
                 </div>
                 <div class="col-md-4">
@@ -411,7 +411,7 @@
             </span>
                 </li>
                 <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
-                  Unknown & Unclassified
+                  Unknown
                   <span class="badge badge-primary badge-pill">
               <i *ngIf="obj.allow_unknown" class="fa fa-check" aria-hidden="true"></i>
               <i *ngIf="!obj.allow_unknown" class="fa fa-times" aria-hidden="true"></i>
@@ -691,7 +691,7 @@
                     </span>
                 </li>
                 <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
-                  Unknown & Unclassified
+                  Unknown
                   <span class="badge badge-primary badge-pill">
                     <i *ngIf="obj.allow_unknown" class="fa fa-check" aria-hidden="true"></i>
                     <i *ngIf="!obj.allow_unknown" class="fa fa-times" aria-hidden="true"></i>
@@ -771,7 +771,7 @@
                   </span>
                 </li>
                 <li class="list-group-item d-flex pb-2 pt-2 bor-bm justify-content-between align-items-center">
-                  Unknown & Unclassified
+                  Unknown
                   <span class="badge badge-primary badge-pill">
                     <i *ngIf="obj.allow_unknown" class="fa fa-check" aria-hidden="true"></i>
                     <i *ngIf="!obj.allow_unknown" class="fa fa-times" aria-hidden="true"></i>

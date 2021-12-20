@@ -124,8 +124,9 @@ export class CompanyteamComponent implements OnInit {
       this.loading.stop();
       if (data) {
         const key = 'response';
+        const companyLevelRoles = data[key].filter((t) => t.role_name.indexOf('Org') == -1);
         // const roleid = data[key];
-        this.roleList = data[key];
+        this.roleList = companyLevelRoles;
       }
     }, (err) => {
       this.alertMsg = err;
@@ -219,14 +220,18 @@ export class CompanyteamComponent implements OnInit {
             this.modalService.dismissAll('Data Saved!');
           });
       } else {
+        let useremail = this.inviteUserForm.getRawValue().emailid;
         const requestObj = {
-         // email: this.inviteUserOrgForm.get('emailid').value,
           id: this.recordID,
+          email: useremail,
           user_id: this.approverID,
           role_id: this.inviteUserForm.value.permissions,
-        //  user_level: 'organization'
+          firstname: this.inviteUserForm.value.firstname,
+          lastname: this.inviteUserForm.value.lastname,
+          user_level: 'company',
+          action:'edit'
         };
-        this.companyService.updateUserRole( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
+        this.companyService.updateUserRole( this.constructor.name, moduleName.companyModule, requestObj)
           .subscribe((data) => {
             if (data) {
               this.alertMsg = data.response;

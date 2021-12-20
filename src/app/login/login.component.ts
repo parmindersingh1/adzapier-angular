@@ -6,21 +6,52 @@ import {AlertService, AuthenticationService, UserService} from './../_services';
 import {OrganizationService} from '../_services/organization.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {moduleName} from '../_constant/module-name.constant';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import {animate, group, query, state, style, transition, trigger} from '@angular/animations';
+import { Observable, timer, Subscription } from 'rxjs';
+import {options} from 'ionicons/icons';
+
+const left = [
+  query(':enter, :leave', style({ }), { optional: true }),
+  group([
+    query(':enter', [style({ transform: 'translateX(-57px)' }), animate('.3s ease-out', style({ transform: 'translateX(0%)' }))], {
+      optional: true,
+    }),
+    query(':leave', [style({ display:'none' }), animate('.3s ease-out', style({ transform: 'translateX(57px)' }))], {
+      optional: true,
+    }),
+  ]),
+];
+
+const right = [
+  query(':enter, :leave', style({}), { optional: true }),
+  group([
+    query(':enter', [style({ transform: 'translateX(57px)' }), animate('.3s ease-in-out', style({ transform: 'translateX(0%)' }))], {
+      optional: true,
+    }),
+    query(':leave', [style({ display:'none' }), animate('.3s ease-out', style({ transform: 'translateX(-57px)' }))], {
+      optional: true,
+    }),
+  ]),
+];
 
 @Component({
   templateUrl: 'login.component.html',
   styleUrls: ['./login.component.scss'],
   animations: [
-    trigger('slideInOut', [
-      state('false', style({
-        transform: 'translateX(0)'
-      })),
-      state('true', style({
-        transform: 'translateX(-550px)'
-      })),
-      transition('false <=> true', animate('400ms ease-in-out'))
-    ])
+    // trigger('slideInOut', [
+    //   state('false', style({
+    //     transform: 'translateX(0)'
+    //   })),
+    //   state('true', style({
+    //     transform: 'translateX(-550px)'
+    //   })),
+    //   transition('false <=> true', animate('400ms ease-in-out'))
+    // ])
+    trigger('animImageSlider', [
+      transition(':increment', right),
+      transition(':decrement', left),
+    ]),
+
 
   ]
 
@@ -40,10 +71,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   alertMsg: any;
   isOpen = false;
   alertType: any;
-  isEmailVerified: boolean;
+  step:any = 1;
+  isEmailVerified = false;
   isMsgConfirm = false;
   isVerificationBtnClick = false;
-
+  isInvitedUserVerified: boolean;
+  hideMessage: boolean;
+  subscription:Subscription;
+  timer : Observable<any>;
+  forgotpasswordForm: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -52,12 +88,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private orgservice: OrganizationService,
     private loadingBar: NgxUiLoaderService,
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthenticationService
   ) {
     if (this.authenticationService.currentUserValue) {
       this.router.navigate(['/']);
     }
-    this.isEmailVerified = true;
+    // this.isEmailVerified = true;
   }
 
 
@@ -71,13 +108,18 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.pattern]],
       password: ['', [Validators.required]]
     });
+    this.forgotpasswordForm = this.formBuilder.group({
+      emailid: ['', [Validators.required, Validators.pattern]]
+    });
+    this.authenticationService.userEmailVerificationStatus.subscribe((data) => this.isInvitedUserVerified = data);
+    //this.setTimer();
   }
 
   ngOnDestroy() {
     const element = document.getElementById('main');
     element.classList.remove('container-fluid');
     element.style.padding = null;
-    element.classList.add('container');
+   // element.classList.add('container');
     element.classList.add('site-content');
   }
 
@@ -86,9 +128,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.loginForm.controls;
   }
 
+  get r(){
+    return this.forgotpasswordForm.controls;
+  }
+
+  next(){
+    this.step = this.step + 1;
+  }
+
+  previous(){
+    this.step = this.step - 1;
+
+  }
   clearError() {
     this.errorMsg = '';
   }
+
+
 
   onSubmit() {
 
@@ -104,38 +160,80 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
 
     }
-
     this.loading = true;
-    this.authenticationService.login(this.constructor.name, moduleName.loginModule, this.f.email.value, this.f.password.value)
+    this.authenticationService.login(this.constructor.name, moduleName.loginModule, this.f.email.value.toLowerCase(), this.f.password.value)
       .pipe(first())
       .subscribe(
         data => {
-          // this.getLoggedInUserDetails();
-          this.authenticationService.userLoggedIn.next(true);
-          this.authenticationService.currentUserSubject.next(data);
-          localStorage.setItem('currentUser', JSON.stringify(data));
-          let params = this.route.snapshot.queryParams;
-          this.returnUrl = params['redirectURL'];
-          // if (params['redirectURL']) {
-          if (this.returnUrl) {
-            this.router.navigate([params['redirectURL']]);
+          if (data.response.hasOwnProperty('action')) {
+            if (data.response.action === 'required') {
+              this.router.navigate(['/signup'], {queryParams: {email: data.response.email, userID: data.response.userID, step: 'required'}});
+            }
+            return false;
           } else {
-            this.router.navigate(['/home/welcome']);
+            // this.getLoggedInUserDetails();
+            this.authenticationService.userLoggedIn.next(true);
+            this.authenticationService.currentUserSubject.next(data);
+            localStorage.setItem('currentUser', JSON.stringify(data));
+            let params = this.route.snapshot.queryParams;
+            this.returnUrl = params['redirectURL'];
+            // if (params['redirectURL']) {
+            if (this.returnUrl) {
+              this.router.navigate([params['redirectURL']]);
+            } else {
+              this.router.navigate(['/home/welcome']);
+            }
           }
         },
         error => {
-          // if (error == 'Please verify email address.') {
-          //   this.isEmailVerified = false;
-          //   this.loading = false;
-          //   this.isOpen = false;
-          // } else {
+
+          if (error === 'Please verify email address.') {
+            this.isEmailVerified = true;
             this.isOpen = true;
             this.alertMsg = error;
             this.alertType = 'danger';
             this.loading = false;
-          // }
+          } else {
+            this.isOpen = true;
+            this.alertMsg = error;
+            this.alertType = 'danger';
+            this.loading = false;
+          }
         });
 
+  }
+
+
+  onSubmitForgot() {
+    this.submitted = true;
+    this.alertService.clear();
+    // stop here if form is invalid
+    if (this.forgotpasswordForm.invalid) {
+      return;
+    }
+
+    this.loading = true;
+    this.loadingBar.start();
+    this.userService.forgotpswd(this.constructor.name, moduleName.forgotPasswordModule, this.r.emailid.value)
+      .pipe(first())
+      .subscribe(data => {
+        this.loadingBar.stop();
+        this.alertMsg = 'Link sent to your Email, please Reset Your Password..!';
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.loading = false;
+        this.submitted = false;
+        this.forgotpasswordForm.reset();
+      },
+        error => {
+          this.loadingBar.stop();
+          this.alertMsg = 'Email ID is not registered';
+          this.isOpen = true;
+          this.alertType = 'danger';
+          this.loading = false;
+          this.submitted = false;
+          this.forgotpasswordForm.reset();
+        });
   }
 
   getLoggedInUserDetails() {
@@ -167,8 +265,21 @@ export class LoginComponent implements OnInit, OnDestroy {
       if (data.status === 200) {
         this.isMsgConfirm = true;
         this.isVerificationBtnClick = false;
+        this.alertMsg = 'Verification email has been sent, please check your email inbox';
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.isEmailVerified = false;
       }
     })
   }
+
+  setTimer(){
+    this.timer = timer(8000)
+    this.subscription = this.timer.subscribe(() => {
+      this.isInvitedUserVerified = false;
+      this.hideMessage = true;
+    })
+  }
+
 
 }

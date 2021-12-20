@@ -1,4 +1,4 @@
-<div class="container mb-0">
+<div class="container-fluid mb-0 pl-0">
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-0">
@@ -36,7 +36,7 @@
         (click)="createWorkflowModalPopup(createworkflowModal,'')"><i class="fas fa-plus"></i> Create</button>
      </div> -->
                <div class="float-right mr-1"> <button (click)="createWorkflowModalPopup(createworkflowModal,'')" data-toggle="modal" type="button"
-                    class="btn btn-sm btn-uppercase btn-outline-secondary mr-2">
+                    class="btn btn-sm btn-uppercase btn-outline-secondary mr-2" style="text-transform: none;font-size: 12px;">
                     <i-feather class="feather-16" name="plus"></i-feather>
                     <span class="d-none d-sm-inline mg-l-5">
                         Create</span>
@@ -56,7 +56,7 @@
             </th>
             <th>Created by
             </th>
-            <th pSortableColumn="updatedby_firstname">Last updated by
+            <th pSortableColumn="updatedby_firstname">Last Updated by
             </th>
             <th pSortableColumn="created_at">Created at <p-sortIcon field="created_at"></p-sortIcon>
             </th>
@@ -125,7 +125,7 @@
                 <div class="col-sm-12">
                     <div class="form-group">
                         <label for="workflowName"
-                            class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
+                            class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
                         <input type="text" class="form-control" formControlName="workflowName"
                             [ngClass]="{ 'is-invalid': submitted && addWorkflow.workflowName.errors }" />
                         <div *ngIf="submitted && addWorkflow.workflowName.errors" class="invalid-feedback">
@@ -138,10 +138,11 @@
             </div>
             <div class="row">
                 <div class="col-sm-12 mb-3">
-                    <label for="workflowselect" class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">
+                    <label for="workflowselect" class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">
                         Select Workflow</label>
                     <select class="form-control" formControlName="workflowselection" (change)="onWorkflowChange($event)"
                         [ngClass]="{ 'is-invalid': submitted && addWorkflow.workflowselection.errors }">
+                      <option value="" selected>-- Select Workflow --</option>
                         <ng-container *ngFor="let opt of activeWorkflowList">
                             <option *ngIf="opt.workflow_status=='active'" [value]="opt.id">
                                 {{ opt.workflow_name }}

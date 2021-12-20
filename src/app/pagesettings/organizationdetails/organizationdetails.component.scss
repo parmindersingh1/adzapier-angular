@@ -50,6 +50,10 @@
     display: flex;
 }
 
+.table-responsive.property-div > .card > .card-body, .table-responsive.member-div > .card > .card-body {
+    padding: 15px !important;
+}
+
 .table-responsive.property-div > .card > .card-header, .table-responsive.member-div > .card > .card-header  {
     padding-top: 0;
     padding-right: 0;
@@ -230,4 +234,8 @@ span:not(:last-of-type)::after {
     -moz-appearance: none;
     -webkit-appearance: none;
     appearance: none;
+}
+
+.tr-graybg {
+    background: #f3f3f3;
 }

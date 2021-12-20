@@ -23,12 +23,12 @@ export class ConsentSolutionsService {
               private activateRoute: ActivatedRoute,
               private orgservice: OrganizationService,
               private loki: LokiService) {
-    this.onGetPropsAndOrgId();
     this.activateRoute.queryParamMap
       .subscribe(params => {
         this.queryOID = params.get('oid');
         this.queryPID = params.get('pid'); 
     });
+    this.onGetPropsAndOrgId();
   }
 
   onGetPropsAndOrgId() {
@@ -37,9 +37,8 @@ export class ConsentSolutionsService {
         this.currentManagedOrgID = response.organization_id || response.response.oid || this.queryOID;
         this.currrentManagedPropID = response.property_id || response.response.id || this.queryPID;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid || this.queryOID;
-        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id || this.queryPID;
+        this.currentManagedOrgID =  this.queryOID;
+        this.currrentManagedPropID = this.queryPID;
       }
     });
   }

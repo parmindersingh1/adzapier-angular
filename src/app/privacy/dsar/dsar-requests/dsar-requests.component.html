@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid pr-0 pl-1">
   <nav aria-label="breadcrumb" class="align-navbtn mb-3">
     <ol class="breadcrumb breadcrumb-style1 mg-b-0">
       <li class="breadcrumb-item">Privacy</li>
@@ -12,22 +12,28 @@
         Data Subject Access Requests
     </span>
       <div class="datepickerwrapper col-sm-9 pr-0 mr-0 ml-auto">
-        <button (click)="onRefresh()" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22">
+        <button (click)="onRefresh()" type="reset" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22" style="text-transform: none;font-size: 12px;">
           <i class="fas fa-sync feather-16"></i> Refresh</button>
       <div class="col-sm-5 pr-0 pl-2 mr-2 d-flex row-reverse">
-        <div class="input-group-prepend"  (click)="dp.show()">
-          <span class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm"><i class="fa" [ngClass]="searchbydaterange !== '' ? 'fa-caret-down':'fa-search'"></i></span>
+        <div class="input-group-prepend">
+          <span *ngIf="searchbydaterange == ''" (click)="dp.show()" class="input-group-text rounded-right border-left-0" id="inputGroup-sizing-sm">
+            <i class="fa" [ngClass]="searchbydaterange !== '' ? '':'fa-caret-down'"></i>
+          </span>
+          <span *ngIf="searchbydaterange !== ''" (click)="clearDatePicker()" class="input-group-text bg-transparent"
+          style="background-color: #fff !important; border-left:0 !important; border-radius: 0px 5px 5px 0px;"> 
+          <i class="fa" [ngClass]="searchbydaterange == null ? 'fa-caret-down':'fa-times color-red'" aria-hidden="true"></i>
+        </span>
         </div>
-        <input type="text" [(ngModel)]="searchbydaterange"
-         class="form-control border-left-0  border-right-0 rounded-right"
-        bsDaterangepicker [bsConfig]="bsConfig"  #dp="bsDaterangepicker"  (onHidden)="onDateSelection()">
-        <div class="input-group-prepend border-left-0"  (click)="dp.show()">
+        <input type="text" [(ngModel)]="searchbydaterange" class="form-control border-left-0  border-right-0 rounded-right"
+          bsDaterangepicker [bsConfig]="bsConfig" #dp="bsDaterangepicker"  [outsideClick]="true" placeholder="Select Date"
+          (onHidden)="onDateSelection()">
+        <div class="input-group-prepend border-left-0" (click)="dp.show()">
           <span class="input-group-text rounded-left border-right-0" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
         </div>
       </div>
       <div class="bg-white">
       <button (click)="createWebFormRequestModal(createRequestModal,'')" data-toggle="modal" type="button"
-        class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22">
+        class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22" style="text-transform: none;font-size: 12px;">
         <i-feather class="feather-16" name="plus"></i-feather>
         <span class="d-none d-sm-inline mg-l-5">
           Create Request </span>
@@ -38,15 +44,15 @@
 
   </div>
 
-  <p-table class="dsar-request-table" #ptable [value]="requestsList" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
-    [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="5" [showCurrentPageReport]="true"
+  <p-table class="dsar-request-table" #ptable [value]="requestsList" sortField="rowData.created_at"  (onSort)="customSort($event)" [customSort]="true" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
+    [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="10" [showCurrentPageReport]="true"
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [rowsPerPageOptions]="[5,10,15]" styleClass="p-datatable-sm">
+    [rowsPerPageOptions]="[10,20,30]" styleClass="p-datatable-sm">
     <ng-template pTemplate="caption">
       <div class="searchfield row mt-1 pl-2 pr-2">
         <div class="col-sm-2 input-group">
           <input class="form-control border-right-0 border" [(ngModel)]="inputValue" type="text"
-            (keyup.enter)="onSearchInputChange()" placeholder="Search" id="example-search-input" />
+            (keyup.enter)="onSearchInputChange()" placeholder="Search by name" id="example-search-input" />
           <span class="input-group-append">
             <div *ngIf="inputValue !== ''" (click)="clearSearchfield()" class="input-group-text bg-transparent"
               style="background-color: #fff !important;">
@@ -59,7 +65,7 @@
           </span>
         </div>
         <div class="col-sm-2 dp-safari">
-          <select (change)="onChangeRequestType($event)" class="form-control">
+          <select (change)="onChangeRequestType($event)"  [(ngModel)]="dprequestType" class="form-control">
             <option selected value="">Type Of Request</option>
             <ng-container *ngFor="let obj of allFilterData.filter_Request_type">
               <option [value]="obj.key">{{obj.value}}</option>
@@ -68,7 +74,7 @@
         </div>
 
         <div class="col-sm-2 dp-safari">
-          <select (change)="onChangeSubjectType($event)" class="form-control">
+          <select (change)="onChangeSubjectType($event)" [(ngModel)]="dpsubjectType" class="form-control">
             <option selected value="">Subject Type</option>
             <ng-container *ngFor="let obj of allFilterData.filter_Subject_type">
               <option [value]="obj.key">{{obj.value}}</option>
@@ -77,7 +83,7 @@
         </div>
 
         <div class="col-sm-2 dp-safari">
-          <select (change)="onChangeStatus($event)" class="form-control">
+          <select (change)="onChangeStatus($event)" [(ngModel)]="dprequestStatus" class="form-control">
             <option selected value="">Status</option>
             <ng-container *ngFor="let obj of allFilterData.filter_status">
               <option [value]="obj.key">{{obj.value}}</option>
@@ -86,7 +92,19 @@
         </div>
 
         <div class="col-sm-2">
-          <input type="number" placeholder="Due in" (change)="onChangeDueIn($event)" class="form-control" />
+          <div class="btn-group dropup" dropdown [autoClose]="true" [insideClick]="true">
+            <button type="button" class="btn btn-white dropdown-toggle" dropdownToggle data-toggle="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+              Due In
+            </button>
+            <div class="dropdown-menu"  *dropdownMenu>
+              <a class="dropdown-item" (click)="onChangeDueIn('-1')">Past due</a>
+              <a class="dropdown-item" (click)="onChangeDueIn('1')">One Day</a>
+              <a class="dropdown-item" (click)="onChangeDueIn('2')">2 Days</a>
+              <a class="dropdown-item" (click)="onChangeDueIn('15')">15 Days</a>
+              <input type="number" (change)="onChangeDueIn($event)" [(ngModel)]="inputValueDueIn" class="form-control" />
+            </div>
+          </div>
+          <!-- <input type="number" placeholder="Due in" (change)="onChangeDueIn($event)" class="form-control" /> -->
           <!-- <select (change)="onChangeDueIn($event)" class="form-control">
             <option selected value="">Due in</option>
             <ng-container *ngFor="let obj of allFilterData.filter_due_in">
@@ -106,7 +124,7 @@
     <ng-template pTemplate="header"  let-columns>
 
       <tr>
-        <th>Id
+        <th>ID
         </th>
         <th>Request Type
         </th>
@@ -122,9 +140,9 @@
         <th  *ngFor="let col of columns">
           {{col.header}} <!--pSortableColumn="{{col.field}}" <p-sortIcon field="{{col.field}}"></p-sortIcon>-->
         </th>
-        <th>Days left
+        <th>Due In
         </th>
-        <th pSortableColumn="created_at">Created At <p-sortIcon field="created_at"></p-sortIcon>
+        <th pSortableColumn="created_at">Created at <p-sortIcon field="created_at"></p-sortIcon>
         </th>
       </tr>
 
@@ -136,8 +154,8 @@
             {{rowData?.id}}
           </a>
         </td>
-        <td><span class="ui-column-title">Request Type</span>{{rowData?.request_type}}</td>
-        <td><span class="ui-column-title">Subject Type</span>{{rowData?.subject_type}}</td>
+        <td><span class="ui-column-title">Request Type</span>{{onCheckRequesttype("requesttype",rowData.request_form,rowData.custom_data)}}</td>
+        <td><span class="ui-column-title">Subject Type</span>{{onCheckSubjecttype("subjecttype",rowData.request_form,rowData.custom_data)}}</td>
         <td>
           <span class="ui-column-title">Status</span>
           <ng-container *ngIf="rowData">
@@ -159,7 +177,7 @@
         </ng-container>
         </td>
         <td>
-          <span class="ui-column-title">Days left</span>
+          <span class="ui-column-title">Due In</span>
           <span class="badge"
             [ngClass]="{'badge-danger':rowData?.days_left < 10,'badge-warning':rowData?.days_left < 30,'badge-success':rowData?.days_left >= 20}">
             <ng-container *ngIf="rowData">
@@ -207,7 +225,7 @@
           <div class="col-sm-12">
             <div class="form-group">
               <label for="webformselection"
-                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Web form templates</label>
+                class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">Web form templates</label>
               <select class="form-control" formControlName="webformselection" (change)="onWebformChange($event)"
                 [ngClass]="{ 'is-invalid': submitted && dsar.webformselection.errors }">
                 <option selected value="">Please select web form</option>
@@ -226,7 +244,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-link tx-decoration-underline tx-13" type="reset" aria-label="Close" (click)="onCancelClick()">Cancel</button>
-        <button class="btn btn-sm btn-outline-secondary btn-uppercase tx-13">Create</button>
+        <button class="btn btn-sm btn-outline-secondary btn-uppercase tx-13" style="text-transform: none;font-size: 12px;">Create</button>
       </div>
     </form>
   </ng-template>

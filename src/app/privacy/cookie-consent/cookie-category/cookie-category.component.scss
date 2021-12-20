@@ -175,6 +175,10 @@
 .row-enabled {
   background-color:transparent;
 }
+.p-toast-top-right {
+  right: 20px !important;
+  top:500px !important;
+}
 
 .row-disabled {
   background-color: #ccc;
@@ -505,4 +509,14 @@ tr.row-disabled > td > a {
   border-radius: 0px 0px 10px 10px;
   border-bottom: 0;
   justify-content: center;
+}
+
+.qs-position-scan {
+  left:650px;
+  top:-50px;
+}
+
+.qs-position-banner {
+  left:450px;
+  top:-50px;
 }

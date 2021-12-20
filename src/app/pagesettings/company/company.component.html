@@ -1,26 +1,29 @@
-<div class="container">
+<div>
     <div class="mb-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-style1 mg-b-0">
-                <li class="breadcrumb-item"><a routerLink="/settings">Settings</a></li>
+                <li class="breadcrumb-item"><a routerLink="/settings" (click)="checkForQsTooltip()" [queryParams]="{oid:queryOID , pid:queryPID}">Settings</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Company</li>
             </ol>
         </nav>
     </div>
+    <!-- <app-quickstartalert [styleobj]="positionObj()" [linkid]="quickDivID" [divguidetext]="'addcompanydetails'"  [guidancetext]="text" [isclickedbyuser]="isquickstartmenu" [isactualLinkclickedbyuser]="actuallinkstatus"></app-quickstartalert>  -->
     <div class="row">
         <div class="col-12">
             <div class="card">
+                 <!-- <div *ngIf="isquickstartmenu && quickDivID == 1" class="guidencediv qs-position">22Edit company details</div> -->
+                
                 <div class="card-header d-flex align-items-center justify-content-between pd-y-10">
                     <h6 class="mg-b-0 tx-color-03 ">
                         Company Details
                     </h6>
                     <div class="d-flex pd-0">
-                        <a routerLink="/settings/organizations" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2">Add Organization</a>
-                        <button (click)="editOrganizationModalPopup(editCompanyModal, 'edit')"
-                            class="btn btn-sm btn-outline-secondary btn-uppercase mr-0">
+                        <a routerLink="/settings/organizations" (click)="checkForQsTooltip()" [queryParams]="{oid:queryOID , pid:queryPID}" class="btn btn-sm btn-outline-secondary btn-uppercase mr-2" style="text-transform: none;font-size: smaller;">Add Organization</a>
+                        <button [ngClass]="quickDivID == 1 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" (click)="editOrganizationModalPopup(editCompanyModal, 'edit')"
+                            class="btn btn-sm btn-outline-secondary btn-uppercase mr-0" style="text-transform: none;font-size: smaller;">
                             <!-- <i-feather name="edit-2" class="feather-16"></i-feather> -->
                             <i class="fa fa-pen mr-1" aria-hidden="true"></i>
-                            <span class="d-none d-sm-inline mg-l-0"> Edit</span>
+                          <span class="d-none d-sm-inline mg-l-0"> Edit</span>
                         </button>
                     </div>
                 </div>
@@ -29,13 +32,13 @@
                 <div class="card-body">
                     <div class="row row-sm">
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
-                            <label class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">
+                            <label class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-b-10">
                                 Company</label>
                             <p class="mg-b-0">{{orgname}}</p>
                         </div>
                         <div class="col-sm-3 mg-t-5 mg-sm-t-5">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Address</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-b-10">Address</label>
                             <p class="mg-b-0">{{address1}} {{address2}} {{zipcode}} {{city}} {{state}}</p>
                         </div>
 
@@ -46,22 +49,22 @@
 
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">TaxID</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-b-10">Tax ID</label>
                             <p class=" mg-b-0">{{taxid}}</p>
                         </div>
                         <div class="col-sm-3 mg-t-5 mg-sm-t-5">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Email</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-b-10">Email</label>
                             <p class=" mg-b-0">{{email}}</p>
                         </div>
                         <div class="col-sm-2 mg-t-5 mg-sm-t-5">
                             <label
-                                class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">Phone</label>
+                                class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-b-10">Phone</label>
                             <p class=" mg-b-0">{{phone}}</p>
                         </div>
                         <div class="col-sm-6 mg-t-5 mg-sm-t-5">
                         <label
-                            class="tx-10 tx-medium tx-spacing-1 tx-color-03 tx-uppercase tx-sans mg-b-10">App ID</label>
+                            class="tx-11 tx-medium tx-spacing-1 tx-color-03 tx-sans mg-b-10">App ID</label>
                         <p *ngIf="!appId" (click)="onGenerateToken(cid)" style="cursor: pointer" class="mg-b-0 tx-primary"> Generate App ID</p>
                         <p class="mg-b-0" *ngIf="appId">{{appId}}</p>
                         <p *ngIf="appId" (click)="onUpdateToken(cid)" style="cursor: pointer" class="mg-b-0 tx-primary"> Update App ID</p>
@@ -85,7 +88,7 @@
             </div>
         </div>
     </div>
-    <div class="divider-text mg-y-10">USERS</div>
+    <div class="divider-text mg-y-10">Users</div>
     <div class="table-responsive company-div">
         <div class="card">
             <div class="card-header tx-semibold">
@@ -98,9 +101,9 @@
                         </span>
                     </div>
 
-                    <div class="col-sm-2 ml-auto">
-                        <button type="button" class="add-user-btn btn btn-sm btn-outline-secondary btn-uppercase mr-0" data-toggle="modal"
-                            (click)="editOrganizationModalPopup(inviteuserModal, 'add')"><i class="fas fa-plus"></i> Add
+                    <div class="col-sm-2 ml-auto btn-align-right">
+                        <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-0" data-toggle="modal"
+                            (click)="editOrganizationModalPopup(inviteuserModal, 'add');checkForQsTooltip();" style="text-transform: none;font-size: smaller;"><i class="fas fa-plus"></i> Add
                             User</button>
                     </div>
                 </div>
@@ -112,7 +115,7 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Roles</th>
+                            <th>Role</th>
                             <th>Last Login</th>
                             <th>Action</th>
                         </tr>
@@ -142,11 +145,11 @@
                             </td>
 
                             <td>
-                                <a class="pd-r-5 cursorpointer" (click)="editUserInvitation(inviteuserModal,list)">
+                                <a class="pd-r-5 cursorpointer" (click)="editUserInvitation(inviteuserModal,list);checkForQsTooltip();">
                                     <span class="d-none d-sm-inline mg-l-0">  <i class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
                                 </a>
 
-                                <a class="pd-r-5 cursorpointer" (click)="removeTeamMember(list,'team member')">
+                                <a class="pd-r-5 cursorpointer" (click)="removeTeamMember(list,'team member');checkForQsTooltip();">
                                     <i class="far fa-trash-alt tx-danger fa-sm"></i>
                                 </a>
 
@@ -181,7 +184,7 @@
                     </div>
                 </div>
                 <div class="row user-notes col-sm-12">
-                    <p class="mb-0"> <strong>Note:</strong> <span> Users in Company table can view all organizations and properties.</span></p>
+                    <p class="mb-0"> <strong>Note:</strong> <span> The users in the list can view all organizations and properties.</span></p>
                 </div>
             </div>
 
@@ -191,7 +194,7 @@
 <ng-template #editCompanyModal let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title">Edit Company Details</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Close Clicked')">
+        <button type="button" class="close" aria-label="Close" (click)="onResetProfile()"> <!--modal.dismiss('Close Clicked')-->
             <span aria-hidden="true">×</span>
         </button>
     </div>
@@ -217,7 +220,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="addressone">Address 1</label>
+                        <label for="addressone">Address: Line 1</label>
                         <input type="text" formControlName="address1" class="form-control" minlength="6" maxlength="200"
                             [ngClass]="{ 'is-invalid': submitted && f.address1.errors }"
                             placeholder="Enter your address" />
@@ -232,7 +235,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="address2">Address 2</label>
+                        <label for="address2">Address: Line 2</label>
                         <input type="text" formControlName="address2" class="form-control"
                             placeholder="Enter your address" />
 
@@ -268,7 +271,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group"><label for="email">Email</label>
-                        <input type="text" disabled class="form-control" formControlName="email" name="email"  />
+                        <input type="text" class="form-control" formControlName="email" name="email"  />
                     </div>
                 </div>
                 <div class="col-sm-6">
@@ -285,7 +288,7 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="zipcode">Zipcode</label>
+                        <label for="zipcode">ZIP Code</label>
                         <input type="text" formControlName="zipcode" class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && f.zipcode.errors }"
                             placeholder="Enter your zipcode" />
@@ -299,7 +302,7 @@
                     <div class="form-group">
                         <label>&nbsp;</label>
                         <div class="text-right">
-                            <button class="btn btn-link tx-decoration-underline" type="reset" (click)="modal.dismiss('Close Clicked')">Cancel</button>
+                            <button class="btn btn-link tx-decoration-underline" type="reset" (click)="modal.dismiss('Close Clicked');checkForQsTooltip();">Cancel</button>
                             <button type="submit" class="btn btn-xs btn-primary">Save</button>
                         </div>
                     </div>
@@ -383,7 +386,7 @@
             </div>
             <div class="float-right">
                 <button class="btn btn-link tx-decoration-underline" type="reset"
-                (click)="onCancelClick()">Cancel</button>
+                (click)="onCancelClick();checkForQsTooltip();">Cancel</button>
                 <button class="btn btn-primary btn-xs" type="submit">Submit</button>
             </div>
         </form>
