@@ -9,6 +9,8 @@ import {AuthenticationService, UserService} from '../../../../_services';
 import {DataService} from '../../../../_services/data.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+
 import { Label } from 'ng2-charts';
 
 @Component({
@@ -87,8 +89,12 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
               private dataService: DataService,
               private loading: NgxUiLoaderService,
               private _cd: ChangeDetectorRef,
-              private activateRoute: ActivatedRoute
+              private activateRoute: ActivatedRoute,
+              private titleService: Title 
+
   ) {
+    this.titleService.setTitle("Cookie Scanning - Adzapier Portal");
+
   }
 
   ngOnInit(): void {
@@ -240,7 +246,7 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     }, error => {
       this.isScanning = false;
       this.isOpen = true;
-      this.alertMsg = error;
+      this.alertMsg = error.Error;
       this.alertType = 'danger';
     });
   }

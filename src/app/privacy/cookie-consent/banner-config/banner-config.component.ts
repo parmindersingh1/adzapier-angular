@@ -30,6 +30,8 @@ import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {CookieCategoryService} from '../../../_services/cookie-category.service';
+import { Title } from '@angular/platform-browser';
+
 
 interface Country {
   name: string,
@@ -106,7 +108,9 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
               private dataService: DataService,
               private cookieCategoryService: CookieCategoryService,
               private cd: ChangeDetectorRef,
-              private modalService: BsModalService
+              private modalService: BsModalService,
+              private titleService: Title 
+
   ) {
     const element = document.getElementById('main');
     element.classList.remove('container');
@@ -114,6 +118,9 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     element.classList.add('container-fluid');
     element.style.padding = '0px';
     element.style.margin = '0px';
+
+    this.titleService.setTitle("Cookie Banner - Adzapier Portal");
+
   }
 
   ngOnInit() {

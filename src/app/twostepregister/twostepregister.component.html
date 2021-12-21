@@ -181,7 +181,7 @@
 <!--                  <div *ngIf="isInvitedUserVerified && requiredID" class="alert alert-success">-->
 <!--                    Your email is successfully verified !-->
 <!--                  </div>-->
-                  <h5 *ngIf="isInvitedUserVerified" class="alert alert-success tx-14">Hey! Just one step to complete <br />
+                  <h5 *ngIf="isInvitedUserVerified" class="alert alert-success tx-14">Hey! Just one step to complete. <br />
                     Please enter the following details to create your account instantly.</h5>
 <!--                  <div *ngIf="!requiredID" class="alert alert-info">-->
 <!--                    Last Step: Please Complete Your Registration Form !-->
@@ -195,10 +195,10 @@
                             <label for="companyname">Company or Agency<span class="required-asterisk">*</span></label>
                             <input type="text" formControlName="companyname" class="form-control input-lg"
                                 [ngClass]="{ 'is-invalid': submitted && r.companyname.errors }"
-                                placeholder="Enter your companyname" (ngModelChange)="clearError()">
+                                placeholder="Enter your company name" (ngModelChange)="clearError()">
                             <div *ngIf="submitted && r.companyname.errors" class="invalid-feedback">
-                                <div *ngIf="r.companyname.errors.required">Companyname is required</div>
-                                <div *ngIf="r.companyname.errors.pattern">Companyname allow only Alphanumeric</div>
+                                <div *ngIf="r.companyname.errors.required">Company name is required</div>
+                                <div *ngIf="r.companyname.errors.pattern">Company name allow only Alphanumeric</div>
                             </div>
                           <div *ngIf="alertMsg" [innerHTML]="alertMsg" class="invalid-feedback">
 
@@ -211,7 +211,7 @@
                                 <input type="text" name="address1" formControlName="address1"
                                     class="form-control input-lg"
                                     [ngClass]="{ 'is-invalid': submitted && r.address1.errors }"
-                                    placeholder="Enter your Address" />
+                                    placeholder="Enter your address" />
                                 <div *ngIf="submitted && r.address1.errors" class="invalid-feedback">
                                     <div *ngIf="r.address1.errors.required">Address 1 is required</div>
                                 </div>
@@ -252,20 +252,20 @@
 
                         <div class="row">
                             <div class="form-group col-md-6">
-                                <label for="code">Zipcode<span class="required-asterisk">*</span></label>
+                                <label for="code">ZIP code<span class="required-asterisk">*</span></label>
                                 <input type="text" name="code" formControlName="code" class="form-control input-lg"
                                     [ngClass]="{ 'is-invalid': submitted && r.code.errors }"
-                                    placeholder="Enter Zipcode" />
+                                    placeholder="Enter ZIP code" />
                                 <div *ngIf="submitted && r.code.errors" class="invalid-feedback">
                                     <div *ngIf="r.code.errors.required">Zipcode is required</div>
                                     <div *ngIf="r.code.errors.pattern">Zipcode can not be less than 5 digit</div>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="phone">Phone No</label>
+                                <label for="phone">Phone Number</label>
                                 <input type="text" formControlName="phone" class="form-control input-lg"
                                     [ngClass]="{ 'is-invalid': submitted && r.phone.errors }"
-                                    placeholder="Enter Phone no" />
+                                    placeholder="Enter Phone number" />
                                 <div *ngIf="submitted && r.phone.errors" class="invalid-feedback">
                                     <!-- <div *ngIf="r.phone.errors.required">Phone No is required</div> -->
                                     <div *ngIf="r.phone.errors.pattern">Phone no should only contain digits no special symbols</div>
@@ -289,7 +289,7 @@
 
                                 <div class="col-sm-9 p-0 input-group-append flex-column">
                                     <input type="text" class="form-control" name="website" formControlName="website"
-                                        placeholder="propertydomain.com"
+                                        placeholder="Enter your domain"
                                         [ngClass]="{ 'is-invalid': submitted && r.website.errors }" />
                                     <div *ngIf="submitted && r.website.errors" class="invalid-feedback">
                                         <div *ngIf="r.website.errors.required">Website address is required</div>
@@ -301,7 +301,7 @@
                         </div>
                         <div class="form-group">
                             <label for="logourl">Logo URL</label>
-                            <input type="text" class="form-control" name="logourl" formControlName="logourl" />
+                            <input type="text" class="form-control" name="logourl" placeholder="Insert Logo URL" formControlName="logourl" />
                         </div>
 
                         <!-- <div>{{this.secondregForm.value | json}}</div>

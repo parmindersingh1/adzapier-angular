@@ -9,6 +9,7 @@ import {ConsentSolutionsService} from '../../../_services/consent-solutions.serv
 import {BsDatepickerConfig, DatepickerDateCustomClasses} from 'ngx-bootstrap/datepicker';
 import { FormBuilder,FormArray, FormGroup, Validators } from '@angular/forms';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -121,13 +122,18 @@ export class ConsentTableComponent implements OnInit {
               private router: Router,
               private formBuilder: FormBuilder,
               private modalService: BsModalService,
-              private activateRoute: ActivatedRoute
+              private activateRoute: ActivatedRoute,
+              private titleService: Title 
+
   ) {
     this.dateCustomClasses = [
       { date: new Date(), classes: ['theme-dark-blue'] },
     ];
     this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
     this.searchbydaterangeExport = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
+
+    this.titleService.setTitle("Consent Preference Records - Adzapier Portal");
+
   }
 
   ngOnInit() {

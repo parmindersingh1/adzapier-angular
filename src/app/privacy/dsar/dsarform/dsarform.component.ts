@@ -21,6 +21,8 @@ import { DataService } from 'src/app/_services/data.service';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 import { environment } from 'src/environments/environment';
 import { take } from 'rxjs/operators';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-dsarform',
@@ -274,7 +276,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
               private sanitizer: DomSanitizer,
               private bsmodalService: BsModalService,
               private dataService: DataService,
-              private cdRef: ChangeDetectorRef
+              private cdRef: ChangeDetectorRef,
+              private titleService: Title 
+
   ) {
 
     this.count = 0;
@@ -283,6 +287,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.queryOID = params.get('oid');
         this.queryPID = params.get('pid');
       });
+
+      this.titleService.setTitle("DSAR Web Form - Adzapier Portal");
 
   }
 
