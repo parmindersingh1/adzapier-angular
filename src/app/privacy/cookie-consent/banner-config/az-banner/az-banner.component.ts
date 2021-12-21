@@ -8,7 +8,7 @@ import {Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef} from 
 export class AzBannerComponent implements OnInit {
   bannerType = 'generic';
   @Input('formData') formData;
-  @Input('showBadge') showBadge;
+  showBadge = false;
   @Output('currentBannerLayer') currentBannerLayer = new EventEmitter();
   @Output('showBadgeOption') showBadgeOption = new EventEmitter();
   constructor(private cd: ChangeDetectorRef) { }

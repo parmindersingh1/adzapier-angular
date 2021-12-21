@@ -1404,7 +1404,7 @@
           <ng-template pTemplate>
             <div class="p-col p-d-flex p-ai-center p-jc-center"
                  [ngStyle]="{margin: currentBannerLayer === 'preference' || BannerConfigurationForm.value.LayoutType === 'boxed-center' ? 'auto' : null}">
-              <app-az-banner *ngIf="currentBannerLayer === 'banner'" (currentBannerLayer)="onChangeBannerLayer($event)" [showBadge]="showBadgeOption"
+              <app-az-banner *ngIf="currentBannerLayer === 'banner'" (currentBannerLayer)="onChangeBannerLayer($event)"
                             (showBadgeOption)="showBadgeOption = false" [formData]="BannerConfigurationForm.value"></app-az-banner>
               <app-az-preference *ngIf="currentBannerLayer === 'preference'" [formData]="BannerConfigurationForm.value" [customerBrandLogo]="customerBrandLogo"
                                  [purposesList]="purposesList"></app-az-preference>
