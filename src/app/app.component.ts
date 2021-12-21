@@ -99,6 +99,18 @@ export class AppComponent implements OnInit {
   }
 
   async ngOnInit() {
+    if (this.location.path().indexOf('/resetpswd') !== -1){
+      this.hideHeaderFooter = false;
+      this.authenticationService.logout();
+      localStorage.removeItem('currentUser');
+      this.userService.getCurrentUser.unsubscribe();
+      localStorage.clear();
+      this.ccpaFormConfigurationService.removeControls();
+      this.dsarformService.removeControls();
+      this.organizationService.removeControls();
+      this.router.navigateByUrl(this.location.path());
+      return false;
+    }
     await this.onInitCPSDK();
     this.openUnAuthModal();
     this.router.events.subscribe((event) => {
