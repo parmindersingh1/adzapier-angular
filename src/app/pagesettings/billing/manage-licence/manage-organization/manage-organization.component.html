@@ -7,7 +7,7 @@
 
     </ol>
   </nav>
-  <h4 class="mg-b-0 tx-spacing--1">Manage License to Organizations</h4>
+  <h4 class="mg-b-0 tx-spacing--1">Add or Remove Organizations to Subscription</h4>
 
 </div>
 <div class="card mt-4">
@@ -17,7 +17,7 @@
       <span>{{planName}}</span>
     </h4>
     <div class="mt-n1 mr-4 ml-auto">
-    <span class="tx-12 tx-semibold">License Used/Available</span>
+    <span class="tx-12 tx-semibold">Subscription Used/Available</span>
     <span class="progress">
       <span class="txt-center-bold"> {{assigneLicence}}/{{totalLicence}}</span>
       <span class="progress-bar" [ngStyle]="{width: percents.assigneLicence +'%'}"></span>
@@ -139,7 +139,7 @@
 </div>
 <ng-template #delConfirm>
   <div class="modal-body text-center">
-    <p>Are you sure you want to remove the license?</p>
+    <p> Are you sure you want to remove this organization from subscription? </p>
     <button type="button" class="btn btn-sm mr-2 btn-outline-secondary btn-uppercase" style="text-transform: none;" (click)="onRemoveOrg(delOrgID)" >Yes</button>
     <button type="button" class="btn btn-primary btn-sm  btn-uppercase" style="text-transform: none;" (click)="decline()" >No</button>
   </div>

@@ -7,6 +7,8 @@ import { AuthenticationService, OrganizationService, UserService } from 'src/app
 import { featuresName } from '../_constant/features-name.constant';
 import { moduleName } from '../_constant/module-name.constant';
 import { DataService } from '../_services/data.service';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-root',
@@ -46,7 +48,9 @@ export class AnalyticsComponent implements OnInit {
     private dataService: DataService,
     private loading: NgxUiLoaderService,
     private userService:UserService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private titleService: Title 
+
   ) {
     this.authService.currentUser.subscribe(x => this.currentUser = x);
     this.activateRoute.queryParamMap
@@ -54,6 +58,8 @@ export class AnalyticsComponent implements OnInit {
         this.queryOID = params.get('oid');
         this.queryPID = params.get('pid');
       });
+      this.titleService.setTitle("Home - Adzapier Portal");
+
    }
   // redirect to home if already logged in
 

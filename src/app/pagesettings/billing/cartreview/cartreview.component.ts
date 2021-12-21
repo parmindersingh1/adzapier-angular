@@ -5,6 +5,8 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
 import { UserService } from 'src/app/_services';
 import { BillingService } from 'src/app/_services/billing.service';
 import { environment } from 'src/environments/environment';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-cartreview',
@@ -34,7 +36,12 @@ export class CartreviewComponent implements OnInit {
     private loading: NgxUiLoaderService,
     private userService : UserService,
     private activatedroute: ActivatedRoute,
-    ) { }
+    private titleService: Title 
+
+    ) { 
+      this.titleService.setTitle("Cart Review - Adzapier Portal");
+
+    }
 
   ngOnInit() {
     this.onGetCartRecord();

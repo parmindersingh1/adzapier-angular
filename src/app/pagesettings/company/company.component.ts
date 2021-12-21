@@ -14,6 +14,8 @@ import { Subject } from 'rxjs';
 import {QuickstartmenuComponent} from 'src/app/_components/quickstartmenu/quickstartmenu.component';
 import { QuickStart } from '../../_models/quickstart'
 import { ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-company',
@@ -90,7 +92,9 @@ export class CompanyComponent implements AfterViewInit, OnInit {
               private quickmenuService: QuickmenuService,
               private activatedRoute: ActivatedRoute,
               private cdRef: ChangeDetectorRef,
-              private renderer: Renderer2
+              private renderer: Renderer2,
+              private titleService: Title 
+
   ) {
     this.paginationConfig = {itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount};
     // this.renderer.listen('window', 'click', (e: Event) => {
@@ -98,6 +102,8 @@ export class CompanyComponent implements AfterViewInit, OnInit {
     //     this.checkForQsTooltip();
     //   }
     // });
+    this.titleService.setTitle("Company - Adzapier Portal");
+
   }
 
   ngOnInit() {

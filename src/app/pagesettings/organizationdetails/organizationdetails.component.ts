@@ -18,6 +18,8 @@ import { isBs3 } from 'ngx-bootstrap/utils';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Title } from '@angular/platform-browser';
+
 // import { CompanyService } from '../company.service';
 @Component({
   selector: 'app-organizationdetails',
@@ -115,7 +117,9 @@ export class OrganizationdetailsComponent implements OnInit {
               private loading: NgxUiLoaderService,
               private location: Location,
               private quickmenuService: QuickmenuService,
-              private cdref: ChangeDetectorRef) {
+              private cdref: ChangeDetectorRef,
+              private titleService: Title 
+              ) {
     // this.orgService.currentProperty.subscribe((data) => {
     //   this.currentManagedOrgID = data.organization_id || data.response.oid;
     //   this.currrentManagedPropID = data.property_id || data.response.id;
@@ -126,6 +130,8 @@ export class OrganizationdetailsComponent implements OnInit {
       totalItems: this.propertyTotalCount, id: 'propertyPagination'
     };
    
+    this.titleService.setTitle("Organization details - Adzapier Portal");
+
 
   }
 
