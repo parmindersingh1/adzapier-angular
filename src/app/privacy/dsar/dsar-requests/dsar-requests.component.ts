@@ -18,6 +18,8 @@ import { DataService } from 'src/app/_services/data.service';
 import { BillingService } from 'src/app/_services/billing.service';
 import { BsDatepickerConfig, DatepickerDateCustomClasses } from 'ngx-bootstrap/datepicker';
 import { Table } from "primeng/table";
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-dsar-requests',
@@ -155,13 +157,18 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private dataService: DataService,
-    private billingService: BillingService
+    private billingService: BillingService,
+    private titleService: Title 
+
   ) {
     this.dateCustomClasses = [
       { date: new Date(), classes: ['theme-dark-blue'] },
     ];
   //  this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)),new Date()]
     this.isSelected = true;
+
+    this.titleService.setTitle("DSAR Requests - Adzapier Portal");
+
     }
 
   ngOnInit() {

@@ -11,6 +11,8 @@ import {LazyLoadEvent} from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-manage-vendors',
@@ -60,8 +62,13 @@ export class ManageVendorsComponent implements OnInit {
     private cookieBanner: CookieBannerService,
     private dataService: DataService,
     private location: Location,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private titleService: Title 
+
   ) {
+
+    this.titleService.setTitle("Manage Vendors - Adzapier Portal");
+
   }
 
   ngOnInit() {

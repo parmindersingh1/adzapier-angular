@@ -9,6 +9,8 @@ import {AuthenticationService, UserService} from '../../../../_services';
 import {DataService} from '../../../../_services/data.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-scan-details',
@@ -79,8 +81,12 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
               private dataService: DataService,
               private loading: NgxUiLoaderService,
               private _cd: ChangeDetectorRef,
-              private activateRoute: ActivatedRoute
+              private activateRoute: ActivatedRoute,
+              private titleService: Title 
+
   ) {
+    this.titleService.setTitle("Cookie Scanning - Adzapier Portal");
+
   }
 
   ngOnInit(): void {

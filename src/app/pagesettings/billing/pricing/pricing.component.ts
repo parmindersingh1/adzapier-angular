@@ -11,6 +11,8 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-pricing',
@@ -87,8 +89,12 @@ export class PricingComponent implements OnInit, AfterViewInit {
               private billingService: BillingService,
               private cdRef: ChangeDetectorRef,
               private activatedroute: ActivatedRoute,
+              private titleService: Title 
+
               ) {
               // this.onGetActivePlan();
+              this.titleService.setTitle("Pricing - Adzapier Portal");
+
   }
 
   ngOnInit() {

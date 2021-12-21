@@ -240,7 +240,7 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="orgForm" (ngSubmit)="onSubmitOrg()">
-      <label for="typeahead-basic">Find Organization:</label>
+      <label for="typeahead-basic">Select Organization:</label>
       <div class="row">
         <div class="col-sm-8">
           <p-multiSelect class="gdprSelect" [disabled]="totalLicenceOrg - assigneLicenceOrg === 0"
@@ -273,14 +273,14 @@
   <div class="modal-body">
     <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
       <div class="form-group dp-safari">
-        <label for="sel1">Find Organization:</label>
+        <label for="sel1">Select Organization:</label>
         <select (change)="onGetAllPropertyList($event)" class="form-control" id="sel1">
           <option [value]="">-- Select Organization --</option>
           <option *ngFor="let obj of orgList" [value]="obj.id">{{obj.orgname}}</option>
         </select>
       </div>
 
-      <label for="propertyNameError">Find Property:</label>
+      <label for="propertyNameError">Select Property:</label>
 
       <p-multiSelect class="gdprSelect" [disabled]="totalLicence - assigneLicence === 0"
                      [selectionLimit]="totalLicence - assigneLicence "

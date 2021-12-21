@@ -7,6 +7,8 @@ import { moduleName } from '../../../_constant/module-name.constant';
 import { OrganizationService } from 'src/app/_services';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Title } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-createworkflow',
   templateUrl: './createworkflow.component.html',
@@ -72,12 +74,17 @@ export class CreateworkflowComponent implements OnInit, AfterViewChecked, DirtyC
               private loadingBar: NgxUiLoaderService,
               private orgservice: OrganizationService,
               private bsmodalService: BsModalService,
-              private cd: ChangeDetectorRef) {
+              private cd: ChangeDetectorRef,
+              private titleService: Title 
+              ) {
                 this.activatedRoute.queryParamMap
                 .subscribe(params => {
                   this.queryOID = params.get('oid');
                   this.queryPID = params.get('pid');
                 });
+
+                this.titleService.setTitle("DSAR Create Workflow - Adzapier Portal");
+
   }
 
   ngOnInit() {

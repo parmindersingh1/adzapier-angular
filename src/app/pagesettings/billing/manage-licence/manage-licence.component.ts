@@ -12,6 +12,8 @@ import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import { takeUntil } from 'rxjs/operators';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { QuickStart } from 'src/app/_models/quickstart';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-manage-subscription',
@@ -71,8 +73,13 @@ export class ManageLicenceComponent implements OnInit {
     private orgservice: OrganizationService,
     private activatedRoute: ActivatedRoute,
     private cdRef: ChangeDetectorRef,
-    private router: Router
-  ) { }
+    private router: Router,
+    private titleService: Title 
+
+  ) { 
+    this.titleService.setTitle("Manage Subscriptions - Adzapier Portal");
+
+  }
 
   ngOnInit() {
     this.quickmenuService.onClickEmitQSLinkobj.pipe(

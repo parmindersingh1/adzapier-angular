@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BillingService } from 'src/app/_services/billing.service';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-cartsystem',
@@ -42,8 +44,12 @@ export class CartsystemComponent implements OnInit {
   constructor(private billingService : BillingService,
     private loading: NgxUiLoaderService,
     private activatedroute: ActivatedRoute,
+    private titleService: Title 
+
 
     ) {
+      this.titleService.setTitle("Cart - Adzapier Portal");
+
 
    }
 
