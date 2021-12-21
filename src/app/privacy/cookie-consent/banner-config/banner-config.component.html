@@ -381,7 +381,10 @@
 
                     <div class="row mt-3">
                       <div class="col-md-6">
-                        <p class=" mb-0  input-label pt-2">Allow Purposes By Default</p>
+                        <p class=" mb-0  input-label pt-2">Allow Purposes By Default
+                          <i-feather class="feather-16" name="info"
+                          tooltip="If enabled, all categories of cookies will be allowed by default"></i-feather>
+                        </p>
                       </div>
                       <div class="col-md-6">
                         <p-inputSwitch formControlName="AllowPurposeByDefault"></p-inputSwitch>
@@ -406,7 +409,7 @@
                         <p class=" mb-0  input-label pt-2">Mute Cookie Notice</p>
                       </div>
                       <div class="col-md-6">
-                          <p-inputSwitch formControlName="MuteBanner"></p-inputSwitch>
+                          <p-inputSwitch formControlName="MuteBanner" tooltip="If enabled, the cookie notice won't be displayed on the domain"></p-inputSwitch>
                       </div>
                     </div>
                   </div>

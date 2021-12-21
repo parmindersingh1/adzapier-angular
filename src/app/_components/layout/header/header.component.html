@@ -59,7 +59,7 @@
   <div class="collapse navbar-collapse mr-auto" [collapse]="!isCollapsed"
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
     <ul *ngIf="orgPropertyMenu" class="navbar-nav nav-mr" dropdown container="body">
-      <a class="nav-link dropdown-link"  dropdownToggle (click)="false" tooltip="Select Organization/Property">
+      <a class="nav-link dropdown-link"  dropdownToggle (click)="false" triggers="mouseenter:mouseleave mouseenter:click" tooltip="Select Organization/Property">
        <span [ngStyle]="addEllipsisOrg()" *ngIf="currentOrganization !== undefined && currentOrganization.length > 0" class="mr-2 large-orgname">{{currentOrganization}} &nbsp;</span>
        <span class="large-propname" [ngStyle]="addEllipsis()" *ngIf="currentProperty !== undefined && currentProperty.length > 0"> &amp; &nbsp; {{currentProperty.length > 0 ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
        <span *ngIf="currentOrganization == undefined">Select Organization<span class="ml-2">&amp; &nbsp;</span></span>
@@ -184,7 +184,7 @@
     </div>
   <!--Help center after login-->
   <div class="navbar-right" *ngIf="currentUser"  dropdown [insideClick]="true">
-  <a (click)="clicktext()"  class="nav-link dropdown-link mr-3" tooltip="Help Center" dropdownToggle>
+  <a (click)="clicktext()" triggers="mouseenter:mouseleave mouseenter:click"  class="nav-link dropdown-link mr-3" tooltip="Help Center" dropdownToggle>
     <i-feather name="help-circle" class="feather-20 tx-white"></i-feather>
   </a>
   <ul class="dropdown-menu helpcenter-menu-right" *dropdownMenu>
