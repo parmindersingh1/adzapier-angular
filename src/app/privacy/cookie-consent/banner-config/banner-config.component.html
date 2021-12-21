@@ -147,10 +147,13 @@
                     </p-divider>
                     <!--                    GDPR Target-->
                     <div class="row">
-                      <div class="col-md-4">
-                        <p class=" mb-0  input-label pt-2" for="ccpa_target">GDPR Target</p>
+                      <div class="col-md-5">
+                        <p class=" mb-0  input-label pt-2" for="ccpa_target">GDPR Target
+                          <i-feather class="feather-16" name="info"
+                                     tooltip="The users from the selected countries will get the GDPR banner. The rest of the users will get the default banner that you selected under the Advanced Features."></i-feather>
+                        </p>
                       </div>
-                      <div class="col-md-8">
+                      <div class="col-md-7">
                         <p-multiSelect [options]="gdprCountries" formControlName="GdprCountries"
                                        defaultLabel="Select a Country" optionLabel="name" optionValue="code"
                                        class="multiselect-custom "
@@ -186,7 +189,10 @@
                     <!--                  Enable IAB-->
                     <div class="row mt-3">
                       <div class="col-md-6">
-                        <p class=" mb-0  input-label pt-2">Enable IAB</p>
+                        <p class=" mb-0  input-label pt-2">Enable IAB
+                          <i-feather class="feather-16" name="info"
+                                     tooltip="If enabled, a set of IAB vendors can send or receive the signals from your domain"></i-feather>
+                        </p>
                       </div>
                       <div class="col-md-6">
                         <p-inputSwitch formControlName="EnableIAB"></p-inputSwitch>
@@ -197,7 +203,10 @@
                     <div class="row mt-3">
                       <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2"
-                           [ngStyle]="{color: disablePlanFeatures.disableGoogleVendors ? '#999': ''}">Google Vendors</p>
+                           [ngStyle]="{color: disablePlanFeatures.disableGoogleVendors ? '#999': ''}">Google Vendors
+                           <i-feather class="feather-16" name="info"
+                           tooltip="If enabled, a set of Google vendors can send or receive the signals from your domain"></i-feather>
+                          </p>
                       </div>
                       <div class="col-md-6" (click)="onCheckAllowGoogleVendors()">
                         <p-inputSwitch [disabled]="disablePlanFeatures.disableGoogleVendors"
@@ -230,7 +239,10 @@
                     <!--                  CCPA Target-->
                     <div class="row">
                       <div class="col-md-6">
-                        <p class=" mb-0  input-label pt-2" for="ccpa_target">CCPA Target</p>
+                        <p class=" mb-0  input-label pt-2" for="ccpa_target">CCPA Target
+                          <i-feather class="feather-16" name="info"
+                           tooltip="The users from the selected region will get the GDPR banner. The rest of the users will get the default banner that you selected under the Advanced Features."></i-feather>
+                        </p>
                       </div>
                       <div class="col-md-6">
                         <p-dropdown id="ccpa_target" [options]="countries" formControlName="CCPATarget"
@@ -290,40 +302,40 @@
                       <b>Banner Type</b>
                     </p-divider>
                     <div class="row">
-                      <div class="col-md-4 mb-2 cursor-pointer" (click)="onSetBannerType('full-width-top')">
+                      <div tooltip="Select to see the preview" class="col-md-4 mb-2 cursor-pointer" (click)="onSetBannerType('full-width-top')">
                         <i *ngIf="BannerConfigurationForm.value.LayoutType === 'full-width-top'"
                            class="fas fa-check-circle banner-types"></i>
                         <img class="w-100" src="assets/imgs/banner-types/az-banner-top.svg"/>
                       </div>
-                      <div class="col-md-4 mb-2 cursor-pointer" (click)="onSetBannerType('full-width-bottom')">
+                      <div tooltip="Select to see the preview" class="col-md-4 mb-2 cursor-pointer" (click)="onSetBannerType('full-width-bottom')">
                         <i *ngIf="BannerConfigurationForm.value.LayoutType === 'full-width-bottom'"
                            class="fas fa-check-circle banner-types"></i>
                         <img class="w-100" src="assets/imgs/banner-types/az-banner-bottom.svg"/>
                       </div>
-                      <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-left-bottom')">
+                      <div tooltip="Select to see the preview" class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-left-bottom')">
                         <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-left-bottom'"
                            class="fas fa-check-circle banner-types"></i>
                         <img class="w-100" src="assets/imgs/banner-types/az-box-bottom-left.svg"/>
                       </div>
-                      <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-right-bottom')">
+                      <div tooltip="Select to see the preview" class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-right-bottom')">
                         <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-right-bottom'"
                            class="fas fa-check-circle banner-types"></i>
                         <img class="w-100" src="assets/imgs/banner-types/az-box-bottom-right.svg"/>
                       </div>
 
-                      <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-left-top')">
+                      <div tooltip="Select to see the preview" class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-left-top')">
                         <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-left-top'"
                            class="fas fa-check-circle banner-types"></i>
                         <img class="w-100" src="assets/imgs/banner-types/az-box-top-left.svg"/>
                       </div>
 
-                      <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-right-top')">
+                      <div tooltip="Select to see the preview" class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-right-top')">
                         <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-right-top'"
                            class="fas fa-check-circle banner-types"></i>
                         <img class="w-100" src="assets/imgs/banner-types/az-box-top-right.svg"/>
                       </div>
 
-                      <div class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-center')">
+                      <div tooltip="Select to see the preview" class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('boxed-center')">
                         <i *ngIf="BannerConfigurationForm.value.LayoutType === 'boxed-center'"
                            class="fas fa-check-circle banner-types"></i>
                         <img class="w-100" src="assets/imgs/banner-types/popup-center.svg"/>
@@ -340,7 +352,10 @@
 
                     <div class="row mt-3">
                       <div class="col-md-6">
-                        <p class=" mb-0  input-label pt-2">Default Regulation</p>
+                        <p class=" mb-0  input-label pt-2">Default Regulation
+                          <i-feather class="feather-16" name="info"
+                           tooltip="The users from any region will get the cookie banner of  the selected regulation, excluding the targeted regions. "></i-feather>
+                        </p>
                       </div>
                       <div class="col-md-6">
                         <p-dropdown class="col-md-6 p-0 m-0" formControlName="DefaultRegulation"
@@ -352,7 +367,10 @@
                       <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2"
                            [ngStyle]="{color: disablePlanFeatures.disableCookieblocking ? '#999': ''}">Cookie
-                          Blocking</p>
+                          Blocking
+                          <i-feather class="feather-16" name="info"
+                          tooltip="If enabled, the cookies get blocked automatically, until the user gives the consent"></i-feather>
+                        </p>
                       </div>
                       <div class="col-md-6" (click)="onCheckDisableCookiebloking()">
                         <p-inputSwitch [disabled]="disablePlanFeatures.disableCookieblocking"
@@ -373,7 +391,10 @@
                     <div class="row mt-3">
                       <div class="col-md-6">
                         <p class=" mb-0  input-label pt-2"
-                           [ngStyle]="{color: disablePlanFeatures.hideLogo ? '#999': ''}">Show Watermark</p>
+                           [ngStyle]="{color: disablePlanFeatures.hideLogo ? '#999': ''}">Show Watermark
+                           <i-feather class="feather-16" name="info"
+                           tooltip="If enabled, an Adzapier branding watermark appears on the footer of the privacy settings pop-up"></i-feather>
+                          </p>
                       </div>
                       <div class="col-md-6" (click)="onCheckLogoAllow()">
                         <p-inputSwitch [disabled]="disablePlanFeatures.hideLogo"
@@ -397,7 +418,10 @@
 
                     <div class="row mt-3">
                       <div class="col-md-6">
-                        <p class=" mb-0  input-label pt-2">Show Badge</p>
+                        <p class=" mb-0  input-label pt-2">Show Badge
+                          <i-feather class="feather-16" name="info"
+                          tooltip="If enabled, a privacy settings badge will remain on the website after closing the cookie notice"></i-feather>
+                        </p>
                       </div>
                       <div class="col-md-6">
                         <p-inputSwitch  #showBadgeBtn (onChange)="showBadgeOption = !showBadgeOption" formControlName="ShowBadge"></p-inputSwitch>
@@ -406,11 +430,12 @@
 
                     <div class="row mt-3">
                       <div class="col-md-4">
-                        <p  [ngStyle]="{color: !showBadgeBtn.checked ? '#999' : null}" class=" mb-0  input-label pt-2">Badge Type</p>
+                        <p  [ngStyle]="{color: !showBadgeBtn.checked ? '#999' : null}" class=" mb-0  input-label pt-2">Badge Type
+                        </p>
                       </div>
                       <div class="col-md-8">
                         <div class="row">
-                          <p-selectButton [disabled]="!showBadgeBtn.checked" (onChange)="showBadgeOption = true" [options]="[{label: 'Cookie Consent', value: 'text'}, {icon: 'fas fa-fingerprint tx-18', value: 'icon'}]"
+                          <p-selectButton tooltip="Use Cookie Consent text as the badge or use icon as the badge" [disabled]="!showBadgeBtn.checked" (onChange)="showBadgeOption = true" [options]="[{label: 'Cookie Consent', value: 'text'}, {icon: 'fas fa-fingerprint tx-18', value: 'icon'}]"
                                           formControlName="BadgeType"   optionLabel="label" optionValue="value"></p-selectButton>
                           <!--                        <div class="col-md-8">-->
 <!--                          <button [disabled]="!showBadgeBtn.checked" type="button" (click)="onSetBadgeType('text')"  (click)="showBadgeOption = true"-->
@@ -1288,7 +1313,7 @@
                          *ngFor="let purpose of BannerConfigurationForm.controls.PurposeList['controls']; let i=index"
                          [formGroupName]="i">
                       <p  class="az-purpose-dropdown" (click)="onOpenDropDown('purpose' + i)"><span cdkDragHandle class="drag-drop"><i
-                        class="fas fa-grip-vertical "></i></span> {{purposesList[i].title}}
+                        tooltip="Drag to move" class="fas fa-grip-vertical "></i></span> {{purposesList[i].title}}
                         <span *ngIf="showDropDownValue !== 'purpose' + i"><i
                           class="fas fa-chevron-down"></i></span>
                         <span *ngIf="showDropDownValue === 'purpose' + i"><i

@@ -88,10 +88,11 @@
                 <tr>
                   <th pResizableColumn>
                     <div class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" id="customCheckAll"
+                      <input  type="checkbox" class="custom-control-input" id="customCheckAll"
                              (change)="onAllowAllIabVendor($event)"
                              [checked]="iabVendorsList.length === iabVendorsID.length">
-                      <label class="custom-control-label" for="customCheckAll"></label>
+                      <label title="{{this.tooltips}}" class="custom-control-label" for="customCheckAll"></label>
+                
                     </div>
                   </th>
                   <th pResizableColumn>ID</th>

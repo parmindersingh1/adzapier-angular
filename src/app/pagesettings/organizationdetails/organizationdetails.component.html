@@ -83,7 +83,7 @@
             <div class="card-header tx-semibold">
                 <div class="card-header d-flex align-items-center justify-content-between pd-15">
                     <div class="row col-3 input-group">
-                        <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchPropertyText"
+                        <input placeholder="Search by property name" class="form-control py-2 border-right-0 border" [(ngModel)]="searchPropertyText"
                             type="search" value="search" id="example-search-input" />
                         <span class="input-group-append">
                             <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
@@ -163,10 +163,10 @@
                             </td>
                             <td>
                                 <!-- <i-feather name="edit-3" class="feather-16"></i-feather> -->
-                                <a class="pd-r-5" *ngIf="list.active" (click)="editModalPopup(propertyModal,list);checkForQsTooltip();">
+                                <a tooltip="Edit property details" class="pd-r-5" *ngIf="list.active" (click)="editModalPopup(propertyModal,list);checkForQsTooltip();">
                                    <span class="cursorpointer"><i class="far fa-edit fa-1x"></i></span>
                                 </a>
-                                <a class="pd-r-5" *ngIf="list.active"
+                                <a tooltip="Delete property" class="pd-r-5" *ngIf="list.active"
                                     (click)="disableProperty(list,'property');checkForQsTooltip();">
                                     <span class="cursorpointer">  <i class="far fa-trash-alt tx-danger fa-sm"></i></span>
                                 </a>
@@ -223,7 +223,7 @@
             <div class="card-header tx-semibold">
                 <div class="searchfield mt-3" style="display: flex;">
                     <div class="col-3 input-group">
-                        <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
+                        <input placeholder="Search by member's name" class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
                             value="search" id="example-search-input" />
                         <span class="input-group-append">
                             <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
@@ -276,10 +276,10 @@
                                      <i class="fa fa-pen mr-2 tx-gray-400"></i>
                                      <i class="far fa-trash-alt tx-gray-400 fa-sm"></i>    
                                 </span>                               
-                                <a class="pd-r-5" *ngIf="list.role_name !== 'Super Administrator' "  (click)="editUserInvitation(inviteuserModal,list);checkForQsTooltip();">
+                                <a tooltip="Edit user details" class="pd-r-5" *ngIf="list.role_name !== 'Super Administrator' "  (click)="editUserInvitation(inviteuserModal,list);checkForQsTooltip();">
                                     <span class="d-none d-sm-inline mg-l-0 cursorpointer"> <i class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
                                 </a>
-                                <a class="pd-r-5 cursorpointer" *ngIf="list.role_name !== 'Super Administrator' "  (click)="removeTeamMember(list,'team member')">
+                                <a tooltip="Delete user details" class="pd-r-5 cursorpointer" *ngIf="list.role_name !== 'Super Administrator' "  (click)="removeTeamMember(list,'team member')">
                                     <i class="far fa-trash-alt tx-danger fa-sm"></i>
                                 </a>
                             </td>
@@ -335,7 +335,7 @@
                     <div class="form-group">
                         <label for="organizationName">Organization Name</label>
                         <input type="text" class="form-control" formControlName="organizationName"
-                            name="organizationName"
+                            name="organizationName" placeholder="Enter Organization name"
                             [ngClass]="{ 'is-invalid': submitted && editOrg.organizationName.errors }" />
                         <div *ngIf="submitted && editOrg.organizationName.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.organizationName.errors.required">Organization name is required</div>
@@ -350,14 +350,14 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="taxID">Tax ID</label>
-                        <input type="text" class="form-control" formControlName="taxID" name="taxID" />
+                        <input type="text" class="form-control" formControlName="taxID" name="taxID" placeholder="Enter your Tax ID" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="addressOne">Address: Line 1</label>
                         <input type="text" class="form-control" formControlName="addressOne" name="addressOne"
-                            [ngClass]="{ 'is-invalid': submitted && editOrg.addressOne.errors }" />
+                            [ngClass]="{ 'is-invalid': submitted && editOrg.addressOne.errors }" placeholder="Enter Flat, House number, and so on"/>
                         <div *ngIf="submitted && editOrg.addressOne.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.addressOne.errors.required">Address 1 is required</div>
                         </div>
@@ -370,14 +370,14 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="addressTwo">Address: Line 2</label>
-                        <input type="text" class="form-control" formControlName="addressTwo" name="addressTwo" />
+                        <input type="text" class="form-control" formControlName="addressTwo" name="addressTwo" placeholder="Enter Street, Area, Village, and so on" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="city">City</label>
                         <input type="text" class="form-control" minlength="2" maxlength="250" formControlName="city"
-                            name="city" [ngClass]="{ 'is-invalid': submitted && editOrg.city.errors }" />
+                            name="city" [ngClass]="{ 'is-invalid': submitted && editOrg.city.errors }" placeholder="Enter your city" />
                         <div *ngIf="submitted && editOrg.city.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.city.errors.required">City is required</div>
                             <div *ngIf="editOrg.city.errors.pattern">City allow only Alphabets</div>
@@ -394,7 +394,7 @@
                     <div class="form-group">
                         <label for="state">State</label>
                         <input type="text" class="form-control" minlength="2" maxlength="250" formControlName="state"
-                            name="state" [ngClass]="{ 'is-invalid': submitted && editOrg.state.errors }" />
+                            name="state" [ngClass]="{ 'is-invalid': submitted && editOrg.state.errors }" placeholder="Enter your state" />
                         <div *ngIf="submitted && editOrg.state.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.state.errors.required">State is required</div>
                             <div *ngIf="editOrg.state.errors.pattern">State allow only Alphabets</div>
@@ -408,7 +408,7 @@
                     <div class="form-group">
                         <label for="state">ZIP Code</label>
                         <input type="text" class="form-control" formControlName="zipcode" name="zipcode"
-                            [ngClass]="{ 'is-invalid': submitted && editOrg.zipcode.errors }" />
+                            [ngClass]="{ 'is-invalid': submitted && editOrg.zipcode.errors }" placeholder="Enter your ZIP code"/>
                         <div *ngIf="submitted && editOrg.zipcode.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.zipcode.errors.required">Zipcode is required</div>
                             <div *ngIf="editOrg.zipcode.errors.pattern">Zipcode can not be less than 5 digit</div>
@@ -421,7 +421,7 @@
                     <div class="form-group"><label for="email">Email</label>
                         <input type="text" class="form-control" formControlName="email"
                             pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" name="email"
-                            [ngClass]="{ 'is-invalid': submitted && editOrg.email.errors }" />
+                            [ngClass]="{ 'is-invalid': submitted && editOrg.email.errors }" placeholder="Enter your email" />
                         <div *ngIf="submitted && editOrg.email.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.email.errors.required">Email is required</div>
                             <div *ngIf="editOrg.email.errors.pattern">Please enter valid email</div>
@@ -431,7 +431,7 @@
                 <div class="col-sm-6">
                     <div class="form-group"><label for="phone">Phone</label>
                         <input type="text" class="form-control" formControlName="phone" name="phone"
-                            [ngClass]="{ 'is-invalid': submitted && editOrg.phone.errors }" />
+                            [ngClass]="{ 'is-invalid': submitted && editOrg.phone.errors }" placeholder="Enter your phone number"/>
                         <div *ngIf="submitted && editOrg.phone.errors" class="invalid-feedback">
                             <!-- <div *ngIf="editOrg.phone.errors.required">Phone is required</div> -->
                             <div *ngIf="editOrg.phone.errors || editOrg.phone.errors.pattern">Enter valid phone number</div>
@@ -468,7 +468,7 @@
             <div class="form-group">
                 <label for="name">Property Name</label>
                 <input type="text" class="form-control" name="propertyname" formControlName="propertyname"
-                    [ngClass]="{ 'is-invalid': submitted && orgProp.propertyname.errors }" />
+                    [ngClass]="{ 'is-invalid': submitted && orgProp.propertyname.errors }" placeholder="Enter property name"/>
                 <div *ngIf="submitted && orgProp.propertyname.errors" class="invalid-feedback">
                     <div *ngIf="orgProp.propertyname.errors.required">Property name is required</div>
                     <div *ngIf="orgProp.propertyname.errors.pattern">Property allow only Alphanumeric</div>
@@ -485,7 +485,7 @@
                     
                    
                   <div class="col-sm-9 p-0 input-group-append flex-column">
-                    <input type="text" class="form-control" name="website" formControlName="website" placeholder="propertydomain.com"
+                    <input type="text" class="form-control" name="website" formControlName="website" placeholder="Enter your domain"
                     [ngClass]="{ 'is-invalid': submitted && orgProp.website.errors }" />
                     <div *ngIf="submitted && orgProp.website.errors" class="invalid-feedback">
                         <div *ngIf="orgProp.website.errors.required">Website address is required</div>
@@ -496,7 +496,7 @@
             </div>
             <div class="form-group">
                 <label for="logourl">Logo URL</label>
-                <input type="text" class="form-control" name="logourl" formControlName="logourl" />
+                <input type="text" class="form-control" name="logourl" formControlName="logourl" placeholder="Enter Logo URL"/>
             </div>
             <div class="pull-right-btn">
                 <div class="text-right">
@@ -534,7 +534,7 @@
                     <div class="form-group">
                         <label for="firstname" class="d-block">First name</label>
                         <input type="text" class="form-control" formControlName="firstname" name="firstname" (keydown.space)="$event.preventDefault()"
-                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.firstname.errors }" />
+                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.firstname.errors }" placeholder="Enter first name"/>
                         <div *ngIf="isInviteFormSubmitted && f.firstname.errors" class="invalid-feedback">
                             <div *ngIf="f.firstname.errors.required">First name is required</div>
                         </div>
@@ -544,7 +544,7 @@
                     <div class="form-group">
                         <label for="lastname" class="d-block">Last name</label>
                         <input type="text" class="form-control"  formControlName="lastname" name="lastname" (keydown.space)="$event.preventDefault()"
-                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.lastname.errors }" />
+                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && f.lastname.errors }" placeholder="Enter last name"/>
                         <div *ngIf="isInviteFormSubmitted && f.lastname.errors" class="invalid-feedback">
                             <div *ngIf="f.lastname.errors.required">Last name is required</div>
                         </div>

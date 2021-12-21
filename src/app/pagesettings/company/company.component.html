@@ -94,7 +94,7 @@
             <div class="card-header tx-semibold">
                 <div class="searchfield mt-3">
                     <div class="col-3 input-group">
-                        <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
+                        <input placeholder="Search user by name" class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
                             value="search" id="example-search-input" />
                         <span class="input-group-append">
                             <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
@@ -145,11 +145,11 @@
                             </td>
 
                             <td>
-                                <a class="pd-r-5 cursorpointer" (click)="editUserInvitation(inviteuserModal,list);checkForQsTooltip();">
+                                <a tooltip="Edit user details" class="pd-r-5 cursorpointer" (click)="editUserInvitation(inviteuserModal,list);checkForQsTooltip();">
                                     <span class="d-none d-sm-inline mg-l-0">  <i class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
                                 </a>
 
-                                <a class="pd-r-5 cursorpointer" (click)="removeTeamMember(list,'team member');checkForQsTooltip();">
+                                <a tooltip="Delete this user" class="pd-r-5 cursorpointer" (click)="removeTeamMember(list,'team member');checkForQsTooltip();">
                                     <i class="far fa-trash-alt tx-danger fa-sm"></i>
                                 </a>
 
@@ -223,7 +223,7 @@
                         <label for="addressone">Address: Line 1</label>
                         <input type="text" formControlName="address1" class="form-control" minlength="6" maxlength="200"
                             [ngClass]="{ 'is-invalid': submitted && f.address1.errors }"
-                            placeholder="Enter your address" />
+                            placeholder="Enter Flat, House number, and so on" />
                         <div *ngIf="submitted && f.address1.errors" class="invalid-feedback">
                             <div *ngIf="f.address1.errors.required">Address 1 is required</div>
                             <div *ngIf="f.address1.errors.pattern">Address 1 allow only alphanumeric</div>
@@ -237,7 +237,7 @@
                     <div class="form-group">
                         <label for="address2">Address: Line 2</label>
                         <input type="text" formControlName="address2" class="form-control"
-                            placeholder="Enter your address" />
+                            placeholder="Enter Street, Area, Village, and so on" />
 
                     </div>
                 </div>
@@ -271,13 +271,13 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group"><label for="email">Email</label>
-                        <input type="text" class="form-control" formControlName="email" name="email"  />
+                        <input type="text" class="form-control" formControlName="email" name="email"  placeholder="Enter company's email ID"/>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group"><label for="phone">Phone</label>
                         <input type="text" class="form-control" formControlName="phone" name="phone" minlength="4" maxlength="15"
-                            [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" />
+                            [ngClass]="{ 'is-invalid': submitted && f.phone.errors }" placeholder="Enter phone number"/>
                         <div *ngIf="submitted && f.phone.errors" class="invalid-feedback">
                             <div *ngIf="f.phone.errors.required">Phone is required</div>
                             <div *ngIf="f.phone.errors || f.phone.errors.pattern">Enter valid phone number</div>
@@ -337,7 +337,7 @@
                     <div class="form-group">
                         <label for="firstname" class="d-block">First name</label>
                         <input type="text" class="form-control" formControlName="firstname" name="firstname" (keydown.space)="$event.preventDefault()" 
-                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.firstname.errors }" />
+                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.firstname.errors }" placeholder="Enter first name"/>
                         <div *ngIf="isInviteFormSubmitted && userInvite.firstname.errors" class="invalid-feedback">
                             <div *ngIf="userInvite.firstname.errors.required">First name is required</div>
                         </div>
@@ -347,7 +347,7 @@
                     <div class="form-group">
                         <label for="lastname" class="d-block">Last name</label>
                         <input type="text" class="form-control" formControlName="lastname" name="lastname" (keydown.space)="$event.preventDefault()"
-                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.lastname.errors }"/>
+                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.lastname.errors }" placeholder="Enter last name"/>
                         <div *ngIf="isInviteFormSubmitted && userInvite.lastname.errors" class="invalid-feedback">
                             <div *ngIf="userInvite.lastname.errors.required">Last name is required</div>
                         </div>
