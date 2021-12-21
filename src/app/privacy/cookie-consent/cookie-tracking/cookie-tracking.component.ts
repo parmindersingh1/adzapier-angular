@@ -12,6 +12,8 @@ import { BsDatepickerConfig, DatepickerDateCustomClasses } from 'ngx-bootstrap/d
 import { ActivatedRoute } from '@angular/router';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { QuickStart } from 'src/app/_models/quickstart';
+import { Title } from '@angular/platform-browser';
+
 
 class FilterType {
   consentType = '';
@@ -105,7 +107,9 @@ export class CookieTrackingComponent implements OnInit {
               private activateRoute: ActivatedRoute,
               private gdprService: GdprService,
               private dataService: DataService,
-              private quickmenuService: QuickmenuService
+              private quickmenuService: QuickmenuService,
+              private titleService: Title 
+
   ) {
     this.dateCustomClasses = [
       { date: new Date(), classes: ['theme-dark-blue'] },
@@ -116,6 +120,9 @@ export class CookieTrackingComponent implements OnInit {
         this.queryOID = params.oid;
         this.queryPID = params.pid;
       });
+
+      this.titleService.setTitle("Cookie Consent Tracking - Adzapier Portal");
+
   }
 
   ngOnInit() {

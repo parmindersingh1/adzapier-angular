@@ -8,6 +8,8 @@ import {OrganizationService} from '../../../_services';
 import {moduleName} from '../../../_constant/module-name.constant';
 import { apiConstant } from 'src/app/_constant/api.constant';
 import {CompanyService} from '../../../company.service';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-consent-setup',
@@ -51,8 +53,13 @@ export class ConsentSetupComponent implements OnInit {
     private router: Router,
     private orgservice: OrganizationService,
     private companyService: CompanyService,
-    private activateRoute: ActivatedRoute
-  ) { }
+    private activateRoute: ActivatedRoute,
+    private titleService: Title 
+
+  ) {
+    this.titleService.setTitle("Consent Preference Setup - Adzapier Portal");
+
+   }
 
   ngOnInit() {
     this.activateRoute.queryParamMap

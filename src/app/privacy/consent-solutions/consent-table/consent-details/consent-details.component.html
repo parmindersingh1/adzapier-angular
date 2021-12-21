@@ -11,7 +11,7 @@
         <div>
           <label>First Name</label>
           <div class="input-group">
-            <input formControlName="firstName" class="form-control">
+            <input formControlName="firstName" class="form-control" placeholder="Enter first name">
           </div>
           <div *ngIf="submitted && f.firstName.errors" class="text-danger">
             <div *ngIf="f.firstName.errors.required">First Name is required</div>
@@ -20,7 +20,7 @@
         <div class="ml-5">
           <label>Last Name</label>
           <div class="input-group">
-            <input formControlName="lastName" class="form-control">
+            <input formControlName="lastName" class="form-control" placeholder="Enter last name">
           </div>
           <div *ngIf="submitted && f.lastName.errors" class="text-danger">
             <div *ngIf="f.lastName.errors.required">Last Name is required</div>
@@ -30,7 +30,7 @@
       <div class="form-group">
         <label>Email</label>
         <div class="input-group">
-          <input formControlName="email" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" class="form-control">
+          <input formControlName="email" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" class="form-control" placeholder="Enter Email ID">
         </div>
         <div *ngIf="submitted && f.email.errors" class="text-danger">
           <div *ngIf="f.email.errors.required">Email is required</div>
@@ -54,7 +54,7 @@
         <div style="margin-left: 75px;">
           <label>Auth ID</label>
           <div class="input-group">
-            <input formControlName="AuthID" class="form-control">
+            <input formControlName="AuthID" class="form-control" placeholder="Enter Authentication ID">
           </div>
           <div *ngIf="submitted && f.country.errors" class="text-danger">
             <div *ngIf="f.country.errors.required">AuthID is required</div>
@@ -65,7 +65,7 @@
         <div>
           <label>Country</label>
           <div class="input-group">
-            <input formControlName="country" class="form-control">
+            <input formControlName="country" class="form-control" placeholder="Enter Country">
           </div>
           <div *ngIf="submitted && f.country.errors" class="text-danger">
             <div *ngIf="f.country.errors.required">Country is required</div>
@@ -74,14 +74,14 @@
         <div class="ml-5">
           <label>Owner Id</label>
           <div class="input-group">
-            <input formControlName="ownerID" class="form-control">
+            <input formControlName="ownerID" class="form-control" placeholder="Enter Owner ID">
           </div>
         </div>
       </div>
       <div class="form-group">
         <label>IP Address</label>
         <div class="input-group">
-          <input formControlName="ipAddress" class="form-control">
+          <input formControlName="ipAddress" class="form-control" placeholder="Enter IP Address">
         </div>
         <div *ngIf="submitted && f.ipAddress.errors" class="text-danger">
           <div *ngIf="f.ipAddress.errors.required">IP Address is required</div>
@@ -261,7 +261,7 @@
               <tr>
                 <td class="tabledata">{{proofs.content}}</td>
                 <td class="tabledata"><i (click)="editUser(edit, proofs)" class="pi pi-eye"
-                                         style="font-size: 0.9rem"></i></td>
+                                         style="font-size: 0.9rem" tooltip="View Form Consent"></i></td>
                 <!-- <td>{{proofs.form}}</td> -->
                 <td class="tabledata">{{proofs.created_at | date}}</td>
                 <!-- <td style="text-align-last:right;width:40px"> <a href="#"><i class="pi pi-eye" style="font-size: 0.9rem"></i></a></td> -->
@@ -294,7 +294,7 @@
                 <td class="tabledatas">{{legalRecord.content}}</td>
                 <td class="tabledatas">{{legalRecord.created_at | date}}</td>
                 <td class="tabledatas" style="text-align-last:right;width:40px;"><i class="pi pi-eye" (click)="editLegal(editLeg,legalRecord)"
-                                                                                                style="font-size: 0.9rem;"></i>
+                                                                                                style="font-size: 0.9rem;" tooltip="View details"></i>
                 </td>
               </tr>
             </ng-template>

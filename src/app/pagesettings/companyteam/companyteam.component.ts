@@ -8,6 +8,8 @@ import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import {DataService} from '../../_services/data.service';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-companyteam',
@@ -54,9 +56,13 @@ export class CompanyteamComponent implements OnInit {
               private userService: UserService,
               private loading: NgxUiLoaderService,
               private bsmodalService: BsModalService,
-              private dataService: DataService
+              private dataService: DataService,
+              private titleService: Title 
+
               ) {
                 this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+                this.titleService.setTitle("Company Team - Adzapier Portal");
+
               }
 
   ngOnInit() {

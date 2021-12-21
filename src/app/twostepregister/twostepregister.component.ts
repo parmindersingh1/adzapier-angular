@@ -10,6 +10,8 @@ import {moduleName} from '../_constant/module-name.constant';
 import {environment} from '../../environments/environment';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-twostepregister',
@@ -84,7 +86,11 @@ export class TwostepregisterComponent implements OnInit {
     private loader: NgxUiLoaderService,
     private route: ActivatedRoute,
     private modalService: BsModalService,
+    private titleService: Title 
+
   ) {
+    this.titleService.setTitle("Sign up - Adzapier Portal");
+
     this.countries = [
       'Afghanistan',
       'Albania',

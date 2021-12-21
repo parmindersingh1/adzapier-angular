@@ -9,7 +9,7 @@
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </div> 
                      <button *ngIf="customStages(item)" [disabled]="flowStatus === 'active'" class="deleteicon" (click)="openModal(confirmDeleteStageAlert,i,item)">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
+                        <i class="fa fa-trash" aria-hidden="true" tooltip="Delete this stage" placement="left"></i>
                      </button> 
                     <div class="stageTitle" (click)="selectCurrentStage(item)">
                        {{item.stage_title}}

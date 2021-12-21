@@ -11,6 +11,8 @@ import {LazyLoadEvent} from 'primeng/api';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-manage-vendors',
@@ -51,6 +53,7 @@ export class ManageVendorsComponent implements OnInit {
   queryOID;
   queryPID;
   oIDPIDFromURL:any = [];
+  tooltips = "Select all";
   constructor(
     private orgservice: OrganizationService,
     private gdprService: GdprService,
@@ -60,8 +63,13 @@ export class ManageVendorsComponent implements OnInit {
     private cookieBanner: CookieBannerService,
     private dataService: DataService,
     private location: Location,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private titleService: Title 
+
   ) {
+
+    this.titleService.setTitle("Manage Vendors - Adzapier Portal");
+
   }
 
   ngOnInit() {
@@ -198,9 +206,11 @@ export class ManageVendorsComponent implements OnInit {
     if (isChecked) {
       for (const iabObj of this.iabVendorsList) {
         this.iabVendorsID.push(iabObj.id);
+        this.tooltips="Clear all";
       }
     } else {
       this.iabVendorsID = [];
+      this.tooltips="Select all";
     }
   }
 

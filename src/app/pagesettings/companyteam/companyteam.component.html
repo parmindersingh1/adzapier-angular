@@ -12,7 +12,7 @@
         <div class="card-header tx-semibold">
             <div class="searchfield mt-3">
                 <div class="col-3 input-group">
-                    <input class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
+                    <input placeholder="Search user by name" class="form-control py-2 border-right-0 border" [(ngModel)]="searchText" type="search"
                         value="search" id="example-search-input" />
                     <span class="input-group-append">
                         <div class="input-group-text bg-transparent"><i class="fa fa-search"></i></div>
@@ -64,10 +64,10 @@
                                 </ng-template>
                         </td>
                         <td>
-                            <a class="pd-r-5" (click)="editUserInvitation(inviteuserModal,list)">
+                            <a tooltip="Edit user details" class="pd-r-5" (click)="editUserInvitation(inviteuserModal,list)">
                                 <span class="d-none cursorpointer d-sm-inline mg-l-0">  <i class="fa fa-pen mr-1 colorblue" aria-hidden="true"></i></span>
                             </a>
-                            <a (click)="removeTeamMember(list,'team member')" title="Remove member">
+                            <a tooltip="Delete this user" (click)="removeTeamMember(list,'team member')" title="Remove member">
                                 <span class="d-none d-sm-inline cursorpointer mg-l-0"> <i class="far fa-trash-alt tx-danger fa-sm"></i></span>
                             </a>
                         </td>
@@ -136,7 +136,7 @@
                     <div class="form-group">
                         <label for="firstname" class="d-block">First name</label>
                         <input type="text" class="form-control" formControlName="firstname" name="firstname" (keydown.space)="$event.preventDefault()"
-                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.firstname.errors }" />
+                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.firstname.errors }" placeholder="Enter first name"/>
                         <div *ngIf="isInviteFormSubmitted && userInvite.firstname.errors" class="invalid-feedback">
                             <div *ngIf="userInvite.firstname.errors.required">First name is required</div>
                         </div>
@@ -146,7 +146,7 @@
                     <div class="form-group">
                         <label for="lastname" class="d-block">Last name</label>
                         <input type="text" class="form-control"  formControlName="lastname" name="lastname" (keydown.space)="$event.preventDefault()"
-                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.lastname.errors }" />
+                        [ngClass]="{ 'is-invalid': isInviteFormSubmitted && userInvite.lastname.errors }" placeholder="Enter last name"/>
                         <div *ngIf="isInviteFormSubmitted && userInvite.lastname.errors" class="invalid-feedback">
                             <div *ngIf="userInvite.lastname.errors.required">Last name is required</div>
                         </div>

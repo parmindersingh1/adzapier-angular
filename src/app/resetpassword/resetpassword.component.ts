@@ -6,6 +6,8 @@ import { AlertService, UserService, AuthenticationService } from './../_services
 import { ActivatedRoute } from '@angular/router';
 import { MustMatch } from '../_helpers/must-match.validator';
 import { moduleName } from '../_constant/module-name.constant';
+import { Title } from '@angular/platform-browser';
+
 
 
 @Component({
@@ -33,9 +35,13 @@ export class ResetpasswordComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authenticationService: AuthenticationService,
     private userService: UserService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private titleService: Title 
+
   ) {
     this.activatedRoute.snapshot.paramMap.get('id');
+    this.titleService.setTitle("Reset Password - Adzapier Portal");
+
 
   }
 

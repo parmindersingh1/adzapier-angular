@@ -9,6 +9,8 @@ import {moduleName} from '../_constant/module-name.constant';
 import {animate, group, query, state, style, transition, trigger} from '@angular/animations';
 import { Observable, timer, Subscription } from 'rxjs';
 import {options} from 'ionicons/icons';
+import { Title } from '@angular/platform-browser';
+
 
 const left = [
   query(':enter, :leave', style({ }), { optional: true }),
@@ -89,12 +91,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     private orgservice: OrganizationService,
     private loadingBar: NgxUiLoaderService,
     private userService: UserService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private titleService: Title 
+
   ) {
     if (this.authenticationService.currentUserValue) {
       this.router.navigate(['/']);
     }
     // this.isEmailVerified = true;
+    this.titleService.setTitle("Login - Adzapier Portal");
+
   }
 
 
