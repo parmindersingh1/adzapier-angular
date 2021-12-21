@@ -1047,7 +1047,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   loadOrgPropertyFromLocal() {
     this.selectedOrgProperties.length = 0;
-    if (this.orgPropertyMenu !== undefined) {
+    if (this.orgPropertyMenu !== undefined && this.orgPropertyMenu.length !== 0) { //&& this.orgPropertyMenu.length !== 0
       const orgIndex = this.orgPropertyMenu.findIndex((t) => {
         if (this.queryOID !== null || this.queryOID !== undefined) {
           t.organization_id === this.queryOID
@@ -1818,7 +1818,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
       }
       if (this.location.path().indexOf("manage?success=true") !== -1) { //for stripe success redirect
-          this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: this.oidpidforstrip.organization_id, pid: this.oidpidforstrip.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
+        const orgid = this.oidpidforstrip !== undefined && this.oidpidforstrip.organization_id !== undefined ? this.oidpidforstrip.organization_id : this.oIDPIDFromURL[0]; 
+        const propid = this.oidpidforstrip !== undefined && this.oidpidforstrip.property_id !== undefined ? this.oidpidforstrip.property_id : this.oIDPIDFromURL[1];
+        this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: orgid, pid: propid}, queryParamsHandling: 'merge', skipLocationChange: false });
       } else if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
         this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());
         const url = this.location.path() == '/' ? '/home/welcome' : this.getCurrentRoute();

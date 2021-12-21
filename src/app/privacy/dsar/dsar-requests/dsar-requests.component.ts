@@ -144,6 +144,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   isSelected:boolean = true;
   lazyEvent;
   selectedDateRange;
+  currentSortorder:any;
   constructor(
     private orgservice: OrganizationService,
     private userService: UserService,
@@ -242,6 +243,19 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
             const key = 'response';
             if (Object.values(data[key]).length > 0 && data[key] !== "No data found.") {
               this.requestsList = Object.values(data[key]);
+              if(sortOrder === "asc"){
+                this.requestsList.sort((a, b) => {
+                  let dateA:any = new Date(a.created_at);
+                  let dateB:any = new Date(b.created_at);
+                  return dateA - dateB;
+                });
+              }else{
+                this.requestsList.sort((a, b) => {
+                  let dateA:any = new Date(a.created_at);
+                  let dateB:any = new Date(b.created_at);
+                  return dateB - dateA;
+                });
+              }
               this.reloadRequestList = [...this.requestsList];
               this.totalRecords = data.count;
               // this.rows = Object.values(data[key]).length;
@@ -255,17 +269,19 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           });
       }
     } else {//in case of filter applied subject/request type/status/duein
-      if (event.first === 0) {
-        this.firstone = 1;
-      } else {
-        this.firstone = (event.first / event.rows) + 1;
-      }
-      if (this.firstone > 1 && event.first !== 0) {
-      this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
-      } else {
-       // this.requestsList = this.storeSearchList.slice(0, event.rows); //event.first
-        this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
-      }
+     // if (this.searchbydaterange !== '' || this.searchbydaterange !== null) {
+        if (event.first === 0) {
+          this.firstone = 1;
+        } else {
+          this.firstone = (event.first / event.rows) + 1;
+        }
+        if (this.firstone > 1 && event.first !== 0) {
+          this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+        } else {
+          // this.requestsList = this.storeSearchList.slice(0, event.rows); //event.first
+          this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+        }
+     // }
     }
 
     this.cols = [
@@ -284,29 +300,9 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
       const sortOrder = event.order === -1 ? 'asc' : 'desc';
       const orderBy = '&order_by_date=' + sortOrder;
+      this.currentSortorder = sortOrder;
       this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
       this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
-      this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
-        this.currrentManagedPropID, pagelimit, orderBy)
-        .subscribe((res) => {
-          this.isloading = false;
-          this.issearchfilteractive = true;
-          const key = 'response';
-          if (Object.values(res[key]).length > 0 && res[key] !== "No data found.") {
-            this.storeSearchList = Object.values(res[key]);
-            this.totalRecords = res['count'];
-            this.loadrequestsListLazy(this.lazyEvent);
-          }
-          else {
-            this.requestsList = [];
-            this.totalRecords = 0;
-          }
-        }, error => {
-          this.loading.stop();
-          this.alertMsg = error;
-          this.isOpen = true;
-          this.alertType = 'danger';
-        });
     }     
 }
 
@@ -398,6 +394,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.searchFilter();
     }else{
       this.requestType = "";
+      this.issearchfilterForReq = false;
       this.issearchfilteractive = false;
       if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
         this.searchFilter();
@@ -414,6 +411,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.searchFilter();
     }else{
       this.status = "";
+      this.issearchfilterForStatus = false;
       this.issearchfilteractive = false;
       if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
         this.searchFilter();
@@ -443,6 +441,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     }else{
       this.subjectType = "";
       this.issearchfilteractive = false;
+      this.issearchfilterForSub = false;
       if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
         this.searchFilter();
       }else{
@@ -572,8 +571,10 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         if (Object.values(data[key]).length > 0 && data[key] !== "No data found.") {
           this.requestsList = Object.values(data[key]);
           this.reloadRequestList = [...this.requestsList];
-        }
         this.totalRecords = data.count;
+        }else{
+          this.loadrequestsListLazy(this.lazyEvent);
+        }
       }, error => {
         this.loading.stop();
         this.alertMsg = error;
@@ -666,7 +667,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.alertType = 'danger';
         });
       }else{
-        this.onRefreshDSARList();
+        this.clearDatePicker();
       }
   }
 
@@ -722,6 +723,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   clearDatePicker(){
+    this.issearchfilteractive = false;
     this.selectedDateRange = "";
     this.searchbydaterange = "";    
     this.onRefreshDSARList();

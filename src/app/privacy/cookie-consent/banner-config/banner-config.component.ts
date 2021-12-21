@@ -852,6 +852,13 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertType = 'success';
         this.publishing = false;
         this.onGetSavedBannerConfig();
+        this.BannerConfigurationForm.patchValue({
+          PreviewLanguage: {
+            title: 'English (United States)',
+            code: 'en-US',
+            countryFlag: 'us',
+          }
+        });
         if (this.publishType === 'publish') {
           this.openModal(this.publishModal);
         }
@@ -899,6 +906,13 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertType = 'success';
         this.publishing = false;
         this.onGetSavedBannerConfig();
+        this.BannerConfigurationForm.patchValue({
+          PreviewLanguage: {
+            title: 'English (United States)',
+            code: 'en-US',
+            countryFlag: 'us',
+          }
+        });
         if (this.publishType === 'publish') {
           this.openModal(this.publishModal);
         }
@@ -1189,6 +1203,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
     myReader.onloadend = (e) => {
       this.customerBrandLogo = myReader.result;
+      this.currentBannerLayer = 'preference';
     };
     myReader.readAsDataURL(file);
   }

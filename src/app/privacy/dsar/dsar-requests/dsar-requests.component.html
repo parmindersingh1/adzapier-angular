@@ -25,7 +25,7 @@
         </span>
         </div>
         <input type="text" [(ngModel)]="searchbydaterange" class="form-control border-left-0  border-right-0 rounded-right"
-          bsDaterangepicker [bsConfig]="bsConfig" #dp="bsDaterangepicker" placeholder="Select Date"
+          bsDaterangepicker [bsConfig]="bsConfig" #dp="bsDaterangepicker"  [outsideClick]="true" placeholder="Select Date"
           (onHidden)="onDateSelection()">
         <div class="input-group-prepend border-left-0" (click)="dp.show()">
           <span class="input-group-text rounded-left border-right-0" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
@@ -44,7 +44,7 @@
 
   </div>
 
-  <p-table class="dsar-request-table" #ptable [value]="requestsList" sortField="rowData.created_at"  (onSort)="customSort($event)" [customSort]="true" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
+  <p-table class="dsar-request-table" #ptable [value]="requestsList" sortField="rowData?.created_at"  (onSort)="customSort($event)" [customSort]="true" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
     [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="10" [showCurrentPageReport]="true"
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [rowsPerPageOptions]="[10,20,30]" styleClass="p-datatable-sm">
@@ -188,7 +188,7 @@
         </td>
         <td><span class="ui-column-title">Created At</span>
           <ng-container *ngIf="rowData">
-          {{rowData.created_at | timeago}}
+         <span *ngIf="rowData !== undefined && rowData?.created_at !== undefined || rowData?.created_at !== null || rowData?.created_at !== ''">{{rowData?.created_at | timeago}}</span> 
         </ng-container>
         </td>
       </tr>

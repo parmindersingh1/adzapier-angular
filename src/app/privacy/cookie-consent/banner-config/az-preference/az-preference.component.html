@@ -2,7 +2,10 @@
   <div class="ccpa" *ngIf="formData.LivePreviewType === 'ccpa'">
       <div class="card"  [ngStyle]="{'background': formData.PreferenceBackgroundColor, 'color': formData.PreferenceTextColor}">
         <div class="card-body preference-wrap"  [ngStyle]="{'background': formData.PreferenceBackgroundColor, 'color': formData.PreferenceTextColor}">
-          <div class="btn-group-action">
+          <div class="btn-group-action-purpose" [ngClass]="{'text-center' : !customerBrandLogo}">
+           <div  class="company-logo">
+             <img *ngIf="customerBrandLogo" [src]="customerBrandLogo" />
+           </div>
             <button type="button" style="font-size: 12px;" class="btn btn-link " [ngStyle]="{'color' :  preferenceStep === 1 ? '#2196f3' : formData.PreferenceTextColor,
       'border-bottom' : preferenceStep === 1 ? '2px solid' : null
       }" (click)="preferenceStep = 1">Purpose</button>
@@ -82,7 +85,7 @@
           <button pButton pRipple type="button" [label]="formData.PreferenceAcceptAllText" class="aceept-all-btn"  style="font-size: 13px"
                   [ngStyle]="{'background': formData.PreferenceAcceptAllBackgroundColor, 'border-color': formData.PreferenceAcceptAllBackgroundColor, 'color': formData.PreferenceAcceptAllTextColor}"></button>
           <div class="row mr-3 mt-1 float-right " *ngIf="formData.ShowWatermark">
-              <p class="power-by-tx"  [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}">Powered by: <span class="logo">Adzapier</span></p>
+              <p class="power-by-tx" style="color: gray">Powered by: <span>Adzapier</span></p>
           </div>
         </div>
       </div>
@@ -92,7 +95,10 @@
   <div class="generic" *ngIf="formData.LivePreviewType === 'generic' ">
     <div class="card"  [ngStyle]="{'background': formData.PreferenceBackgroundColor, 'color': formData.PreferenceTextColor}">
       <div class="card-body preference-wrap"  [ngStyle]="{'background': formData.PreferenceBackgroundColor, 'color': formData.PreferenceTextColor}">
-        <div class="btn-group-action">
+        <div class="btn-group-action-purpose" [ngClass]="{'text-center' : !customerBrandLogo}">
+          <div  class="company-logo">
+            <img *ngIf="customerBrandLogo" [src]="customerBrandLogo" />
+          </div>
           <button type="button"  style="font-size: 12px;" class="btn btn-link " [ngStyle]="{'color' :  preferenceStep === 1 ? '#2196f3' : formData.PreferenceTextColor,
       'border-bottom' : preferenceStep === 1 ? '2px solid' : null
       }" (click)="preferenceStep = 1">Purpose</button>
@@ -166,12 +172,14 @@
 
       </div>
       <div class="card-body footer-body pb-1 pt-3">
-        <button pButton pRipple type="button" [label]="formData.PreferenceSaveMyChoiceText" class="p-button-warning mr-3 donotsellbtn" style="font-size: 13px"
+        <button *ngIf="preferenceStep === 1" pButton pRipple type="button" [label]="formData.PreferenceSaveMyChoiceText" class="p-button-warning mr-3 donotsellbtn" style="font-size: 13px"
                 [ngStyle]="{'background': formData.PreferenceSaveMyChoiceBackgroundColor, 'border-color': formData.PreferenceSaveMyChoiceBackgroundColor, 'color': formData.PreferenceSaveMyChoiceTextColor}"></button>
+        <button *ngIf="preferenceStep === 2" pButton pRipple type="button" [label]="formData.PreferenceDisableAllText" class="p-button-secondary mr-3 donotsellbtn"  style="font-size: 13px"
+                [ngStyle]="{'background': formData.PreferenceDisableAllBackgroundColor, 'border-color': formData.PreferenceDisableAllBackgroundColor, 'color': formData.PreferenceDisableAllTextColor}"></button>
         <button pButton pRipple type="button" [label]="formData.PreferenceAcceptAllText" class="aceept-all-btn"  style="font-size: 13px"
                 [ngStyle]="{'background': formData.PreferenceAcceptAllBackgroundColor, 'border-color': formData.PreferenceAcceptAllBackgroundColor, 'color': formData.PreferenceAcceptAllTextColor}"></button>
         <div class="row mr-3 mt-1 float-right "  *ngIf="formData.ShowWatermark">
-          <p class="power-by-tx"  [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}">Powered by: <span class="logo">Adzapier</span></p>
+          <p class="power-by-tx"  style="color: gray">Powered by: <span>Adzapier</span></p>
         </div>
       </div>
     </div>
@@ -182,7 +190,10 @@
   <div class="gdpr" *ngIf="formData.LivePreviewType === 'gdpr' ">
     <div class="card" [ngStyle]="{'background': formData.PreferenceBackgroundColor}">
       <div class="card-body preference-wrap"  [ngStyle]="{'background': formData.PreferenceBackgroundColor, 'color': formData.PreferenceTextColor}">
-        <div class="btn-group-action">
+        <div class="btn-group-action-purpose" [ngClass]="{'text-center' : !customerBrandLogo}">
+          <div  class="company-logo">
+            <img *ngIf="customerBrandLogo" [src]="customerBrandLogo" />
+          </div>
           <button type="button"  style="font-size: 12px;" class="btn btn-link " [ngStyle]="{'color' :  preferenceStep === 1 ? '#2196f3' : formData.PreferenceTextColor,
       'border-bottom' : preferenceStep === 1 ? '2px solid' : null
       }" (click)="preferenceStep = 1">Purposes</button>
@@ -291,7 +302,7 @@
         <button pButton pRipple type="button" [label]="formData.PreferenceAcceptAllText" class="gdpr-accept-all"  style="font-size: 13px"
                 [ngStyle]="{'background': formData.PreferenceAcceptAllBackgroundColor, 'border-color': formData.PreferenceAcceptAllBackgroundColor, 'color': formData.PreferenceAcceptAllTextColor}"></button>
         <div class="row mr-3 mt-1 float-right "  *ngIf="formData.ShowWatermark">
-          <p class="power-by-tx" [ngStyle]="{ 'color': formData.PreferencePurposeTextColor}" >Powered by: <span class="logo">Adzapier</span></p>
+          <p class="power-by-tx" style="color: gray">Powered by: <span>Adzapier</span></p>
         </div>
       </div>
     </div>

@@ -139,7 +139,7 @@
                     </p>
                   </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col-md-6">
                     <h6>Total LocalStorage</h6>
                   </div>
@@ -150,7 +150,7 @@
                       || lastScan.scanner_status === 'running' ?  'Calculating...' : lastScan.total_localstorage }}
                     </p>
                   </div>
-                </div>
+                </div> -->
                 <div class="row">
                   <div class="col-md-6">
                     <h6>Total Pages</h6>
@@ -201,10 +201,10 @@
             <div *ngIf="lastScan.scanner_status === 'completed'">
             <canvas baseChart
                     [chartType]="chartType"
+                    [labels]="chartTypeLabels"
                     [options]="doughnutChartOptions"
                     [colors]="pieColors"
-                    [labels]="chartTypeLabels"
-                    [data]="chartTypeData">
+                    [datasets]="chartTypeData">
             </canvas>
             </div>
           </div>
@@ -234,8 +234,8 @@
               <th>Scan End</th>
               <th>Scan Status</th>
               <th>Total Cookies</th>
-              <th>Total LocalStorage
-              </th>
+              <!-- <th>Total LocalStorage
+              </th> -->
               <th>Total Page Scan</th>
               <th>Total Tags</th>
               <!--              <th>Secure</th>-->
@@ -263,7 +263,7 @@
                 <span *ngIf="scanJob.scanner_status === 'unknown'" class="tx-14 badge badge-info">Unknown</span>
               </td>
               <td>{{scanJob.total_cookies}}</td>
-              <td>{{scanJob.total_localstorage}}</td>
+              <!-- <td>{{scanJob.total_localstorage}}</td> -->
               <td>{{scanJob.total_page_scans}}</td>
               <td>{{scanJob.total_tages}}</td>
               <!--              <td>{{scanJob.domain}}</td>-->

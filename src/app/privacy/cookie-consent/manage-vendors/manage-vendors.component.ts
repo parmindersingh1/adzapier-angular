@@ -53,6 +53,7 @@ export class ManageVendorsComponent implements OnInit {
   queryOID;
   queryPID;
   oIDPIDFromURL:any = [];
+  tooltips = "Select all";
   constructor(
     private orgservice: OrganizationService,
     private gdprService: GdprService,
@@ -205,9 +206,11 @@ export class ManageVendorsComponent implements OnInit {
     if (isChecked) {
       for (const iabObj of this.iabVendorsList) {
         this.iabVendorsID.push(iabObj.id);
+        this.tooltips="Clear all";
       }
     } else {
       this.iabVendorsID = [];
+      this.tooltips="Select all";
     }
   }
 

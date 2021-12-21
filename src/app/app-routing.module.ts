@@ -32,6 +32,7 @@ const routes: Routes = [
   // {path: 'pricing', loadChildren: () =>
   //     import('./pagesettings/billing/pricing/pricing.module').then(m => m.PricingModule)},
   { path: 'resetpswd/:id', loadChildren: () => import('./resetpassword/resetpassword.module').then(m => m.ResetpasswordModule) },
+  {path: 'setpassword/:userid',loadChildren: () => import('./inviteuserpassword/inviteuserpassword.module').then(m => m.InviteuserpasswordModule)},
   { path: 'pagenotfound', component: PagenotfoundComponent },
   { path: '404page', component: PagenotfoundComponent1 },
   { path: 'internalerror', component: InternalerrorComponent },

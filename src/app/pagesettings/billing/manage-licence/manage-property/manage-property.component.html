@@ -72,8 +72,8 @@
 
 
 
-          <div class="btn-group" dropdown>
-            <button  id="button-basic" dropdownToggle type="button" class="btn btn-default"
+          <div class="btn-group" tooltip="Remove this property from subscription" dropdown>
+            <button id="button-basic" dropdownToggle type="button" class="btn btn-default"
                     aria-controls="dropdown-basic">
                     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
             </button>
@@ -139,8 +139,8 @@
     </form>
   </div>
 </ng-template>
-<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
-  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" >{{  alertMsg}}</alert>
+<div class="col-sm-5 mr-0 float-right flotingdiv">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>
 
 

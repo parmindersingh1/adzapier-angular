@@ -14,7 +14,7 @@ import { featuresName } from 'src/app/_constant/features-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
-
+import { isBs3 } from 'ngx-bootstrap/utils';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -274,7 +274,8 @@ export class OrganizationdetailsComponent implements OnInit {
       isactualbtnclicked: true,
       islinkclicked: true
     };
-    
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
     if (type === 'invite') {
       if (! await this.onCheckSubscription()) {
         return false;
@@ -292,8 +293,6 @@ export class OrganizationdetailsComponent implements OnInit {
     }, (reason) => {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-    this.quickmenuService.updateQuerymenulist(quickLinkObj);
 
   }
 
