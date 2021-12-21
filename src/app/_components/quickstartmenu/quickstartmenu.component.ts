@@ -47,7 +47,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   @Output() onClickEmitQSLinkobj : EventEmitter<any> = new EventEmitter<any>();
   @Output() onClickDismiss : EventEmitter<any> = new EventEmitter<any>();
   @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
-  @Input() quickStartMenuList:any = [];
+  quickStartMenuList:any = [];
   insideqsmenu = false;
   textmsg:string = "check";
   currentUser:any;
@@ -59,6 +59,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   dismissible = true;
   isClickedonDismissed:boolean = false;
   currentloggedInUser:any;
+  skeletonLoading = true;
   constructor(private location: Location,
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -83,9 +84,9 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
         this.queryPID = params.get('pid');
       });
       this.oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
-      this.getLoggedInUserDetails();
-      if (this.quickStartMenuList === null) {
-        this.getupdatedQuickStartMenu();
+      if (this.quickStartMenuList.length == 0 || this.quickStartMenuList === null) {
+        this.getLoggedInUserDetails();
+      //  this.getupdatedQuickStartMenu();
       }
     }
   
@@ -309,7 +310,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   }
 
   getupdatedQuickStartMenu(){
-    
+    this.skeletonLoading = false;
     let updatedqsMenu = this.quickmenuService.getQuerymenulist();
     return this.quickStartMenuList = [...updatedqsMenu];
     
@@ -389,7 +390,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
           if(data){
             this.currentloggedInUser = data;
             this.quickStartMenuList = this.currentloggedInUser.response.quickstart_visited_links;
-            if(this.quickStartMenuList !== null){
+            if(this.quickStartMenuList !== undefined && this.quickStartMenuList !== null){
               this.quickmenuService.setQuerymenulist(this.quickStartMenuList);
             }else{
               let updatedqsMenu = this.quickmenuService.getQuerymenulist();
