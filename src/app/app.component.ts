@@ -254,7 +254,9 @@ export class AppComponent implements OnInit {
   //   this.qsMenuList = this.quickstartmenuComponent.getupdatedQuickStartMenu();
   // }
   ngAfterViewChecked() {
-
+    if (this.location.path().indexOf('welcome') !== -1) {
+      this.hideHeaderFooter = true;
+    } //after reset password when user login this block required.
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
     if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1 || this.location.path().indexOf('setpassword') !== -1) {
       this.isloginpage = false; // quick start will not be visible
