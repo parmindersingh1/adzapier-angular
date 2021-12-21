@@ -80,7 +80,7 @@ export class AnalyticsComponent implements OnInit {
 
   isPropertyLicenseAssigned(status): boolean {
     this.isLicenseAssignedtoProperty = status;
-    this.cookieTooltiptext = this.isLicenseAssignedtoProperty ? '' : 'You have not assigned Cookie consent license to selected property';
+    this.cookieTooltiptext = this.isLicenseAssignedtoProperty ? '' : 'The selected property has not been assigned to Cookie Consent subscription';
     return this.isLicenseAssignedtoProperty; //|| ispropplanExist !== undefined ? true : false;
   }
 
@@ -88,13 +88,13 @@ export class AnalyticsComponent implements OnInit {
     this.dataService.isConsentPreferenceAppliedForProperty.subscribe((status) => {
     this.isConsentPreferenceLicenseAssignedToProperty = status.hasaccess;
     });
-    this.consentTooltipText = this.isConsentPreferenceLicenseAssignedToProperty ? '' : 'You have not assigned Consent Preference to selected property';
+    this.consentTooltipText = this.isConsentPreferenceLicenseAssignedToProperty ? '' : 'The selected property has not been assigned to Consent Preference subscription';
     return this.isConsentPreferenceLicenseAssignedToProperty;
   }
 
   isOrganizationLicenseAssigned(status): boolean {
     this.isLicenseAssignedtoOrganization = status;
-    this.dsarTooltiptext = this.isLicenseAssignedtoOrganization ? '' : 'You have not assigned DSAR license to selected organization';
+    this.dsarTooltiptext = this.isLicenseAssignedtoOrganization ? '' : 'The selected organization has not been assigned to DSAR subscription';
 
     return this.isLicenseAssignedtoOrganization;
   }
