@@ -24,7 +24,7 @@
                 <div class="form-group mb-2">
                   <label for="formname" class="tx-10 tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
                   <input type="text" class="form-control" formControlName="formname" name="formname" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null"
-                         [ngClass]="{ 'is-invalid': basicFormSubmitted && stepFormOne.formname.errors }" />
+                         [ngClass]="{ 'is-invalid': basicFormSubmitted && stepFormOne.formname.errors }" placeholder="Enter web form name" />
                   <div *ngIf="basicFormSubmitted && stepFormOne.formname.errors" class="invalid-feedback">
                     <div *ngIf="stepFormOne.formname.errors.required">Form name is required
                     </div>

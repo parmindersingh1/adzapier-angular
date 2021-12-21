@@ -23,7 +23,7 @@
           Add Consent </span>
       </button>
 
-      <button type="button"
+      <button type="button" tooltip="Export consent records as a CSV file"
               [disabled]="consentRecordList.length === 0"
               (click)="openModal(template);" class="btn  btn-sm btn-outline-secondary btn-uppercase mr-2" style="text-transform: none;font-size: 12px;">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -162,7 +162,7 @@
         <div class="col-sm-6">
           <label>First Name : </label>
           <div class="input-group">
-            <input formControlName="firstName" class="form-control">
+            <input formControlName="firstName" class="form-control" placeholder="Enter first name">
           </div>
           <!-- <div *ngIf="submitted && f.firstName.errors" class="text-danger">
             <div *ngIf="f.firstName.errors.required">First Name is required</div>
@@ -172,7 +172,7 @@
         <div class="col-sm-6">
           <label>Last Name : </label>
           <div class="input-group">
-            <input formControlName="lastName" class="form-control">
+            <input formControlName="lastName" class="form-control" placeholder="Enter last name">
           </div>
           <!-- <div *ngIf="submitted && f.lastName.errors" class="text-danger">
             <div *ngIf="f.lastName.errors.required">Last Name is required</div>
@@ -183,7 +183,7 @@
       <div class="col-sm-6">
         <label>Email : </label>
         <div class="input-group">
-          <input placeholder="yourname@yourmail.com" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" formControlName="email" class="form-control">
+          <input placeholder="yourname@yourmail.com" pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$" formControlName="email" class="form-control" placeholder="Enter Email ID">
         </div>
         <div *ngIf="submitted && f.email.errors" class="text-danger">
           <div *ngIf="f.email.errors.required">Email is required</div>
@@ -194,7 +194,7 @@
       <div class="col-sm-6">
         <label>Authentication ID : </label>
         <div class="input-group">
-          <input formControlName="AuthID" class="form-control">
+          <input formControlName="AuthID" class="form-control" placeholder="Enter Authentication ID">
         </div>
         <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
           <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
@@ -247,7 +247,7 @@
         <div class="col-sm-6">
           <label>Country : </label>
           <div class="input-group">
-            <input formControlName="country" class="form-control">
+            <input formControlName="country" class="form-control" placeholder="Enter Country">
           </div>
           <!-- <div *ngIf="submitted && f.country.errors" class="text-danger">
             <div *ngIf="f.country.errors.required">Country is required</div>
@@ -256,7 +256,7 @@
         <div class="col-sm-6">
           <label>Owner ID : </label>
           <div class="input-group">
-            <input formControlName="ownerID" class="form-control">
+            <input formControlName="ownerID" class="form-control" placeholder="Enter Owner ID">
           </div>
           <!-- <div *ngIf="submitted && f.ownerID.errors" class="text-danger">
             <div *ngIf="f.ownerID.errors.required">Owner Id is required</div>
@@ -267,7 +267,7 @@
       <div class="form-group">
         <label>IP Address : </label>
         <div class="input-group">
-          <input formControlName="ipAddress" class="form-control">
+          <input formControlName="ipAddress" class="form-control" placeholder="Enter IP Address">
         </div>
         <!-- <div *ngIf="submitted && f.ipAddress.errors" class="text-danger">
           <div *ngIf="f.ipAddress.errors.required">IP Address is required</div>
@@ -300,7 +300,7 @@
       </div> -->
       <label>Preferences :</label>
       <div class="row">
-        <div class="col-sm-12 table-responsive" formArrayName="preferences">
+        <div class="col-sm-12 table-responsive" formArrayName="preferences" >
           <table class="table">
             <!-- <thead>
               <tr style="text-align: center;">
@@ -314,15 +314,15 @@
                 <td style="white-space: nowrap;border: none;"><input type="text" id="preference{{i}}" formControlName="preference" class="form-control mr-3" [ngClass]="{ 'is-invalid': submitted && preferences.get('preference').errors }"/></td>
                 <label class="mt-3">Allowed</label>
                 <td style="white-space: nowrap;border: none;"><input type="checkbox" id="allow{{i}}" formControlName="allow" class="mt-2"/></td>
-                <td style="border: none;"><button (click)="deletePref(i)" class="btn btn-sm btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></td>
+                <td style="border: none;"><button (click)="deletePref(i)" class="btn btn-sm btn-danger" tooltip="Remove preference" placement="top"><i class="fa fa-minus-circle" aria-hidden="true" ></i></button></td>
 
               </tr>
 
             </tbody>
             <tfoot>
               <tr>
-                <td style="border: none;"><button type="button" (click)="addNewPref()" *ngIf="AddConsentForm.value.preferences.length === 0" class="btn btn-sm btn-primary">Add Preference<i class="fa fa-plus ml-2" aria-hidden="true"></i></button>
-                  <button type="button" *ngIf="AddConsentForm.value.preferences.length > 0" (click)="addNewPref()" class="btn btn-sm btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></td>
+                <td style="border: none;"><button type="button" (click)="addNewPref()" *ngIf="AddConsentForm.value.preferences.length === 0" class="btn btn-sm btn-primary" >Add Preference<i class="fa fa-plus ml-2" aria-hidden="true"></i></button>
+                  <button type="button" *ngIf="AddConsentForm.value.preferences.length > 0" (click)="addNewPref()" class="btn btn-sm btn-primary" tooltip="Add Preference"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></td>
               </tr>
             </tfoot>
           </table>
@@ -349,7 +349,7 @@
                 <td style="white-space: nowrap;border: none;"><textarea id="content{{i}}" formControlName="content" class="form-control"  [ngClass]="{ 'is-invalid': submitted && proofs.get('content').errors }" ></textarea></td>
                 <label class="mt-3">Form</label>
                 <td style="white-space: nowrap;border: none;"><textarea id="form{{i}}" formControlName="form" class="form-control" [ngClass]="{ 'is-invalid': submitted && proofs.get('form').errors }"></textarea></td>
-                <td style="border: none;"><button (click)="deleteRow(i)" class="btn btn-sm btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></td>
+                <td style="border: none;"><button (click)="deleteRow(i)" class="btn btn-sm btn-danger" tooltip="Remove proof"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></td>
 
               </tr>
 
@@ -357,7 +357,7 @@
             <tfoot>
               <tr>
                 <td style="border: none;"><button type="button" *ngIf="AddConsentForm.value.proofs.length === 0" (click)="addNewRow()" class="btn btn-sm btn-primary">Add Proof<i class="fa fa-plus ml-2" aria-hidden="true"></i></button>
-                  <button type="button"  *ngIf="AddConsentForm.value.proofs.length > 0" (click)="addNewRow()" class="btn btn-sm btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></td>
+                  <button type="button" tooltip="Add proof"  *ngIf="AddConsentForm.value.proofs.length > 0" (click)="addNewRow()" class="btn btn-sm btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></td>
               </tr>
             </tfoot>
 
@@ -389,14 +389,14 @@
                 <td style="white-space: nowrap;border: none;"><input id="version{{ind}}" type="number" formControlName="version" class="form-control"></td>
                 <label class="mt-3">Content</label>
                 <td style="white-space: nowrap;border: none;"><textarea id="content{{ind}}" formControlName="content" class="form-control" [ngClass]="{ 'is-invalid': submitted && legalNotices.get('content').errors }" ></textarea></td>
-                <td style="border: none;"><button (click)="deleteLegalRow(ind)" class="btn btn-sm btn-danger"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></td>
+                <td style="border: none;"><button (click)="deleteLegalRow(ind)" class="btn btn-sm btn-danger" tooltip="Remove Legal Notice" placement="left"><i class="fa fa-minus-circle" aria-hidden="true"></i></button></td>
               </tr>
 
             </tbody>
             <tfoot>
               <tr>
                 <td style="border: none;"><button type="button" *ngIf="AddConsentForm.value.legalNotices.length === 0" (click)="addNewLegalRow()" class="btn btn-sm btn-primary">Add LegalNotice<i class="fa fa-plus ml-2" aria-hidden="true"></i></button>
-                  <button type="button" *ngIf="AddConsentForm.value.legalNotices.length > 0" (click)="addNewLegalRow()" class="btn btn-sm btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></td>
+                  <button type="button" tooltip="Add Legal Notice" *ngIf="AddConsentForm.value.legalNotices.length > 0" (click)="addNewLegalRow()" class="btn btn-sm btn-primary"><i class="fa fa-plus-circle" aria-hidden="true"></i></button></td>
               </tr>
             </tfoot>
 

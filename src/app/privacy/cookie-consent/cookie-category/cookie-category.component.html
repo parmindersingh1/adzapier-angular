@@ -191,11 +191,11 @@
         </ng-template>
 
         <ng-template pTemplate="right">
-          <button type="button" class="btn btn-sm  btn-outline-secondary btn-uppercase mr-2" (click)="openCookieModal(addCookieModal)" style="text-transform: none;font-size: 12px;"> <!--openNew()-->
+          <button tooltip="Add cookie details manually" type="button" class="btn btn-sm  btn-outline-secondary btn-uppercase mr-2" (click)="openCookieModal(addCookieModal)" style="text-transform: none;font-size: 12px;"> <!--openNew()-->
             <i aria-hidden="true" class="fa fa-plus pr-1"></i> Add Cookie
           </button>
 
-          <button type="button"
+          <button tooltip="Export cookie records as a CSV file" type="button"
                   [disabled]="cookieCategoryList.length === 0"
                   (click)="onGenerateCsv()" class="btn  btn-sm btn-outline-secondary btn-uppercase mr-2" style="text-transform: none;font-size: 12px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -225,18 +225,24 @@
           <tr>
             <td class="id-box"><span class="ml-4;" style="font-weight: bold;">ID</span></td>
             <th pSortableColumn="name">Name
-              <p-sortIcon field="name"></p-sortIcon>
+              <p-sortIcon field="name" tooltip="Sort"></p-sortIcon>
             </th>
             <th>Path</th>
             <th pSortableColumn="category">Category
-              <p-sortIcon field="category"></p-sortIcon>
+              <p-sortIcon field="category" tooltip="sort"></p-sortIcon>
             </th>
             <th *ngFor="let col of columns">
               {{col.header}}
             </th>
             <th>Domain</th>
-            <th>HTTP Only</th>
-            <th>Secure</th>
+            <th>HTTP Only
+              <i-feather class="feather-16" name="info"
+              tooltip="Http Only tagged cookies that prevent client-side scripts from accessing data"></i-feather>
+            </th>
+            <th title="Secure-flagged cookies which may contain sensitive data">Secure
+              <i-feather class="feather-16" name="info"
+              tooltip="Secure-flagged cookies which may contain sensitive data"></i-feather>
+            </th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
@@ -293,7 +299,7 @@
               <label class="tx-11 tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
                 class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i>Cookie
                 Name</label>
-              <input type="text" formControlName="name" class="form-control" placeholder="Cookie Name">
+              <input type="text" formControlName="name" class="form-control" placeholder="Enter cookie Name">
               <div *ngIf="submitted && f.name.errors"
               >
                 <div class="text-danger mt-2" *ngIf="f.name.errors.required">This Field is required</div>
@@ -321,7 +327,7 @@
             <div class="form-group col-md-6">
               <label class="tx-11 tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
                 class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Domain</label>
-              <input type="text" formControlName="domain" class="form-control" placeholder="Domain">
+              <input type="text" formControlName="domain" class="form-control" placeholder="Enter Domain">
               <div *ngIf="submitted && f.domain.errors"
               >
                 <div class="text-danger mt-2" *ngIf="f.domain.errors.required">This Field is required</div>
@@ -332,7 +338,7 @@
             <div class="form-group col-md-6">
               <label class="tx-11 tx-medium tx-spacing-1 mg-b-0 tx-color-03"><i
                 class="tx-8 fa fa-asterisk tx-danger " aria-hidden="true"></i> Path</label>
-              <input type="text" formControlName="path" class="form-control" placeholder="Path">
+              <input type="text" formControlName="path" class="form-control" placeholder="Enter Path">
               <div *ngIf="submitted && f.path.errors"
               >
                 <div class="text-danger mt-2" *ngIf="f.path.errors.required">This Field is required</div>
@@ -368,7 +374,7 @@
             <label><i class="tx-11 fa fa-asterisk tx-danger " aria-hidden="true"></i>
               Description</label>
             <textarea formControlName="description" class="form-control"
-                      rows="3"></textarea>
+                      rows="3" placeholder="Enter Description"></textarea>
             <div *ngIf="submitted && f.description.errors"
             >
               <div class="text-danger mt-2" *ngIf="f.description.errors.required">This Field is required</div>
@@ -378,7 +384,7 @@
           <div class="form-group mg-b-5">
             <label><i class="tx-11 fa fa-asterisk tx-danger " aria-hidden="true"></i>
               Value</label>
-            <textarea formControlName="value" class="form-control" rows="3"></textarea>
+            <textarea formControlName="value" class="form-control" rows="3" placeholder="Enter Value"></textarea>
             <div *ngIf="submitted && f.value.errors"
             >
               <div class="text-danger mt-2" *ngIf="f.value.errors.required">This Field is required</div>

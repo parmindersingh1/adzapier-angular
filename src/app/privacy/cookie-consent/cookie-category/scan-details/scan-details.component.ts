@@ -9,6 +9,7 @@ import {AuthenticationService, UserService} from '../../../../_services';
 import {DataService} from '../../../../_services/data.service';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { ActivatedRoute } from '@angular/router';
+import { Label } from 'ng2-charts';
 
 @Component({
   selector: 'app-scan-details',
@@ -42,11 +43,18 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   alertMsg: any;
   isOpen = false;
   alertType: any;
-  public chartType = 'doughnut';
+  public chartType = 'bar';
   public chartLabels: Array<string> = [];
   public chartData: Array<number> = [];
   public doughnutChartOptions: ChartOptions = {
     responsive: true,
+    scales: {
+      xAxes: [{}], yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    },
     legend: {
       position: 'bottom'
     }
@@ -58,8 +66,8 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       ]
     }
   ];
-  public chartTypeLabels: Array<string> = ['Cookies', 'Page Scans', 'Tags'];
-  public chartTypeData: Array<number> = [];
+  public chartTypeLabels: Label[] = ['Last Scan details'];
+  public chartTypeData: any[];
 
   selectedProducts = [];
   isUpdate = false;
@@ -173,7 +181,11 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       if (res) {
           if (Object.keys(res).length > 0) {
             this.lastScan = res.response;
-            this.chartTypeData = [this.lastScan.total_cookies, this.lastScan.total_page_scans, this.lastScan.total_tages];
+            this.chartTypeData = [
+              {data:[Number(this.lastScan.total_cookies)], label: 'Cookies'},
+             {data:[Number(this.lastScan.total_page_scans)],label : 'Page Scans'},
+              {data:[Number(this.lastScan.total_tages)],label: 'Tags'}
+            ];
           }
           this.authService.notificationUpdated.next(true);
       }

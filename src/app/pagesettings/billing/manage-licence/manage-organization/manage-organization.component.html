@@ -84,7 +84,7 @@
         <!-- <td> {{obj.city+ ', ' + obj.state + ', ' + obj.zipcode}} </td> -->
       <td>
           <button class="btn btn-sm btn-outline-secondary tx-danger btn-uppercase nohover border-0" (click)="delOrgID = obj.id; openModal(delConfirm)">
-            <i-feather name="trash-2" class="commom-feathericon-height"></i-feather></button>
+            <i-feather placement="left" tooltip="Remove this organization from subscription" name="trash-2" class="commom-feathericon-height"></i-feather></button>
         </td>
 
       </tr>
@@ -131,8 +131,11 @@
 </ng-template>
 
 
-<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+<!-- <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
   <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" >{{  alertMsg}}</alert>
+</div> -->
+<div class="col-sm-5 mr-0 float-right flotingdiv">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>
 <ng-template #delConfirm>
   <div class="modal-body text-center">
