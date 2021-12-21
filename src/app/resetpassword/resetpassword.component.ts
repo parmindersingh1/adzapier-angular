@@ -25,7 +25,10 @@ export class ResetpasswordComponent implements OnInit {
   successmessage: any;
   errormessage: any;
   public id: string;
-
+  isOpen = false;
+  alertMsg: any;
+  alertType: any;
+  dismissible = true;
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
@@ -96,13 +99,28 @@ export class ResetpasswordComponent implements OnInit {
        this.f.token.value, this.f.newpsw.value, this.f.renewpsw.value)
       .pipe(first())
       .subscribe((data) => {
-        if (data) {
+        if (data.status === 200) {
           this.show = true;
-          this.successmessage = 'Password has been reset successfully!';
-          this.router.navigate(['/login']);
+          this.loading = false;
+          this.isOpen = true;
+          this.alertMsg = 'Password has been reset successfully!';
+          this.alertType = 'success';
+          setTimeout(()=>{
+            this.router.navigate(['/login']);
+          },1000);
         }
       }, (error) => {
-        this.errormessage = error.Invalid_token;
+        this.isOpen = true;
+        this.alertMsg = error.Invalid_link;
+        this.alertType = 'danger';
+        this.loading = false;
+       // this.errormessage = error.Invalid_token;
       });
   }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
+  }
+
 }
