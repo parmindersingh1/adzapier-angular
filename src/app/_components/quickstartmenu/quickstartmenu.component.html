@@ -3,7 +3,11 @@
     <div class="quickstart-wrapper" cdkDragBoundary=".height-100" [@slideInOut]="showQuickStartMenu ? true : false" cdkDrag>
         <button class="quickclosebtn" (click)="onCloseQuickstart($event)">&times;</button>
         <accordion [isAnimated]="true" [closeOthers]="true">
-            <accordion-group *ngFor="let datalist of quickStartMenuList" heading="{{datalist.indextext}}"
+            <ng-container *ngIf="skeletonLoading && quickStartMenuList?.length == 0">
+                <ngx-skeleton-loader appearance="circle"   [theme]="{
+                width: '280px',height: '30px','border-radius': '10px', marginRight: '80px'}"></ngx-skeleton-loader>
+            </ng-container>
+            <accordion-group *ngFor="let datalist of quickStartMenuList; trackBy: trackById;" heading="{{datalist.indextext}}"
                 [panelClass]="customClass" [isOpen]="datalist.index == currenttabindex">
                 <ul class="link-list">
                     <li *ngFor="let pagelinks of datalist.quicklinks">

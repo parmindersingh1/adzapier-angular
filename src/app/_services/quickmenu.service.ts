@@ -8,6 +8,7 @@ import { environment } from './../../environments/environment';
 })
 export class QuickmenuService extends QuickStartMenuList {
  // @Output() onClickEmitQSLinkobj : EventEmitter<any> = new EventEmitter<any>();
+  currentloggedInUser:any;
    qsMenuobjwithIndexid:any;
   isclickeventoutsidemenu:boolean = false;
   isclickeventfromquickmenu:boolean = false;
@@ -60,6 +61,9 @@ export class QuickmenuService extends QuickStartMenuList {
         controlList[ctrlIdx].quicklinks[quicklinkIdx].isactualbtnclicked = newItem.isactualbtnclicked;
         controlList[ctrlIdx].quicklinks[quicklinkIdx].islinkclicked = newItem.islinkclicked;
         // controlList[ctrlIdx].quicklinks[quicklinkIdx] = newItem;
+        if(newItem.isactualbtnclicked){
+          this.addUpdateQuickStartLinks(controlList).subscribe((data)=>console.log(data,'qsmupdated..'));
+        }
         localStorage.setItem('quickmenuList', JSON.stringify(controlList));
       }
 
@@ -81,5 +85,9 @@ export class QuickmenuService extends QuickStartMenuList {
   dismissQuickStart(status): Observable<any>{
     return this.httpClient.post<any>(environment.apiUrl + '/quickstart/dismiss',{"is_quickstart_dismissed":status});
   }
+
+  addUpdateQuickStartLinks(obj): Observable<any>{
+    return this.httpClient.post<any>(environment.apiUrl + '/quickstart/visitedlinks',{"quickstart_visited_links":obj});
+}
 
 }

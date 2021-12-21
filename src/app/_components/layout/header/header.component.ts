@@ -1047,7 +1047,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   loadOrgPropertyFromLocal() {
     this.selectedOrgProperties.length = 0;
-    if (this.orgPropertyMenu !== undefined) {
+    if (this.orgPropertyMenu !== undefined && this.orgPropertyMenu.length !== 0) { //&& this.orgPropertyMenu.length !== 0
       const orgIndex = this.orgPropertyMenu.findIndex((t) => {
         if (this.queryOID !== null || this.queryOID !== undefined) {
           t.organization_id === this.queryOID
