@@ -246,7 +246,7 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     }, error => {
       this.isScanning = false;
       this.isOpen = true;
-      this.alertMsg = error;
+      this.alertMsg = error.Error;
       this.alertType = 'danger';
     });
   }
