@@ -239,3 +239,7 @@ span:not(:last-of-type)::after {
 .tr-graybg {
     background: #f3f3f3;
 }
+
+::ng-deep .dropdown.open.bottom {
+    z-index: 1200;
+}

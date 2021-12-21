@@ -52,6 +52,9 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   allPropertyList = [];
   queryOID;
   queryPID;
+  loggedInuserDetails:any;
+  currentUserPropertyList:any;
+  dismissible = true;
   constructor(private service: BillingService,
               private modalService: BsModalService,
               private activatedRoute: ActivatedRoute,
@@ -91,6 +94,8 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
       this.queryPID = params.get('pid');
     });
     this.getAllOrgList();
+    this.getCurrentLoggedInUserDetails();
+    this.getPropertyListAccessedToCurrentUser();
   }
 
   onGetPlanInfo() {
@@ -315,6 +320,7 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
   onRemoveProperty(pID) {
     this.loading.start();
     this.skLoading = true;
+  if(this.isUserHasAccessForAction(pID)){
     this.service.removeProperty(this.constructor.name, moduleName.billingModule, {properly_licenses_id: this.propertlyLicensesID,
       pID,
       planID: this.planID
@@ -338,6 +344,14 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
         this.alertMsg = err;
         this.alertType = 'danger';
       });
+    }else{
+      this.loading.stop();
+      this.skLoading = false;
+      this.isOpen = true;
+      this.modalRef.hide();
+      this.alertMsg = "You are not authorized to access this functionality. Please contact your Administrator";
+      this.alertType = 'danger';
+    }
   }
 
   decline(): void {
@@ -349,5 +363,39 @@ export class ManagePropertyComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // this.modalRef.hide();
+  }
+
+  getCurrentLoggedInUserDetails(){
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
+      if (res.status === 200) {
+        this.loggedInuserDetails = res.response;
+      }
+   });
+  }
+
+  getPropertyListAccessedToCurrentUser(){
+    this.orgservice.getOrganizationWithProperty().subscribe((data)=>{
+      if(data !== undefined && data.response !== undefined && data.response[0].property !== undefined){
+        this.currentUserPropertyList = data.response[0].property;
+      }
+    })
+  }
+
+  isUserHasAccessForAction(pID):boolean {
+    if(this.loggedInuserDetails.role === "Organization Administrator"){
+      const isPIDExists = this.currentUserPropertyList.some((t)=>t.property_id === pID);
+      if(isPIDExists){
+        return true
+      }else{
+        return false;
+      }
+    }else{
+      return true; // For users other than "Organization Administrator"
+    }
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
   }
 }

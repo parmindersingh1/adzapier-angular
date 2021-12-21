@@ -6,6 +6,7 @@ import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {forkJoin, Observable} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {moduleName} from 'src/app/_constant/module-name.constant';
+import { UserService } from 'src/app/_services';
 import {BillingService} from 'src/app/_services/billing.service';
 import {DataService} from 'src/app/_services/data.service';
 import {OrganizationService} from 'src/app/_services/organization.service';
@@ -49,13 +50,17 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
   calculateRequestUsage;
   queryOID;
   queryPID;
+  loggedInuserDetails:any;
+  currentUserOrganizationList:any;
+  dismissible = true;
   constructor(private service: BillingService,
               private modalService: BsModalService,
               private activatedRoute: ActivatedRoute,
               private loading: NgxUiLoaderService,
               private formBuilder: FormBuilder,
               private dataService: DataService,
-              private orgservice: OrganizationService
+              private orgservice: OrganizationService,
+              private userService: UserService
   ) {
   }
 
@@ -76,6 +81,8 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
     });
 
     this.getAllOrgList();
+    this.getCurrentLoggedInUserDetails();
+    this.getPropertyListAccessedToCurrentUser();
   }
   onGetPlanInfo() {
     this.loading.start('23');
@@ -243,6 +250,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
   onRemoveOrg(oID) {
     this.loading.start();
     this.skLoading = true;
+    if(this.isUserHasAccessForAction(oID)){
     this.service.removeOrg(this.constructor.name, moduleName.billingModule, {orgID: oID})
       .subscribe((res: any) => {
         this.loading.stop();
@@ -262,6 +270,14 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
         this.alertMsg = err;
         this.alertType = 'danger';
       })
+    }else{
+      this.loading.stop();
+      this.skLoading = false;
+      this.isOpen = true;
+      this.modalRef.hide();
+      this.alertMsg = "You are not authorized to access this functionality. Please contact your Administrator";
+      this.alertType = 'danger';
+    }
   }
 
   decline(): void {
@@ -296,6 +312,40 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
     } else {
        return usedLimit > 0 ? Math.ceil(usedLimit / currentLimit * 100) : 0;
     }
+  }
+
+  getCurrentLoggedInUserDetails(){
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
+      if (res.status === 200) {
+        this.loggedInuserDetails = res.response;
+      }
+   });
+  }
+
+  getPropertyListAccessedToCurrentUser(){
+    this.orgservice.getOrganizationWithProperty().subscribe((data)=>{
+      if(data !== undefined && data.response !== undefined && data.response[0].property !== undefined){
+        this.currentUserOrganizationList = data.response;
+      }
+    })
+  }
+
+  isUserHasAccessForAction(oID):boolean {
+    if(this.loggedInuserDetails.role === "Organization Administrator"){
+      const isOIDExists = this.currentUserOrganizationList.some((t)=>t.id === oID);
+      if(isOIDExists){
+        return true
+      }else{
+        return false;
+      }
+    }else{
+      return true; // For users other than "Organization Administrator"
+    }
+  }
+
+  onClosed(dismissedAlert: any): void {
+    this.alertMsg = !dismissedAlert;
+    this.isOpen = false;
   }
 
   ngOnDestroy() {

@@ -213,7 +213,7 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
         city: this.editOrganisationForm.value.cityname,
         state: this.editOrganisationForm.value.statename,
         zipcode: this.editOrganisationForm.value.zipcodenum,
-        email: this.editOrganisationForm.value.email,
+        email: this.editOrganisationForm.value.email.toLowerCase(),
         phone: this.editOrganisationForm.value.phone
       };
       this.loading.start();

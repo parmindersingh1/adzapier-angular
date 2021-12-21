@@ -457,6 +457,13 @@ li {
   margin-top: 53px;
   margin-bottom: 0px !important;
 }
+
+.enterprise-btndisabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
+}
+
 .feature-list-group-dsar {
   padding-left: 14px;
 }

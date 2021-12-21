@@ -96,24 +96,9 @@ export class AppComponent implements OnInit {
         }
       }
     );
-    this.quickmenuService.isClickedOnQSMenu.subscribe((data) => {
-      if (data) {
-        this.qsMenuList = this.quickmenuService.getQuerymenulist();
-        // console.log(updatedqsMenu,'constructor..appcomp');
-        // this.qsMenuList =  [...updatedqsMenu];
-      }
-    })
-
   }
 
   async ngOnInit() {
-    this.quickmenuService.isClickedOnQSMenu.subscribe((data) => {
-      if (data) {
-        this.qsMenuList = this.quickmenuService.getQuerymenulist();
-        // console.log(updatedqsMenu,'constructor..appcomp');
-        // this.qsMenuList =  [...updatedqsMenu];
-      }
-    });
     await this.onInitCPSDK();
     this.openUnAuthModal();
     this.router.events.subscribe((event) => {
@@ -151,7 +136,6 @@ export class AppComponent implements OnInit {
       //  console.log(this.queryPID,'queryPID..');
       // }
     });
-    this.qsMenuList = this.quickmenuService.getQuerymenulist();
     let obj;
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => obj = data);
 
@@ -223,10 +207,9 @@ export class AppComponent implements OnInit {
     // if(Object.values(obj).length !== 0){
     //   this.quickmenuService.updateQuerymenulist(obj);
     // }else{
-    this.quickmenuService.updateQuerymenulist($event);
+    //this.quickmenuService.updateQuerymenulist($event); //Note this
     // }
     //this.quickstartmenuComponent.getupdatedQuickStartMenu();
-    this.qsMenuList = this.quickmenuService.getQuerymenulist();
 
   }
 
@@ -252,8 +235,6 @@ export class AppComponent implements OnInit {
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => this.quicklinkclickedObj = data);
     this.cdRef.detectChanges();
-    let updatedqsMenu = this.quickmenuService.getQuerymenulist();
-    this.qsMenuList = [...updatedqsMenu];
     this.cdRef.detectChanges();
   }
 

@@ -259,7 +259,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   resendToken() {
     this.isVerificationBtnClick = true;
     const reqObj = {
-      email: this.f.email.value
+      email: this.f.email.value.toLowerCase()
     }
     this.userService.resendEmailVerificationToken(this.constructor.name, moduleName.loginModule, reqObj).subscribe((data) => {
       if (data.status === 200) {

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment';
 import { User } from './../_models';
 import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
-import { map, shareReplay, retry, catchError } from 'rxjs/operators';
+import { map, shareReplay, retry, catchError, take } from 'rxjs/operators';
 import { LokiService } from './loki.service';
 import { LokiFunctionality, LokiStatusType } from '../_constant/loki.constant';
 import { apiConstant } from '../_constant/api.constant';
@@ -166,7 +166,21 @@ export class UserService {
 
     getLoggedInUserDetails(componentName, moduleName): Observable<User> {
         const path = '/user';
-        return this.http.get<User>(environment.apiUrl + path).pipe(shareReplay(1),
+        return this.http.get<User>(environment.apiUrl + path).pipe(take(1),
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getLoggedInUserDetails, componentName, moduleName, path);
+                return throwError(error);
+            })
+        );
+    }
+
+    getLoggedQSMList(componentName, moduleName): Observable<any> {
+        const path = '/user';
+        return this.http.get<any>(environment.apiUrl + path).pipe(take(1),
+            map((result) => {
+                return result.response;
+            }),
+
             catchError(error => {
                 this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getLoggedInUserDetails, componentName, moduleName, path);
                 return throwError(error);
