@@ -98,9 +98,13 @@
           || systemName === 'moosend'">
             <div class="form-group w-75">
               <label>Test Email (Only For Test Connection)</label>
-              <input type="email" (change)="onSetTestEmail($event)" class="form-control" />
+              <input type="email" formControlName="testEmail"  [ngClass]="{ 'is-invalid': submitted && f.testEmail.errors }" class="form-control" />
+              <div *ngIf="submitted && f.testEmail.errors" class="text-danger" >
+                <div *ngIf="f.testEmail.errors.email">Email is not valid </div>
+              </div>
             </div>
           </div>
+
 
           <div class="col-md-6">
             <button type="submit" (click)="submitType = 'test'" [disabled]="isTesting"  class="btn btn-outline-secondary">

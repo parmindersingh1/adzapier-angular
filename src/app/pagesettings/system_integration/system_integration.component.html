@@ -1,6 +1,3 @@
-<!--<app-mysql-form></app-mysql-form>-->
-
-
 <div class="card">
   <div class="card-header">
     <h4 class="float-left pt-2">Connections List</h4>
@@ -44,7 +41,7 @@
             </button>
           </td>
           <td><span class="text-success pr-2" (click)="openModalUpdateConnection(updateConnection, rowData)"><i class="fas fa-edit cursorpointer"></i></span>
-            <span class="text-danger"><i class="fas fa-trash-alt cursorpointer"></i></span>
+            <span class="text-danger" (click)="openModalDelete(rowData.id, deleteConnection)"><i class="fas fa-trash-alt cursorpointer"></i></span>
           </td>
         </tr>
       </ng-template>
@@ -108,7 +105,7 @@
       <div class="list-group">
         <div class="row">
             <ng-container *ngFor="let obj of systemList">
-              <div class="col-md-4 mb-3">
+              <div class="col-md-4 text-center mb-3">
               <a href="javascript:;" (click)="onSelectSystem(obj, 2)" class="list-group-item list-group-item-action">
                 <span *ngIf="obj.name ==='mysql'"><img style="width:  90px" src="assets/imgs/db/mysql.png" alt="mysql" /></span>
                 <span *ngIf="obj.name ==='mailchimp'"><img style="width:  180px" src="assets/imgs/db/mailchimp.png" alt="mailchimp" /></span>
@@ -181,6 +178,16 @@
     </form>
   </div>
 </ng-template>
+
+<ng-template #deleteConnection>
+  <div class="modal-body text-center">
+    <p>Are You Sure ?
+    </p>
+    <button type="button" class="btn btn-default" (click)="modalRef.hide()">No</button>
+    <button type="button" class="btn btn-primary ml-2" (click)="onDeleteConnection(deleteConnectionID)">Yes</button>
+  </div>
+</ng-template>
+
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
   <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
       ><span [innerHTML]="alertMsg"></span></alert>

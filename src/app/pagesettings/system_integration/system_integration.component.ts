@@ -45,6 +45,7 @@ export class SystemIntegrationComponent implements OnInit {
   submitted = false;
   credCount: any = 0;
   errorMessage = '';
+  deleteConnectionID: any;
   constructor(private modalService: BsModalService,
               private systemIntegrationService: SystemIntegrationService,
               private loading: NgxUiLoaderService,
@@ -245,5 +246,29 @@ export class SystemIntegrationComponent implements OnInit {
         this.loading.stop();
         this.errorMessage = error;
       });
+  }
+  onDeleteConnection(id) {
+    this.loading.start();
+    this.systemIntegrationService.deleteConnection(this.constructor.name,
+      moduleName.systemIntegrationModule, id).subscribe((res: any) => {
+        this.loading.stop();
+        this.isOpen = true;
+        this.alertMsg = res.response;
+        this.alertType = 'success';
+        this.modalRef.hide();
+        this.onGetCredList();
+    }, error => {
+      this.testingSuccess = false;
+      this.isTesting = false;
+      this.loading.stop();
+      this.errorMessage = error;
+    });
+  }
+
+  openModalDelete(id, template) {
+    this.deleteConnectionID = id;
+    this.modalRef = this.modalService.show(template, {
+      animated: false, keyboard: false, ignoreBackdropClick: true
+    });
   }
 }
