@@ -5,6 +5,8 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { MustMatch } from '../_helpers/must-match.validator';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { moduleName } from '../_constant/module-name.constant';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-edit-profile',
@@ -47,7 +49,12 @@ export class EditProfileComponent implements OnInit {
     private userService: UserService,
     private loadingBar: NgxUiLoaderService,
     private modalService: NgbModal,
-  ) { }
+    private titleService: Title 
+
+  ) { 
+    this.titleService.setTitle("User Preference - Adzapier Portal");
+
+  }
 
   ngOnInit() {
     //  this.isDisabled = true;

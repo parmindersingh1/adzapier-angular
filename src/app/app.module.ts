@@ -25,6 +25,8 @@ import {TimeagoModule} from 'ngx-timeago';
 import { SubscriptionPopupComponent } from './_components/subscription-popup/subscription-popup.component';
 import { QuickstartmenuComponent } from './_components/quickstartmenu/quickstartmenu.component';
 import { SidemenuModule } from 'src/app/_components/sidemenu/sidemenu.module';
+import { Title } from '@angular/platform-browser';
+
 
 @NgModule({
   declarations: [
@@ -81,6 +83,7 @@ import { SidemenuModule } from 'src/app/_components/sidemenu/sidemenu.module';
   ],
   providers: [
     NgxUiLoaderService,
+    Title,
     AuthenticationService,
     {
       provide: HTTP_INTERCEPTORS,

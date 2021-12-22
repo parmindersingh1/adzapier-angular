@@ -92,6 +92,9 @@ export class ErrorInterceptor implements HttpInterceptor {
               if(err.url.indexOf('/api/v1/register') !== -1){
                 const error = err.error.error || err.statusText;
                 return throwError(error);
+              } else if(err.url.indexOf('/api/v1/password/reset') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
               } else if(err.url.indexOf('/api/v1/password') !== -1){
                 const error = err.error.error || err.statusText;
                 return throwError(error);

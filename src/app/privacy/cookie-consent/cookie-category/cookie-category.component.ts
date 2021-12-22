@@ -17,6 +17,7 @@ import { forkJoin, Observable, Subject } from 'rxjs';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { QuickStart } from 'src/app/_models/quickstart';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Title } from '@angular/platform-browser';
 
 const colorCodes = ['#f77eb9', '#fdb16d', '#c693f9', '#65e0e0', '#69b2f8', '#6fd39b'];
 
@@ -127,9 +128,13 @@ export class CookieCategoryComponent implements OnInit {//AfterViewChecked
               private userService: UserService,
               private quickmenuService: QuickmenuService,
               private activateRoute: ActivatedRoute,
-              private router: Router
+              private router: Router,
+              private titleService: Title 
+
   ) {
     this.onInItCategoryForm();
+    this.titleService.setTitle("Cookie Category - Adzapier Portal");
+
   }
 
   ngOnInit() {
