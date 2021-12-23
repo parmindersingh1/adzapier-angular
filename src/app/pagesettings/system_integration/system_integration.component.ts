@@ -5,6 +5,7 @@ import {SystemIntegrationService} from '../../_services/system_integration.servi
 import {moduleName} from '../../_constant/module-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -48,8 +49,12 @@ export class SystemIntegrationComponent implements OnInit {
   constructor(private modalService: BsModalService,
               private systemIntegrationService: SystemIntegrationService,
               private loading: NgxUiLoaderService,
-              private formBuilder: FormBuilder
+              private formBuilder: FormBuilder,
+              private titleService: Title 
+
   ) {
+    this.titleService.setTitle("System Integration - Adzapier Portal");
+
   }
 
   ngOnInit() {
