@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { GdprService } from 'src/app/_services/gdpr.service';
+import { Title } from '@angular/platform-browser';
+
 
 interface RouterPayloads {
   tcstring: string;
@@ -50,7 +52,12 @@ export class DecodeComponent implements OnInit {
   vendorsList: VendorsList = new VendorsList();
   constructor(private activatedRoute: ActivatedRoute,
     private router: Router,
-     private gdprService: GdprService) { }
+     private gdprService: GdprService,
+     private titleService: Title 
+     ) {
+      this.titleService.setTitle("Consent details - Adzapier Portal");
+
+      }
 
   ngOnInit() {
     this.activatedRoute.queryParams
