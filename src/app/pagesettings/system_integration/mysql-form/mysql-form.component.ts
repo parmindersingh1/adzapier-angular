@@ -31,7 +31,6 @@ export class MysqlFormComponent implements OnInit {
   mySqlForm: FormGroup;
   submitted = false;
   testingSuccess = '';
-  testEmail = '';
   credForm = credForm;
   constructor(private formBuilder: FormBuilder,
               private systemIntegrationService: SystemIntegrationService,
@@ -51,6 +50,7 @@ export class MysqlFormComponent implements OnInit {
       connection_name: ['', Validators.required],
       connection_desc: ['', Validators.required],
       connector_type: ['', Validators.required],
+      testEmail: ['', Validators.email],
       credential: this.formBuilder.array([]),
     });
     this.onGetConnectionList();
@@ -61,10 +61,18 @@ export class MysqlFormComponent implements OnInit {
   }
 
   addCredential(index) {
-    return this.formBuilder.group({
-      key: [credForm[this.systemName][index].key, Validators.required],
-      secret_1: ['', Validators.required],
-    });
+    if (credForm[this.systemName][index].required) {
+      return this.formBuilder.group({
+        key: [credForm[this.systemName][index].key, Validators.required],
+        secret_1: ['', Validators.required],
+      });
+    } else {
+      return this.formBuilder.group({
+        key: [credForm[this.systemName][index].key, Validators.required],
+        secret_1: [''],
+      });
+    }
+
   }
 
   get addCredentialRows() {
@@ -86,7 +94,6 @@ export class MysqlFormComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
     if (this.mySqlForm.invalid) {
       return;
     }
@@ -103,7 +110,6 @@ export class MysqlFormComponent implements OnInit {
       this.onSaveCred(payload);
     }
   }
-
   onTestConnection(payload) {
     this.loading.start();
     const params: any = {
@@ -115,7 +121,7 @@ export class MysqlFormComponent implements OnInit {
       || this.systemName === 'sendgrid'
       || this.systemName === 'hubspot'
       || this.systemName === 'moosend') {
-      params.email = this.testEmail;
+      params.email = this.mySqlForm.value.testEmail;
     }
     this.isTesting = true;
     this.testingSuccess = '';
@@ -165,9 +171,5 @@ export class MysqlFormComponent implements OnInit {
   hideConnectionForm() {
     this.onGetConnectionList();
     this.showConnectionForm = false;
-  }
-
-  onSetTestEmail(event: any) {
-    this.testEmail = event.target.value;
   }
 }

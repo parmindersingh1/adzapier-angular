@@ -19,7 +19,7 @@ import {ActivatedRoute} from '@angular/router';
   templateUrl: './http-query-builder.component.html',
   styleUrls: ['./http-query-builder.component.scss']
 })
-export class HttpQueryBuilderComponent implements OnInit, OnChanges, AfterViewInit {
+export class HttpQueryBuilderComponent implements OnInit,  AfterViewInit {
   @Input('formObject') formObject;
   @Input('formID') formID;
   @Input('connectionId') connectionId;
@@ -33,6 +33,7 @@ export class HttpQueryBuilderComponent implements OnInit, OnChanges, AfterViewIn
   alertType: any;
   orgID = null;
   pageStep = 1;
+  updateData = [];
   constructor(private formBuilder: FormBuilder,
               private cd: ChangeDetectorRef,
               private loading: NgxUiLoaderService,
@@ -47,14 +48,53 @@ export class HttpQueryBuilderComponent implements OnInit, OnChanges, AfterViewIn
       path: ['', Validators.required],
       queryParams: this.formBuilder.array([])
     });
+    this.onGetSavedData();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.formObject = changes.formObject.currentValue;
-    this.cd.detectChanges();
+  onGetSavedData() {
+    this.systemIntegrationService.GetQueryBuilderData(this.constructor.name,
+      moduleName.systemIntegrationModule, this.orgID, this.connectionId, this.formID).subscribe((res: any) => {
+      if (res.status === 200) {
+        if (res.response.length > 0) {
+          this.updateData = res.response;
+          // this.isUpdate = true;
+          this.fillSavedData();
+        } else {
+          this.addSkills();
+        }
+      }
+    });
   }
+  fillSavedData (){
+    // OID: "f1090f4a-a5e4-40f5-8d96-4038de69a999"
+    // connection_id: "703c8def-a455-40f0-9a0d-5b720da43a81"
+    // created_at: "2021-12-23T08:17:35.602756Z"
+    // field: "path"
+    // form_id: "d9d503d0-94ae-439f-8db7-9c95de7c10fa"
+    // id: "2fd636e5-b861-4bb7-ab3e-9627b9f241ef"
+    // system_name: "http"
+    // updated_at: "2021-12-23T08:17:35.602756Z"
+    // value_1: "response"
+    for (const obj of this.updateData) {
+      if (obj.field === 'path') {
+        this.httpQueryBuilderForm.patchValue({
+          path: obj.value_1
+        });
+      } else {
+        this.skills.push(this.fillSaved(obj.field, obj.value_1));
+      }
+    }
+  }
+  fillSaved(field, value_1): FormGroup {
+    return this.formBuilder.group({
+      field: [field, Validators.required],
+      value_1: [value_1, Validators.required],
+      system_name: [this.systemName]
+    });
+  }
+
   ngAfterViewInit() {
-    this.addSkills();
+    // this.addSkills();
   }
   get f() { return this.httpQueryBuilderForm.controls; }
 
@@ -75,6 +115,9 @@ export class HttpQueryBuilderComponent implements OnInit, OnChanges, AfterViewIn
   }
 
   removeSkill(i:number) {
+    if (this.httpQueryBuilderForm.controls.queryParams['controls'].length === 1) {
+      return
+    }
     this.skills.removeAt(i);
   }
 
@@ -84,7 +127,6 @@ export class HttpQueryBuilderComponent implements OnInit, OnChanges, AfterViewIn
 
   onSubmit() {
     this.submitted = true;
-    console.log('this.httpQueryBuilderForm', this.httpQueryBuilderForm)
     // stop here if form is invalid
     if (this.httpQueryBuilderForm.invalid) {
       return;

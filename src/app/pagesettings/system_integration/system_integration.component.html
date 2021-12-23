@@ -1,5 +1,14 @@
-<!--<app-mysql-form></app-mysql-form>-->
-
+<div class=" ml-4 d-sm-flex align-items-center justify-content-between">
+  <div>
+    <nav aria-label="breadcrumb" class="bredcrub-row" style="margin-left:-14px;">
+      <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+        <li class="breadcrumb-item active" aria-current="page"><a routerLink="/settings"
+                                                            [queryParams]="{oid: queryOID, pid: queryPID}">Settings</a></li>
+        <li class="breadcrumb-item active">System Integration</li>
+      </ol>
+    </nav>
+  </div>
+</div> <!-- breadcrumb -->
 
 <div class="card">
   <div class="card-header">
@@ -43,8 +52,8 @@
 
             </button>
           </td>
-          <td><span class="text-success pr-2" (click)="openModalUpdateConnection(updateConnection, rowData)"><i tooltip="Edit this connection" class="fas fa-edit cursorpointer"></i></span>
-            <span class="text-danger"><i tooltip="Delete this connection" class="fas fa-trash-alt cursorpointer"></i></span>
+          <td><span class="text-success pr-2" (click)="openModalUpdateConnection(updateConnection, rowData)"><i class="fas fa-edit cursorpointer"></i></span>
+            <span class="text-danger" (click)="openModalDelete(rowData.id, deleteConnection)"><i class="fas fa-trash-alt cursorpointer"></i></span>
           </td>
         </tr>
       </ng-template>
@@ -108,7 +117,7 @@
       <div class="list-group">
         <div class="row">
             <ng-container *ngFor="let obj of systemList">
-              <div class="col-md-4 mb-3">
+              <div class="col-md-4 text-center mb-3">
               <a href="javascript:;" (click)="onSelectSystem(obj, 2)" class="list-group-item list-group-item-action">
                 <span *ngIf="obj.name ==='mysql'"><img style="width:  90px" src="assets/imgs/db/mysql.png" alt="mysql" /></span>
                 <span *ngIf="obj.name ==='mailchimp'"><img style="width:  180px" src="assets/imgs/db/mailchimp.png" alt="mailchimp" /></span>
@@ -181,6 +190,16 @@
     </form>
   </div>
 </ng-template>
+
+<ng-template #deleteConnection>
+  <div class="modal-body text-center">
+    <p>Are you sure you want to delete this connection?
+    </p>
+    <button type="button" class="btn btn-default" (click)="modalRef.hide()">No</button>
+    <button type="button" class="btn btn-primary ml-2" (click)="onDeleteConnection(deleteConnectionID)">Yes</button>
+  </div>
+</ng-template>
+
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
   <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
       ><span [innerHTML]="alertMsg"></span></alert>

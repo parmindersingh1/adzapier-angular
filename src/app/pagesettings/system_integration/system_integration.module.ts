@@ -24,7 +24,7 @@ const router: Routes = [
     MysqlFormComponent,
     HttpQueryBuilderComponent
   ],
-  imports: [RouterModule.forChild(router), ReactiveFormsModule, SharedbootstrapModule, TableModule, FormsModule, SkeletonModule, ButtonModule, RippleModule]
+  imports: [RouterModule.forChild(router),         ReactiveFormsModule, SharedbootstrapModule, TableModule, FormsModule, SkeletonModule, ButtonModule, RippleModule]
 })
 
 export class SystemIntegrationModule{}

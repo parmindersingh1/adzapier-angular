@@ -107,7 +107,7 @@ export const credForm = {
       {
         key: 'api_token',
         secret_1: '',
-        type: 'textarea',
+        type: 'text',
         required: true
       },
     ],
@@ -121,7 +121,7 @@ export const credForm = {
   sendgrid: [{
     key: 'authorization',
     secret_1: '',
-    type: 'textarea',
+    type: 'text',
     required: true
   },
   ],
@@ -129,7 +129,7 @@ export const credForm = {
     {
       key: 'api_key',
       secret_1: '',
-      type: 'textarea',
+      type: 'text',
       required: true
     },
     {
@@ -143,7 +143,7 @@ export const credForm = {
     {
       key: 'api_key',
       secret_1: '',
-      type: 'textarea',
+      type: 'text',
       required: true
     }
   ]

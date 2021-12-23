@@ -23,7 +23,6 @@ export class UpdateConnectionFormComponent implements OnInit {
 
   @Output('refreshConnectionList') refreshConnectionList = new EventEmitter()
   systemID = null;
-  connectionID: any;
   dismissible = true;
   alertMsg: any;
   isOpen = false;
@@ -33,7 +32,6 @@ export class UpdateConnectionFormComponent implements OnInit {
   mySqlForm: FormGroup;
   submitted = false;
   testingSuccess = '';
-  testEmail = '';
   credForm = credForm;
 
   constructor(private formBuilder: FormBuilder,
@@ -55,6 +53,7 @@ export class UpdateConnectionFormComponent implements OnInit {
       connection_name: ['', Validators.required],
       connection_desc: ['', Validators.required],
       connector_type: ['', Validators.required],
+      testEmail: ['', Validators.email],
       credential: this.formBuilder.array([]),
     });
     this.mySqlForm.patchValue({
@@ -62,8 +61,6 @@ export class UpdateConnectionFormComponent implements OnInit {
       connection_desc: this.updateConnectionData.description,
       connector_type: this.updateConnectionData.connector_type
     });
-
-    console.log('this.updateConnectionData', this.updateConnectionData)
     this.onGetConnectionList();
     for (let i = 0; this.updateConnectionData.integration_cred.length > i; i++) {
       this.addCredentialRows.push(this.addCredential(i));
@@ -97,7 +94,9 @@ export class UpdateConnectionFormComponent implements OnInit {
     this.systemIntegrationService.GetConnectionListBySystemID(this.constructor.name, moduleName.systemIntegrationModule, this.systemID)
       .subscribe((res: any) => {
         this.connectionList = res.response;
-      })
+      }, error => {
+
+      });
   }
 
 
@@ -107,11 +106,9 @@ export class UpdateConnectionFormComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
-
     if (this.mySqlForm.invalid) {
       return;
     }
-
     const payload = {
       cred_name: this.mySqlForm.value.connection_name,
       description: this.mySqlForm.value.connection_desc,
@@ -136,7 +133,7 @@ export class UpdateConnectionFormComponent implements OnInit {
       || this.systemName === 'sendgrid'
       || this.systemName === 'hubspot'
       || this.systemName === 'moosend') {
-      params.email = this.testEmail;
+      params.email = this.mySqlForm.value.testEmail;
     }
     this.isTesting = true;
     this.testingSuccess = '';
@@ -185,9 +182,5 @@ export class UpdateConnectionFormComponent implements OnInit {
   hideConnectionForm() {
     this.onGetConnectionList();
     this.showConnectionForm = false;
-  }
-
-  onSetTestEmail(event: any) {
-    this.testEmail = event.target.value;
   }
 }
