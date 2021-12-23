@@ -7,7 +7,7 @@
 
     </ol>
   </nav>
-  <h4 class="mg-b-0 tx-spacing--1">Manage Properties</h4>
+  <h4 class="mg-b-0 tx-spacing--1">Add or Remove Properties to Subscription</h4>
 
 <div class="card mt-4">
     <h5 class=" col-md-12 mt-4 plan-name cl-gray" style="font-weight: bold;">
@@ -15,7 +15,7 @@
       <ngx-skeleton-loader  *ngIf="skLoading" count="1" [theme]="{height: '30px', width: '60%'}"></ngx-skeleton-loader>
     </h5>
     <div class=" col-md-12">
-      <h4 class="assign-text cl-gray">{{assigneLicence}}/{{totalLicence}} Assigned</h4>
+      <h4 class="assign-text cl-gray">{{assigneLicence}}/{{totalLicence}} Subscription Used</h4>
       <div class="col-md-4">
         <div class="progress" style="height:16px">
           <div class="progress-bar" [ngStyle]="{width: percents.assigneLicence +'%'}" style=" background-color: #11188f">
@@ -30,7 +30,7 @@
           <div class="row">
           <div class="col-md-3 cl-gray type-text">
             <i class="fa fa-square" style="color:#11188f" aria-hidden="true"></i>
-            Assigned
+            Used
           </div>
           <div class="col-md-3 cl-gray type-text pl-0">
             <i class="fa fa-square" style="color:#3d78d4" aria-hidden="true"></i>
@@ -58,10 +58,11 @@
     <table class="table">
       <thead>
       <tr>
-        <th>Property Name</th>
+        <th>Property</th>
         <th></th>
-        <th>Domain Name</th>
+        <th>Domain</th>
         <th>Organization</th>
+        <th>Status</th>
       </tr>
       </thead>
       <tbody>
@@ -71,8 +72,8 @@
 
 
 
-          <div class="btn-group" dropdown>
-            <button  id="button-basic" dropdownToggle type="button" class="btn btn-default"
+          <div class="btn-group"  dropdown>
+            <button triggers="mouseenter:mouseleave mouseenter:click" tooltip="Remove this property from subscription" id="button-basic" dropdownToggle type="button" class="btn btn-default"
                     aria-controls="dropdown-basic">
                     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
             </button>
@@ -114,14 +115,14 @@
   <div class="modal-body">
     <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
       <div class="form-group dp-safari">
-        <label for="usr">Find Organization:</label>
+        <label for="usr">Select Organization</label>
         <select (change)="onGetAllPropertyList($event)" class="form-control" id="sel1">
           <option [value]="">-- Select Organization --</option>
           <option *ngFor="let obj of orgList" [value]="obj.id">{{obj.orgname}}</option>
         </select>
       </div>
 
-    <label for="typeahead-basic">Find Property:</label>
+    <label for="typeahead-basic">Select Property</label>
 
     <p-multiSelect class="gdprSelect" [disabled]="totalLicence - assigneLicence === 0" [selectionLimit]="totalLicence - assigneLicence " (onChange)="onCheckAvailableLic($event)"
     formControlName="propID" [style]="{'width':'100%'}" [options]="allUnSignPropertyList" ></p-multiSelect>
@@ -138,14 +139,14 @@
     </form>
   </div>
 </ng-template>
-<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
-  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" >{{  alertMsg}}</alert>
+<div class="col-sm-5 mr-0 float-right flotingdiv">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>
 
 
 <ng-template #delConfirm>
   <div class="modal-body text-center">
-    <p>Do you want to remove subscription from this property?</p>
+    <p>Are you sure you want to remove this property from subscription?</p>
     <button type="button" class="btn btn-default" (click)="onRemoveProperty(delPropID)" >Yes</button>
     <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
   </div>

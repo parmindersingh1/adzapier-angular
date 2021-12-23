@@ -2,6 +2,8 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import {ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { DataService } from '../_services/data.service';
+import { Title } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-pagesettings',
   templateUrl: './pagesettings.component.html',
@@ -16,10 +18,14 @@ export class PagesettingsComponent implements OnInit {
   constructor(private router: Router,
               private bsmodalService: BsModalService, 
               private activatedRoute: ActivatedRoute,
-              private dataService: DataService) { 
+              private dataService: DataService,
+              private titleService: Title 
+              ) { 
                 this.dataService.OrganizationCreatedStatus.subscribe((status) => {
                   this.isPropertyCreated = status;
                 });
+                this.titleService.setTitle("Settings - Adzapier Portal");
+
               }
 
   ngOnInit() {

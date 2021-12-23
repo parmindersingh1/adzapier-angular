@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef} from '@angular/core';
 
 @Component({
   selector: 'app-az-banner',
@@ -8,8 +8,10 @@ import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 export class AzBannerComponent implements OnInit {
   bannerType = 'generic';
   @Input('formData') formData;
+  showBadge = false;
   @Output('currentBannerLayer') currentBannerLayer = new EventEmitter();
-  constructor() { }
+  @Output('showBadgeOption') showBadgeOption = new EventEmitter();
+  constructor(private cd: ChangeDetectorRef) { }
 
   ngOnInit(): void {
   }
@@ -24,5 +26,10 @@ export class AzBannerComponent implements OnInit {
   }
   get isBannerRightType() {
     return this.formData?.LayoutType?.search('right') !== -1 ? 'right' : 'left';
+  }
+
+  showCookieNotice() {
+    this.showBadge = false;
+    this.showBadgeOption.emit(true);
   }
 }

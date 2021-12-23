@@ -9,10 +9,12 @@ import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from '../../../_constant/module-name.constant';
 import { LazyLoadEvent } from 'primeng/api';
 import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { OrganizationService } from 'src/app/_services';
 import { trimValidator } from 'src/app/_helpers/trimspace.validator';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
+import { Title } from '@angular/platform-browser';
+
 // import { strings } from "ngx-timeago/language-strings/en";
 // import { TimeagoIntl } from "ngx-timeago";
 @Component({
@@ -65,7 +67,9 @@ export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponent
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
               private cdRef: ChangeDetectorRef,
-              private orgservice: OrganizationService
+              private orgservice: OrganizationService,
+              private titleService: Title 
+
             //  intl: TimeagoIntl
   ) {
   //  intl.strings = strings;
@@ -76,6 +80,9 @@ export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponent
       this.queryOID = params.get('oid');
       this.queryPID = params.get('pid');
     });
+
+    this.titleService.setTitle("DSAR Workflows - Adzapier Portal");
+
   }
 
   ngOnInit() {
@@ -127,8 +134,7 @@ export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponent
       if (response !== '') {
         this.currentManagedOrgID = response.organization_id || response.response.oid;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
+        this.currentManagedOrgID = this.queryOID;
       }
     });
   }
@@ -365,7 +371,7 @@ isLicenseLimitAvailable(){
 
 licenseAvailabilityForFormAndRequestPerOrg(org){
   this.dataService.removeAvailableLicenseForFormAndRequestPerOrg();
-  this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
+  this.dataService.checkLicenseAvailabilityPerOrganization(org).pipe(take(1)).subscribe(results => {
     let finalObj = {
       ...results[0].response,
       ...results[1].response,

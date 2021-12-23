@@ -20,6 +20,8 @@ import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from '../../../_constant/module-name.constant';
 import { formatDate } from '@angular/common';
 import {SystemIntegrationService} from '../../../_services/system_integration.service';
+import { Title } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-dsar-requestdetails',
   templateUrl: './dsar-requestdetails.component.html',
@@ -244,7 +246,9 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
               private cdRef: ChangeDetectorRef,
               private userService: UserService,
               private authService: AuthenticationService,
-              private systemIntegrationService: SystemIntegrationService
+              private systemIntegrationService: SystemIntegrationService,
+              private titleService: Title 
+
   ) {
     // this.renderer2.listen('window', 'click', (e: Event) => {
     //   if (e.target !== this.toggleDayleftdiv.nativeElement &&
@@ -255,6 +259,9 @@ export class DsarRequestdetailsComponent implements  AfterViewInit, AfterViewChe
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount, id: 'userPagination' };
     this.activitytype = 0; // 0 = private (internal), 1 = public
     // this.getCurrentLoggedInUser();
+
+    this.titleService.setTitle("DSAR Requests details - Adzapier Portal");
+
   }
 
   ngOnInit() {

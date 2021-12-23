@@ -100,8 +100,8 @@ export const defaultBannerContent = {
   FunctionalTitle: 'Functional Cookies',
   FunctionalDescription: 'Functional cookies help to perform certain functionalities like sharing the content of the website on social media platforms, collect feedbacks, and other third-party features.',
 
-  UnknownTitle: 'Unclassified',
-  UnknownDescription: 'Unclassified cookies are cookies that we are in the process of classifying, together with the providers of individual cookies.'
+  UnknownTitle: 'Unknown',
+  UnknownDescription: 'Unknown cookies are cookies that we are in the process of classifying, together with the providers of individual cookies.'
 };
 
 export class FormDefaultData {

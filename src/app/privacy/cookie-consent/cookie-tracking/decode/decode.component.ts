@@ -75,10 +75,10 @@ export class DecodeComponent implements OnInit {
               },2000)
         }
       else {
-        this.router.navigateByUrl('/cookie-consent/cookie-tracking');
+        this.router.navigate(['/cookie-consent/cookie-tracking'], {queryParams: {oid: this.queryOID, pid: this.queryPID}});
       }
     }else {
-        this.router.navigateByUrl('/cookie-consent/cookie-tracking');
+          this.router.navigate(['/cookie-consent/cookie-tracking'], {queryParams: {oid: this.queryOID, pid: this.queryPID}});
       }
   })
   }

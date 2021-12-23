@@ -8,6 +8,8 @@ import { TablePaginationConfig } from 'src/app/_models/tablepaginationconfig';
 import { moduleName } from 'src/app/_constant/module-name.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import {DataService} from '../../_services/data.service';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-companyteam',
@@ -54,9 +56,13 @@ export class CompanyteamComponent implements OnInit {
               private userService: UserService,
               private loading: NgxUiLoaderService,
               private bsmodalService: BsModalService,
-              private dataService: DataService
+              private dataService: DataService,
+              private titleService: Title 
+
               ) {
                 this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
+                this.titleService.setTitle("Company Team - Adzapier Portal");
+
               }
 
   ngOnInit() {
@@ -220,14 +226,18 @@ export class CompanyteamComponent implements OnInit {
             this.modalService.dismissAll('Data Saved!');
           });
       } else {
+        let useremail = this.inviteUserForm.getRawValue().emailid;
         const requestObj = {
-         // email: this.inviteUserOrgForm.get('emailid').value,
           id: this.recordID,
+          email: useremail,
           user_id: this.approverID,
           role_id: this.inviteUserForm.value.permissions,
-        //  user_level: 'organization'
+          firstname: this.inviteUserForm.value.firstname,
+          lastname: this.inviteUserForm.value.lastname,
+          user_level: 'company',
+          action:'edit'
         };
-        this.companyService.updateUserRole( this.constructor.name, moduleName.organizationDetailsModule, requestObj)
+        this.companyService.updateUserRole( this.constructor.name, moduleName.companyModule, requestObj)
           .subscribe((data) => {
             if (data) {
               this.alertMsg = data.response;

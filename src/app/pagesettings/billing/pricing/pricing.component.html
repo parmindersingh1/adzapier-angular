@@ -151,7 +151,7 @@
 
             <div class="form-group row mb-2 ">
               <label class="property-type col-md-6" for="sel1">Property</label>
-              <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
+              <!-- <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
                 <option>1</option>
                 <ng-container *ngIf="plan.price > 0">
                   <option>2</option>
@@ -164,28 +164,39 @@
                   <option>9</option>
                   <option>10</option>
                 </ng-container>
-              </select>
-            </div>
+              </select> -->
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
+
+              <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+
+              </div>
 
 
-            <button data-toggle="tooltip" data-placement="top"
+            <button data-toggle="tooltip" data-placement="top" [attr.disabled]="(userRole$ | async)?.response.role == 'Organization Administrator' ? true : null"
               [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked && plan.price >=  activeData.cookieConsent.maxPrice ? 'btn-qs-pricing-hightlight' : ''"
-              [title]="plan.price <=  activeData.cookieConsent.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
-              *ngIf="plan.price !=  activeData.cookieConsent.maxPrice"
-              [disabled]="plan.price <=  activeData.cookieConsent.maxPrice"
               (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"
               class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
-              Add To Cart
+              Add to Cart
             </button>
 
+<!--            <button data-toggle="tooltip" data-placement="top"-->
+<!--                    [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked && plan.price >=  activeData.cookieConsent.maxPrice ? 'btn-qs-pricing-hightlight' : ''"-->
+<!--                    [title]="plan.price <=  activeData.cookieConsent.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"-->
+<!--                    *ngIf="plan.price !=  activeData.cookieConsent.maxPrice"-->
+<!--                    [disabled]="plan.price <=  activeData.cookieConsent.maxPrice"-->
+<!--                    (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"-->
+<!--                    class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
+<!--              Add To Cart-->
+<!--            </button>-->
 
-
-            <button *ngIf="plan.price ==  activeData.cookieConsent.maxPrice"
-              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
-              (click)="onGenerateSessionID();checkForQsTooltip();"
-              class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
-              Manage Plan
-            </button>
+<!--            <button *ngIf="plan.price ==  activeData.cookieConsent.maxPrice"-->
+<!--              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"-->
+<!--              (click)="onGenerateSessionID();checkForQsTooltip();"-->
+<!--              class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
+<!--              Manage Plan-->
+<!--            </button>-->
 
 
 
@@ -205,15 +216,15 @@
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank"
-              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+            <a (click)="checkForQSTooltipForEnterprisebt()" href="(userRole$ | async)?.response.role == 'Organization Administrator' ? 'javascript:void(0)' : 'https://adzapier.com/get-started/'" target="_blank" 
+              [ngClass]="[(userRole$ | async)?.response.role == 'Organization Administrator' ? 'enterprise-btndisabled' : '',(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : '']"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
 
         <div *ngIf="!skeletonLoader && currentStep === 2" class="plan-wrapper mt-2 justify-content-center">
 
-          <div *ngFor="let plan of dsarPlanList" style="overflow: hidden"
+          <div *ngFor="let plan of dsarPlanList;let i = index;" style="overflow: hidden"
             class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
             <div *ngIf="dsarBillingCycle === 'yearly'" class="plan-discount">
@@ -259,7 +270,7 @@
             <p class="tx-size-10  mt-2 ">Billed {{dsarBillingCycle}} </p>
             <div class="form-group row mb-2 ">
               <label class="property-type col-md-6" for="sel1">Organization</label>
-              <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
+              <!-- <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
                 <option>1</option>
                 <ng-container *ngIf="plan.price > 0">
                   <option>2</option>
@@ -272,25 +283,37 @@
                   <option>9</option>
                   <option>10</option>
                 </ng-container>
-              </select>
+              </select> -->
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
+
+              <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+
             </div>
 
 
-            <button data-toggle="tooltip" data-placement="top"
+            <button data-toggle="tooltip" data-placement="top" [attr.disabled]="(userRole$ | async)?.response.role == 'Organization Administrator' ? true : null"
               [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked && plan.price >=  activeData.dsar.maxPrice ? 'btn-qs-pricing-hightlight' : ''"
-              [title]="plan.price <=  activeData.dsar.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
-              *ngIf="plan.price !=  activeData.dsar.maxPrice" [disabled]="plan.price <=  activeData.dsar.maxPrice"
               (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"
               class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
-              Add To Cart
+              Add to Cart
             </button>
 
+<!--            <button data-toggle="tooltip" data-placement="top"-->
+<!--                    [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked && plan.price >=  activeData.dsar.maxPrice ? 'btn-qs-pricing-hightlight' : ''"-->
+<!--                    [title]="plan.price <=  activeData.dsar.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"-->
+<!--                    *ngIf="plan.price !=  activeData.dsar.maxPrice" [disabled]="plan.price <=  activeData.dsar.maxPrice"-->
+<!--                    (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"-->
+<!--                    class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
+<!--              Add To Cart-->
+<!--            </button>-->
 
-            <button *ngIf="plan.price ==  activeData.dsar.maxPrice"
-              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
-              (click)="onGenerateSessionID()" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
-              Manage Plan
-            </button>
+<!--            <button *ngIf="plan.price ==  activeData.dsar.maxPrice"-->
+<!--              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"-->
+<!--              (click)="onGenerateSessionID()" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
+<!--              Manage Plan-->
+<!--            </button>-->
 
 
           </div><!-- col -->
@@ -309,15 +332,15 @@
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank"
-              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+            <a (click)="checkForQSTooltipForEnterprisebt()" href="(userRole$ | async)?.response.role == 'Organization Administrator' ? 'javascript:void(0)' : 'https://adzapier.com/get-started/'" target="_blank"
+              [ngClass]="[(userRole$ | async)?.response.role == 'Organization Administrator' ? 'enterprise-btndisabled' : '',(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : '']"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
 
         <div *ngIf="!skeletonLoader && currentStep === 3" class="plan-wrapper mt-2 justify-content-center">
 
-          <div *ngFor="let plan of consentPreferenceList" style="overflow: hidden"
+          <div *ngFor="let plan of consentPreferenceList;let i = index;" style="overflow: hidden"
             class="col d-flex bg-white-col bt-card flex-column bd pt-0 mr-2  ">
 
             <div *ngIf="consentPreferenceBillingCycle === 'yearly'" class="plan-discount">
@@ -373,7 +396,7 @@
             <p class="tx-size-10  mt-2 ">Billed {{consentPreferenceBillingCycle}} </p>
             <div class="form-group row mb-2 ">
               <label class="property-type col-md-6" for="sel1">Property</label>
-              <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
+              <!-- <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
                 <option>1</option>
                 <ng-container *ngIf="plan.price > 0">
                   <option>2</option>
@@ -386,26 +409,37 @@
                   <option>9</option>
                   <option>10</option>
                 </ng-container>
-              </select>
+              </select> -->
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
+
+              <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
+              >
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
+
             </div>
 
 
-            <button data-toggle="tooltip" data-placement="top"
+            <button data-toggle="tooltip" data-placement="top" [attr.disabled]="(userRole$ | async)?.response.role == 'Organization Administrator' ? true : null"
               [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked && plan.price >=  activeData.consentPreference.maxPrice ? 'btn-qs-pricing-hightlight' : ''"
-              [title]="plan.price <=  activeData.consentPreference.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"
-              *ngIf="plan.price !=  activeData.consentPreference.maxPrice"
-              [disabled]="plan.price <=  activeData.consentPreference.maxPrice"
               (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"
               class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
-              Add To Cart
+              Add to Cart
             </button>
+<!--            <button data-toggle="tooltip" data-placement="top"-->
+<!--                    [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked && plan.price >=  activeData.consentPreference.maxPrice ? 'btn-qs-pricing-hightlight' : ''"-->
+<!--                    [title]="plan.price <=  activeData.consentPreference.maxPrice ? 'You can not downgrade your plan' : 'Add to Cart'"-->
+<!--                    *ngIf="plan.price !=  activeData.consentPreference.maxPrice"-->
+<!--                    [disabled]="plan.price <=  activeData.consentPreference.maxPrice"-->
+<!--                    (click)="onAddToCart(plan, planUnit);checkForQsTooltip();"-->
+<!--                    class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
+<!--              Add To Cart-->
+<!--            </button>-->
 
-
-            <button *ngIf="plan.price ==  activeData.consentPreference.maxPrice"
-              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
-              (click)="onGenerateSessionID()" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">
-              Manage Plan
-            </button>
+<!--            <button *ngIf="plan.price ==  activeData.consentPreference.maxPrice"-->
+<!--              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"-->
+<!--              (click)="onGenerateSessionID()" class="btn mt-4 mb-4 add-to-cart-btn btn-primary btn-block">-->
+<!--              Manage Plan-->
+<!--            </button>-->
 
 
           </div><!-- col -->
@@ -427,8 +461,8 @@
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a (click)="checkForQSTooltipForEnterprisebt()" href="https://adzapier.com/get-started/" target="_blank"
-              [ngClass]="(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : ''"
+            <a (click)="checkForQSTooltipForEnterprisebt()" [attr.href]="(userRole$ | async)?.response.role == 'Organization Administrator' ? '#' : 'https://adzapier.com/get-started/'" target="_blank"
+              [ngClass]="[(userRole$ | async)?.response.role == 'Organization Administrator' ? 'enterprise-btndisabled' : '',(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : '']"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
@@ -444,7 +478,7 @@
       </div>
 
 
-      <div *ngIf="cartItem.length > 0" class="col-md-12 p-0 mt-4">
+      <!-- <div *ngIf="cartItem.length > 0" class="col-md-12 p-0 mt-4">
         <div class="card cart-box ">
           <div class="card-body">
             <h3 class="mb-4 text-center">Your Cart</h3>
@@ -518,9 +552,9 @@
                     <div *ngIf="isPromoCodeError" class="invalid-feedback" style="width: 205px;">
                       The promo code you entered is not valid
                     </div>
-                    <!--              <a href="javascript:;" *ngIf="promoCode && !percentOff" class="mr-1 text-primary"-->
-                    <!--                 (click)="onApplyCoupon()">Apply</a>-->
-                    <!--                <a href="javascript:;"  class="mr-1 text-primary" (click)="onRemoveCoupon()">Remove</a>-->
+                                 <a href="javascript:;" *ngIf="promoCode && !percentOff" class="mr-1 text-primary"
+                                    (click)="onApplyCoupon()">Apply</a>
+                                   <a href="javascript:;"  class="mr-1 text-primary" (click)="onRemoveCoupon()">Remove</a>
                     <div *ngIf="percentOff" class="text-success text-left">Promo Code Applied
                       <i class="fa fa-times cursorpointer close-btn" (click)="onRemoveCoupon()"
                         aria-hidden="true"></i>
@@ -543,7 +577,7 @@
 
           </div>
         </div>
-      </div>
+      </div> -->
 
 
     </div>
@@ -641,3 +675,20 @@
     </div>
   </div>
 </ng-template>
+
+
+<div class="hello" *ngIf="displayStyle">
+  <div class="card" style="width: 18rem;">
+    <div class="card-body" style="background-color:rgb(247, 247, 247)" *ngFor="let cart of showpopup">
+      <h5 class="card-title"><i class="pi pi-check mr-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
+        Added to Cart</h5>
+      <h6 class="card-text">{{cart.product_name}}</h6><br>
+      <h6 class="card-text">Billed - {{cart.cycle}}</h6><br>
+      <h6 class="card-text">Price - ${{cart.priceTotal}}</h6><br>
+      <h6 class="card-text">Quantity - {{cart.unit}}</h6><br>
+    </div>
+    <a routerLink="/settings/billing/cart" [queryParams]="{oid:queryOID , pid:queryPID}" style="margin-left: 20px;margin-bottom: 20px;"><button class="btn btn-md btn-primary mb-3" style="width: 250px;">Open Cart</button></a>
+  </div>
+
+</div>
+

@@ -81,7 +81,7 @@
 .flotingdiv{
   position: fixed;
   bottom: 0;
-  top: 84%;
+  top: 80%;
   right:0;
   overflow-x: hidden;
   overflow-y: auto;
@@ -102,7 +102,7 @@
   left: 35%;
   top: 0 !important;
   text-shadow: 1px 1px 0px #11188f;
-  z-index: 1000;
+  z-index: 980;
   font-weight: 600;
   font-size: 13px;
 }
@@ -127,7 +127,6 @@
 
 .flex-column span {
   font-size: 13px;
-  color: #3d78d4;
   line-height: 25px;
   font-weight: 500;
 }

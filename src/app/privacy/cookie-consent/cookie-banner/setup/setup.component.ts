@@ -8,6 +8,8 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ActivatedRoute, Router} from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { apiConstant } from 'src/app/_constant/api.constant';
+import { Title } from '@angular/platform-browser';
+
 
 
 @Component({
@@ -50,7 +52,12 @@ export class SetupComponent implements OnInit {
     private router: Router,
     private activateRoute: ActivatedRoute,
     private orgservice: OrganizationService,
-  ) { }
+    private titleService: Title 
+
+  ) {
+    this.titleService.setTitle("Cookie Consent Setup - Adzapier Portal");
+
+   }
 
   ngOnInit() {
     this.activateRoute.queryParams
@@ -146,7 +153,7 @@ export class SetupComponent implements OnInit {
   navigate() {
     this.modalRef.hide();
    // this.router.navigateByUrl('/cookie-consent/cookie-banner');
-    this.router.navigate(['/cookie-consent/cookie-banner'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
+    this.router.navigate(['/cookie-consent/banner-configuration'],{ queryParams: { oid: this.queryOID, pid: this.queryPID }, queryParamsHandling:'merge', skipLocationChange:false});
   }
 
   onClosed(alertMsg: any) {

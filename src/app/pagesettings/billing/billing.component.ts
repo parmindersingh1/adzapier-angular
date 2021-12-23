@@ -5,6 +5,8 @@ import { CompanyService } from 'src/app/company.service';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {moduleName} from '../../_constant/module-name.constant';
+import { Title } from '@angular/platform-browser';
+
 
 
 @Component({
@@ -33,8 +35,12 @@ export class BillingComponent implements OnInit {
               private billingService: BillingService,
               private companyService: CompanyService,
               private loading: NgxUiLoaderService,
-              private modalService: BsModalService
+              private modalService: BsModalService,
+              private titleService: Title 
+
   ) {
+    this.titleService.setTitle("Billing");
+
 
   }
   ngOnInit() {

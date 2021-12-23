@@ -16,6 +16,9 @@ import * as moment from 'moment';
 import {moduleName} from '../../_constant/module-name.constant';
 import {DataService} from '../../_services/data.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
+import { ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+
 
 declare var jQuery: any;
 interface Country {
@@ -159,6 +162,8 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
   public countryList = [];
   isShowDashboard = false;
 @ViewChild('noSup', {static: true}) noSup;
+  queryOID;
+  queryPID;
   modalRef: BsModalRef;
   constructor(
     private orgservice: OrganizationService,
@@ -168,14 +173,23 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
     private dashboardService: DashboardService,
     private dataService: DataService,
     private _location: Location,
-    private cdRef: ChangeDetectorRef
+    private activatedRoute: ActivatedRoute,
+    private cdRef: ChangeDetectorRef,
+    private titleService: Title 
   ) {
 
     monkeyPatchChartJsTooltip();
     monkeyPatchChartJsLegend();
+    this.titleService.setTitle("DSAR Dashboard - Adzapier Portal");
+
   }
 
   ngOnInit() {
+    this.activatedRoute.queryParams
+    .subscribe((params: any) => {
+      this.queryOID = params.oid;
+      this.queryPID = params.pid;
+    });
     // this.onSetUpMainMap([], [], 0);
     this.onGetPropsAndOrgId();
     this.onCheckSubscription();
@@ -465,9 +479,8 @@ export class CcpaDsarComponent implements OnInit, AfterViewInit {
         this.currentManagedOrgID = response.organization_id || response.response.oid;
         this.currrentManagedPropID = response.property_id || response.response.id;
       } else {
-        const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-        this.currentManagedOrgID = orgDetails.organization_id || orgDetails.response.oid;
-        this.currrentManagedPropID = orgDetails.property_id || orgDetails.response.id;
+        this.currentManagedOrgID = this.queryOID;
+        this.currrentManagedPropID = this.queryPID;
       }
     });
   }

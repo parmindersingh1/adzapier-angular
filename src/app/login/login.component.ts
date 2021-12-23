@@ -9,6 +9,8 @@ import {moduleName} from '../_constant/module-name.constant';
 import {animate, group, query, state, style, transition, trigger} from '@angular/animations';
 import { Observable, timer, Subscription } from 'rxjs';
 import {options} from 'ionicons/icons';
+import { Title } from '@angular/platform-browser';
+
 
 const left = [
   query(':enter, :leave', style({ }), { optional: true }),
@@ -72,7 +74,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   isOpen = false;
   alertType: any;
   step:any = 1;
-  isEmailVerified: boolean;
+  isEmailVerified = false;
   isMsgConfirm = false;
   isVerificationBtnClick = false;
   isInvitedUserVerified: boolean;
@@ -88,12 +90,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private orgservice: OrganizationService,
     private loadingBar: NgxUiLoaderService,
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthenticationService,
+    private titleService: Title 
+
   ) {
     if (this.authenticationService.currentUserValue) {
       this.router.navigate(['/']);
     }
-    this.isEmailVerified = true;
+    // this.isEmailVerified = true;
+    this.titleService.setTitle("Login - Adzapier Portal");
+
   }
 
 
@@ -111,7 +118,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       emailid: ['', [Validators.required, Validators.pattern]]
     });
     this.authenticationService.userEmailVerificationStatus.subscribe((data) => this.isInvitedUserVerified = data);
-    this.setTimer();
+    //this.setTimer();
   }
 
   ngOnDestroy() {
@@ -160,7 +167,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     }
     this.loading = true;
-    this.authenticationService.login(this.constructor.name, moduleName.loginModule, this.f.email.value, this.f.password.value)
+    this.authenticationService.login(this.constructor.name, moduleName.loginModule, this.f.email.value.toLowerCase(), this.f.password.value)
       .pipe(first())
       .subscribe(
         data => {
@@ -185,16 +192,19 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
         },
         error => {
-          // if (error == 'Please verify email address.') {
-          //   this.isEmailVerified = false;
-          //   this.loading = false;
-          //   this.isOpen = false;
-          // } else {
+
+          if (error === 'Please verify email address.') {
+            this.isEmailVerified = true;
             this.isOpen = true;
             this.alertMsg = error;
             this.alertType = 'danger';
             this.loading = false;
-          // }
+          } else {
+            this.isOpen = true;
+            this.alertMsg = error;
+            this.alertType = 'danger';
+            this.loading = false;
+          }
         });
 
   }
@@ -255,12 +265,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   resendToken() {
     this.isVerificationBtnClick = true;
     const reqObj = {
-      email: this.f.email.value
+      email: this.f.email.value.toLowerCase()
     }
     this.userService.resendEmailVerificationToken(this.constructor.name, moduleName.loginModule, reqObj).subscribe((data) => {
       if (data.status === 200) {
         this.isMsgConfirm = true;
         this.isVerificationBtnClick = false;
+        this.alertMsg = 'Verification email has been sent, please check your email inbox';
+        this.isOpen = true;
+        this.alertType = 'success';
+        this.isEmailVerified = false;
       }
     })
   }
@@ -272,4 +286,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.hideMessage = true;
     })
   }
+
+
 }

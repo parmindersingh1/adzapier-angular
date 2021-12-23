@@ -6,6 +6,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {moduleName} from '../../../../_constant/module-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {ActivatedRoute} from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-consentlegal-table',
@@ -43,7 +44,12 @@ export class ConsentDetailsComponent implements OnInit {
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
               private activatedroute: ActivatedRoute,
-              private location: Location, private modalService: BsModalService) {
+              private location: Location, private modalService: BsModalService,
+              private titleService: Title 
+              ) {
+
+                this.titleService.setTitle("Consent Preference Details - Adzapier Portal");
+
   }
 
   ngOnInit() {

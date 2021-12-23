@@ -61,10 +61,18 @@ export class MysqlFormComponent implements OnInit {
   }
 
   addCredential(index) {
-    return this.formBuilder.group({
-      key: [credForm[this.systemName][index].key, Validators.required],
-      secret_1: ['', Validators.required],
-    });
+    if (credForm[this.systemName][index].required) {
+      return this.formBuilder.group({
+        key: [credForm[this.systemName][index].key, Validators.required],
+        secret_1: ['', Validators.required],
+      });
+    } else {
+      return this.formBuilder.group({
+        key: [credForm[this.systemName][index].key, Validators.required],
+        secret_1: [''],
+      });
+    }
+
   }
 
   get addCredentialRows() {

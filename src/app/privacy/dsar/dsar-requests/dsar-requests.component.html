@@ -1,4 +1,4 @@
-<div class="container-fluid pr-0">
+<div class="container-fluid pr-0 pl-1">
   <nav aria-label="breadcrumb" class="align-navbtn mb-3">
     <ol class="breadcrumb breadcrumb-style1 mg-b-0">
       <li class="breadcrumb-item">Privacy</li>
@@ -12,7 +12,7 @@
         Data Subject Access Requests
     </span>
       <div class="datepickerwrapper col-sm-9 pr-0 mr-0 ml-auto">
-        <button (click)="onRefresh()" type="reset" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22">
+        <button (click)="onRefresh()" type="reset" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22" style="text-transform: none;font-size: 12px;">
           <i class="fas fa-sync feather-16"></i> Refresh</button>
       <div class="col-sm-5 pr-0 pl-2 mr-2 d-flex row-reverse">
         <div class="input-group-prepend">
@@ -25,7 +25,7 @@
         </span>
         </div>
         <input type="text" [(ngModel)]="searchbydaterange" class="form-control border-left-0  border-right-0 rounded-right"
-          bsDaterangepicker [bsConfig]="bsConfig" #dp="bsDaterangepicker" placeholder="Select Date"
+          bsDaterangepicker [bsConfig]="bsConfig" #dp="bsDaterangepicker"  [outsideClick]="true" placeholder="Select Date"
           (onHidden)="onDateSelection()">
         <div class="input-group-prepend border-left-0" (click)="dp.show()">
           <span class="input-group-text rounded-left border-right-0" id="inputGroup-sizing-sm"><i class="fa fa-calendar"></i></span>
@@ -33,7 +33,7 @@
       </div>
       <div class="bg-white">
       <button (click)="createWebFormRequestModal(createRequestModal,'')" data-toggle="modal" type="button"
-        class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22">
+        class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22" style="text-transform: none;font-size: 12px;">
         <i-feather class="feather-16" name="plus"></i-feather>
         <span class="d-none d-sm-inline mg-l-5">
           Create Request </span>
@@ -44,7 +44,7 @@
 
   </div>
 
-  <p-table class="dsar-request-table" #ptable [value]="requestsList" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
+  <p-table class="dsar-request-table" #ptable [value]="requestsList" sortField="rowData?.created_at"  (onSort)="customSort($event)" [customSort]="true" [responsive]="true" [columns]="selectedColumns" [paginator]="true" [lazy]="true"
     [loading]="isloading" (onLazyLoad)="loadrequestsListLazy($event)" [rows]="10" [showCurrentPageReport]="true"
     [totalRecords]="totalRecords" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
     [rowsPerPageOptions]="[10,20,30]" styleClass="p-datatable-sm">
@@ -124,7 +124,7 @@
     <ng-template pTemplate="header"  let-columns>
 
       <tr>
-        <th>Id
+        <th>ID
         </th>
         <th>Request Type
         </th>
@@ -142,7 +142,7 @@
         </th>
         <th>Due In
         </th>
-        <th pSortableColumn="created_at">Created At <p-sortIcon field="created_at"></p-sortIcon>
+        <th pSortableColumn="created_at">Created at <p-sortIcon field="created_at"></p-sortIcon>
         </th>
       </tr>
 
@@ -188,7 +188,7 @@
         </td>
         <td><span class="ui-column-title">Created At</span>
           <ng-container *ngIf="rowData">
-          {{rowData.created_at | timeago}}
+         <span *ngIf="rowData !== undefined && rowData?.created_at !== undefined || rowData?.created_at !== null || rowData?.created_at !== ''">{{rowData?.created_at | timeago}}</span> 
         </ng-container>
         </td>
       </tr>
@@ -225,7 +225,7 @@
           <div class="col-sm-12">
             <div class="form-group">
               <label for="webformselection"
-                class="tx-10 tx-uppercase tx-medium tx-spacing-1 mg-b-5 tx-color-03">Web form templates</label>
+                class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">Web form templates</label>
               <select class="form-control" formControlName="webformselection" (change)="onWebformChange($event)"
                 [ngClass]="{ 'is-invalid': submitted && dsar.webformselection.errors }">
                 <option selected value="">Please select web form</option>
@@ -244,7 +244,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-link tx-decoration-underline tx-13" type="reset" aria-label="Close" (click)="onCancelClick()">Cancel</button>
-        <button class="btn btn-sm btn-outline-secondary btn-uppercase tx-13">Create</button>
+        <button class="btn btn-sm btn-outline-secondary btn-uppercase tx-13" style="text-transform: none;font-size: 12px;">Create</button>
       </div>
     </form>
   </ng-template>

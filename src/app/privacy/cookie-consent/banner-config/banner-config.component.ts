@@ -30,6 +30,8 @@ import {featuresName} from '../../../_constant/features-name.constant';
 import {DataService} from '../../../_services/data.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {CookieCategoryService} from '../../../_services/cookie-category.service';
+import { Title } from '@angular/platform-browser';
+
 
 interface Country {
   name: string,
@@ -95,7 +97,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     error: false,
     msg: ''
   };
-
+  showBadgeOption = false;
   constructor(private sanitizer: DomSanitizer,
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
@@ -106,7 +108,9 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
               private dataService: DataService,
               private cookieCategoryService: CookieCategoryService,
               private cd: ChangeDetectorRef,
-              private modalService: BsModalService
+              private modalService: BsModalService,
+              private titleService: Title 
+
   ) {
     const element = document.getElementById('main');
     element.classList.remove('container');
@@ -114,9 +118,13 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     element.classList.add('container-fluid');
     element.style.padding = '0px';
     element.style.margin = '0px';
+
+    this.titleService.setTitle("Cookie Banner - Adzapier Portal");
+
   }
 
   ngOnInit() {
+    this.onGetAllCookies();
     this.onGetPropsAndOrgId();
     this.onGetAllowVendors();
     this.onInitForm();
@@ -373,12 +381,14 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       CookieBlocking: [false],
       AllowPurposeByDefault: [true],
       ShowWatermark: [true],
-      ShowBadge: [true],
       MuteBanner: [false],
       LayoutType: ['full-width-bottom'],
       PublishDate: [],
-      // BannerPosition: ['bottom'],
+      PublishDateDisplay: [],
+      // Badge Position
       BadgePosition: ['right'],
+      ShowBadge: [true],
+      BadgeType: ['text'],
       // Language
       DefaultLanguage: ['en-US'],
       // Banner Content
@@ -560,7 +570,12 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
   onOpenDropDown(step) {
     this.showDropDownValue = this.showDropDownValue === step ? '' : step;
   }
-
+  onSetBadgeType(type) {
+    this.BannerConfigurationForm.patchValue({
+      BadgeType: type
+    });
+    this.showBadgeOption = true;
+  }
   onSelectThemeType(type) {
     this.themeType = type;
     if (type === 'dark') {
@@ -615,8 +630,10 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       DefaultLanguage: CONFIG.LanguageConfig.defaultLang,
       LayoutType: CONFIG?.LayoutType ? CONFIG?.LayoutType : 'full-width-bottom',
       PublishDate: CONFIG?.PublishDate,
+      PublishDateDisplay: CONFIG?.PublishDateDisplay,
       // BannerPosition: CONFIG.BannerPosition,
       BadgePosition: CONFIG.BadgePosition,
+      BadgeType: CONFIG?.BadgeType,
       BannerPrivacyLink: CONFIG.Banner.Privacy.privacyLink,
       // Display Frequency
       DisplayPartialConsent: CONFIG.DisplayFrequency.bannerPartialConsent,
@@ -835,6 +852,13 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertType = 'success';
         this.publishing = false;
         this.onGetSavedBannerConfig();
+        this.BannerConfigurationForm.patchValue({
+          PreviewLanguage: {
+            title: 'English (United States)',
+            code: 'en-US',
+            countryFlag: 'us',
+          }
+        });
         if (this.publishType === 'publish') {
           this.openModal(this.publishModal);
         }
@@ -882,6 +906,13 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertType = 'success';
         this.publishing = false;
         this.onGetSavedBannerConfig();
+        this.BannerConfigurationForm.patchValue({
+          PreviewLanguage: {
+            title: 'English (United States)',
+            code: 'en-US',
+            countryFlag: 'us',
+          }
+        });
         if (this.publishType === 'publish') {
           this.openModal(this.publishModal);
         }
@@ -910,9 +941,11 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       LayoutType: this.BannerConfigurationForm?.value?.LayoutType,
       // BannerPosition: this.BannerConfigurationForm.value.BannerPosition,
       BadgePosition: this.BannerConfigurationForm.value.BadgePosition,
+      BadgeType: this.BannerConfigurationForm.value?.BadgeType,
       CustomerBrandLogo: this.customerBrandLogo,
       ThemeType: this.themeType,
-      PublishDate: this.publishType === 'publish' ? new Date() : this.BannerConfigurationForm.value?.PublishDate,
+      PublishDate: this.BannerConfigurationForm.value?.PublishDate,
+      PublishDateDisplay: this.publishType === 'publish' ? new Date() : this.BannerConfigurationForm.value?.PublishDateDisplay,
       DisplayFrequency: {
         bannerPartialConsent: this.BannerConfigurationForm.value.DisplayPartialConsent,
         bannerPartialConsentType: this.BannerConfigurationForm.value.DisplayPartialConsentType,
@@ -1170,6 +1203,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
 
     myReader.onloadend = (e) => {
       this.customerBrandLogo = myReader.result;
+      this.currentBannerLayer = 'preference';
     };
     myReader.readAsDataURL(file);
   }
@@ -1182,5 +1216,11 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         pid: this.currrentManagedPropID
       }, queryParamsHandling: 'merge', skipLocationChange: false
     });
+  }
+  onSubmitWithReConsent() {
+    this.BannerConfigurationForm.patchValue({
+      PublishDate: new Date()
+    });
+    this.onSubmit();
   }
 }

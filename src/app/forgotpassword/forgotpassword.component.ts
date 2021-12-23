@@ -6,6 +6,8 @@ import { first } from 'rxjs/operators';
 import { AlertService, UserService, AuthenticationService } from './../_services';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { moduleName } from '../_constant/module-name.constant';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-forgotpassword',
@@ -32,7 +34,9 @@ export class ForgotpasswordComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private userService: UserService,
     private loadingBar: NgxUiLoaderService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private titleService: Title 
+
   ) {
     // redirect to home if already logged in
     this.authenticationService.userLoggedIn.subscribe((data) => {
@@ -40,6 +44,8 @@ export class ForgotpasswordComponent implements OnInit {
         this.router.navigate(['']);
       }
     });
+    this.titleService.setTitle("Forgot Password - Adzapier Portal");
+
 
   }
 

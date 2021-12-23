@@ -4,8 +4,17 @@
     flex: 1;
     padding: 20px 0px 20px 30px;// 20px 15px;
     margin-top: 60px;
-    min-height: calc(100vh + (-164px));
+    min-height: calc(100vh + (-164px)); //calc(100vh + (-164px));
     // min-height: 415px;
+  }
+
+  .site-content-rm-left-padding {
+    padding: 20px 0px 20px 0px;
+    min-height: calc(100vh + (-44px));
+  }
+
+  .site-content-add-left-padding {
+    padding: 20px 0px 20px 30px !important;
   }
 
   .btn-default{

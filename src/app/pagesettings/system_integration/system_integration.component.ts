@@ -5,6 +5,7 @@ import {SystemIntegrationService} from '../../_services/system_integration.servi
 import {moduleName} from '../../_constant/module-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
 
 
 @Component({
@@ -46,14 +47,22 @@ export class SystemIntegrationComponent implements OnInit {
   credCount: any = 0;
   errorMessage = '';
   deleteConnectionID: any;
+  queryOID;
+  queryPID;
   constructor(private modalService: BsModalService,
               private systemIntegrationService: SystemIntegrationService,
               private loading: NgxUiLoaderService,
-              private formBuilder: FormBuilder
+              private formBuilder: FormBuilder,
+              private activatedRoute: ActivatedRoute
   ) {
   }
 
   ngOnInit() {
+    this.activatedRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
     this.onGetSystemList();
     this.mailChimpForm = this.formBuilder.group({
       email: ['', Validators.required],
@@ -104,6 +113,7 @@ export class SystemIntegrationComponent implements OnInit {
   }
 
   openModalUpdateConnection(template: TemplateRef<any>, obj) {
+    this.mailChimpForm.reset();
     this.updateSystemName = this.onFindSystemName(obj.system_id);
     this.updateConnectionData = obj;
     this.modalRef = this.modalService.show(template, {class: 'modal-lg', ignoreBackdropClick: true});
@@ -270,5 +280,10 @@ export class SystemIntegrationComponent implements OnInit {
     this.modalRef = this.modalService.show(template, {
       animated: false, keyboard: false, ignoreBackdropClick: true
     });
+  }
+  onResetTestEmailForm(){
+    this.modalRef.hide();
+    this.errorMessage = '';
+    this.mailChimpForm.reset();
   }
 }

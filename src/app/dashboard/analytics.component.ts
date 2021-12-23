@@ -7,6 +7,8 @@ import { AuthenticationService, OrganizationService, UserService } from 'src/app
 import { featuresName } from '../_constant/features-name.constant';
 import { moduleName } from '../_constant/module-name.constant';
 import { DataService } from '../_services/data.service';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-root',
@@ -46,7 +48,9 @@ export class AnalyticsComponent implements OnInit {
     private dataService: DataService,
     private loading: NgxUiLoaderService,
     private userService:UserService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private titleService: Title 
+
   ) {
     this.authService.currentUser.subscribe(x => this.currentUser = x);
     this.activateRoute.queryParamMap
@@ -54,6 +58,8 @@ export class AnalyticsComponent implements OnInit {
         this.queryOID = params.get('oid');
         this.queryPID = params.get('pid');
       });
+      this.titleService.setTitle("Home - Adzapier Portal");
+
    }
   // redirect to home if already logged in
 
@@ -80,7 +86,7 @@ export class AnalyticsComponent implements OnInit {
 
   isPropertyLicenseAssigned(status): boolean {
     this.isLicenseAssignedtoProperty = status;
-    this.cookieTooltiptext = this.isLicenseAssignedtoProperty ? '' : 'You have not assigned Cookie consent license to selected property';
+    this.cookieTooltiptext = this.isLicenseAssignedtoProperty ? '' : 'The selected property has not been assigned to Cookie Consent subscription';
     return this.isLicenseAssignedtoProperty; //|| ispropplanExist !== undefined ? true : false;
   }
 
@@ -88,13 +94,13 @@ export class AnalyticsComponent implements OnInit {
     this.dataService.isConsentPreferenceAppliedForProperty.subscribe((status) => {
     this.isConsentPreferenceLicenseAssignedToProperty = status.hasaccess;
     });
-    this.consentTooltipText = this.isConsentPreferenceLicenseAssignedToProperty ? '' : 'You have not assigned Consent Preference to selected property';
+    this.consentTooltipText = this.isConsentPreferenceLicenseAssignedToProperty ? '' : 'The selected property has not been assigned to Consent Preference subscription';
     return this.isConsentPreferenceLicenseAssignedToProperty;
   }
 
   isOrganizationLicenseAssigned(status): boolean {
     this.isLicenseAssignedtoOrganization = status;
-    this.dsarTooltiptext = this.isLicenseAssignedtoOrganization ? '' : 'You have not assigned DSAR license to selected organization';
+    this.dsarTooltiptext = this.isLicenseAssignedtoOrganization ? '' : 'The selected organization has not been assigned to DSAR subscription';
 
     return this.isLicenseAssignedtoOrganization;
   }
@@ -123,16 +129,16 @@ export class AnalyticsComponent implements OnInit {
       isLicensepurchased: this.isLicenseAssignedtoProperty,
       title: "Banner Configuration",
       iconcss: "fas fa-layer-group tx-primary temp-blue center tx-64 margin-15",
-      content: "Configure geo specific cookie banner, language and preference center.",
+      content: "Configure geo-specific cookie banner, language and preference center.",
       tooltipcontent: this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
-      routerlinktext: this.isLicenseAssignedtoProperty ? '/cookie-consent/cookie-banner' : '/settings/billing/manage',
+      routerlinktext: this.isLicenseAssignedtoProperty ? '/cookie-consent/banner-configuration' : '/settings/billing/manage',
       buttonText: this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
     }, {
       id: 3,
       isLicensepurchased: this.isLicenseAssignedtoProperty,
       title: "Setup",
       iconcss: "fas fa-wrench tx-primary temp-blue fa-3x center tx-64 margin-15",
-      content: "Setup consent banner Javascript CDN into your application",
+      content: "Setup consent banner JavaScript CDN into your application",
       tooltipcontent: this.isLicenseAssignedtoProperty ? '' : this.cookieTooltiptext,
       routerlinktext: this.isLicenseAssignedtoProperty ? '/cookie-consent/cookie-banner/setup' : '/settings/billing/manage',
       buttonText: this.isLicenseAssignedtoProperty ? 'Go Now' : 'Try Now'
@@ -150,7 +156,7 @@ export class AnalyticsComponent implements OnInit {
       isLicensepurchased: this.isConsentPreferenceLicenseAssignedToProperty,
       title: "Consent Preference",
       iconcss: "fas fa-file-signature tx-primary temp-blue center tx-64 margin-15",
-      content: "Collect user preference consent, document opt-ins/out via your web forms and systems.",
+      content: "Collect user preference consent, document opt-ins/opt-outs via your web forms and systems.",
       tooltipcontent: this.isConsentPreferenceLicenseAssignedToProperty ? '' : this.consentTooltipText,
       routerlinktext: this.isConsentPreferenceLicenseAssignedToProperty ? ['/home/dashboard/consent-preference'] : ['/settings/billing/manage'],
       buttonText: this.isConsentPreferenceLicenseAssignedToProperty ? 'Go Now' : 'Try Now'
@@ -285,7 +291,6 @@ export class AnalyticsComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    console.log('analytics ngdestroy..');
     if (this.sub !== undefined) {
       this.sub.unsubscribe();
     }

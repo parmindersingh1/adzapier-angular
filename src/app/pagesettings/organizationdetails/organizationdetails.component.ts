@@ -14,10 +14,12 @@ import { featuresName } from 'src/app/_constant/features-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
-
+import { isBs3 } from 'ngx-bootstrap/utils';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Title } from '@angular/platform-browser';
+
 // import { CompanyService } from '../company.service';
 @Component({
   selector: 'app-organizationdetails',
@@ -115,7 +117,9 @@ export class OrganizationdetailsComponent implements OnInit {
               private loading: NgxUiLoaderService,
               private location: Location,
               private quickmenuService: QuickmenuService,
-              private cdref: ChangeDetectorRef) {
+              private cdref: ChangeDetectorRef,
+              private titleService: Title 
+              ) {
     // this.orgService.currentProperty.subscribe((data) => {
     //   this.currentManagedOrgID = data.organization_id || data.response.oid;
     //   this.currrentManagedPropID = data.property_id || data.response.id;
@@ -126,6 +130,8 @@ export class OrganizationdetailsComponent implements OnInit {
       totalItems: this.propertyTotalCount, id: 'propertyPagination'
     };
    
+    this.titleService.setTitle("Organization details - Adzapier Portal");
+
 
   }
 
@@ -268,7 +274,8 @@ export class OrganizationdetailsComponent implements OnInit {
       isactualbtnclicked: true,
       islinkclicked: true
     };
-    
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
     if (type === 'invite') {
       if (! await this.onCheckSubscription()) {
         return false;
@@ -286,8 +293,6 @@ export class OrganizationdetailsComponent implements OnInit {
     }, (reason) => {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-    this.quickmenuService.updateQuerymenulist(quickLinkObj);
 
   }
 
@@ -349,7 +354,7 @@ export class OrganizationdetailsComponent implements OnInit {
       //  if (!this.isEditOrganization) {
       const updateObj = {
         orgname: this.editOrganisationForm.value.organizationName,
-        taxID: this.editOrganisationForm.value.taxID,
+        tax_id: this.editOrganisationForm.value.taxID,
         address1: this.editOrganisationForm.value.addressOne,
         address2: this.editOrganisationForm.value.addressTwo,
         city: this.editOrganisationForm.value.city,
@@ -595,12 +600,17 @@ export class OrganizationdetailsComponent implements OnInit {
             this.onCancelClick();
           });
       } else {
+        let useremail = this.inviteUserOrgForm.getRawValue().emailid;
         const requestObj = {
           id: this.recordID,
           user_id: this.approverID,
+          email: useremail,
           role_id: this.inviteUserOrgForm.value.permissions,
           firstname: this.inviteUserOrgForm.value.firstname,
-          lastname: this.inviteUserOrgForm.value.lastname
+          lastname: this.inviteUserOrgForm.value.lastname,
+          orgid: this.organizationID,
+          user_level: 'organization',
+          action:'edit'
         };
         this.companyService.updateUserRole(this.constructor.name, moduleName.organizationDetailsModule, requestObj)
           .subscribe((data) => {
@@ -685,6 +695,7 @@ export class OrganizationdetailsComponent implements OnInit {
   }
 
   removeTeamMember(obj, control: string) {
+    obj['user_level']='organization';
     this.confirmTeammember = obj;
     this.controlname = control;
     this.selectedTeamMember = obj.user_email;
@@ -860,7 +871,9 @@ export class OrganizationdetailsComponent implements OnInit {
 
   loadOrganizationLicenseNameByID(orgid,licenseID){
    this.orgService.getOrganizationLicenseNameByID(orgid,licenseID).subscribe((data)=>{
-    this.orgLicensedPlanName = data.response[0].name + " " + data.response[0].cycle;
+     if( data.response[0] !== undefined && data.response[0].name !== undefined && data.response[0].cycle !== undefined){
+      this.orgLicensedPlanName = data.response[0].name + " " + data.response[0].cycle;
+     }
    })
   }
 

@@ -29,7 +29,7 @@
           Scanning...
         </button>
         <button (click)="onGetLastScanJobs()"
-                class="btn float-right mb-3  btn-sm btn-uppercase btn-outline-secondary" style="width: 102px">
+                class="btn float-right mb-3  btn-sm btn-uppercase btn-outline-secondary" style="width: 102px;text-transform: none;font-size: 12px;">
           <i class="fas fa-sync"></i> Refresh
         </button>
       </div>
@@ -96,7 +96,7 @@
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <h6>Start Scanning</h6>
+                    <h6>Scan Starts</h6>
                   </div>
                   <div class="col-md-6">
                     <p>{{lastScan.start_time | date : 'M/d/yy, h:mm:ss a'}}</p>
@@ -104,7 +104,7 @@
                 </div>
                 <div class="row">
                   <div class="col-md-6">
-                    <h6>End Scanning</h6>
+                    <h6>Scan Ends</h6>
                   </div>
                   <div class="col-md-6">
                     <p>
@@ -129,7 +129,7 @@
               <div class="col-md-6">
                 <div class="row">
                   <div class="col-md-6">
-                    <h6>Total Cookie</h6>
+                    <h6>Total Cookies</h6>
                   </div>
                   <div class="col-md-6">
                     <p>
@@ -139,7 +139,7 @@
                     </p>
                   </div>
                 </div>
-                <div class="row">
+                <!-- <div class="row">
                   <div class="col-md-6">
                     <h6>Total LocalStorage</h6>
                   </div>
@@ -150,10 +150,10 @@
                       || lastScan.scanner_status === 'running' ?  'Calculating...' : lastScan.total_localstorage }}
                     </p>
                   </div>
-                </div>
+                </div> -->
                 <div class="row">
                   <div class="col-md-6">
-                    <h6>Page Scan</h6>
+                    <h6>Total Pages</h6>
                   </div>
                   <div class="col-md-6">
                     <p>
@@ -186,11 +186,11 @@
                         class="avalible-text text-info">{{availablePlan.scan_available}} Scan is Available </span>
                     <span
                       *ngIf="availablePlan.scan_available > 0 && availablePlan.scan_available != -1 && availablePlan.scan_available != 1"
-                      class="avalible-text text-info">{{availablePlan.scan_available}} Scans are Available </span>
+                      class="avalible-text text-info">{{availablePlan.scan_available}} Scans Available </span>
                     <span *ngIf="availablePlan.scan_available == 0"
-                          class=" avalible-text text-info"> Scan is not Available </span>
+                          class=" avalible-text text-info"> No Scan Available  </span>
                     <span *ngIf="availablePlan.scan_available == -1"
-                          class="text-info avalible-text">Unlimited Scans are Available </span>
+                          class="text-info avalible-text">Unlimited Scans Available </span>
                   </div>
                 </div>
               </div>
@@ -201,10 +201,10 @@
             <div *ngIf="lastScan.scanner_status === 'completed'">
             <canvas baseChart
                     [chartType]="chartType"
+                    [labels]="chartTypeLabels"
                     [options]="doughnutChartOptions"
                     [colors]="pieColors"
-                    [labels]="chartTypeLabels"
-                    [data]="chartTypeData">
+                    [datasets]="chartTypeData">
             </canvas>
             </div>
           </div>
@@ -234,8 +234,8 @@
               <th>Scan End</th>
               <th>Scan Status</th>
               <th>Total Cookies</th>
-              <th>Total LocalStorage
-              </th>
+              <!-- <th>Total LocalStorage
+              </th> -->
               <th>Total Page Scan</th>
               <th>Total Tags</th>
               <!--              <th>Secure</th>-->
@@ -263,7 +263,7 @@
                 <span *ngIf="scanJob.scanner_status === 'unknown'" class="tx-14 badge badge-info">Unknown</span>
               </td>
               <td>{{scanJob.total_cookies}}</td>
-              <td>{{scanJob.total_localstorage}}</td>
+              <!-- <td>{{scanJob.total_localstorage}}</td> -->
               <td>{{scanJob.total_page_scans}}</td>
               <td>{{scanJob.total_tages}}</td>
               <!--              <td>{{scanJob.domain}}</td>-->

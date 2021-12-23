@@ -1,11 +1,14 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { QuickStartMenuList } from '../_models/quickstartmenulist'
+import { HttpClient } from '@angular/common/http';
+import { environment } from './../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class QuickmenuService extends QuickStartMenuList {
  // @Output() onClickEmitQSLinkobj : EventEmitter<any> = new EventEmitter<any>();
+  currentloggedInUser:any;
    qsMenuobjwithIndexid:any;
   isclickeventoutsidemenu:boolean = false;
   isclickeventfromquickmenu:boolean = false;
@@ -31,7 +34,7 @@ export class QuickmenuService extends QuickStartMenuList {
   get isHeaderNavClickedAfterQSDissmissed() {
     return this.headerNavStatusAfterDismissedQuickStart.asObservable();
   }
-  constructor() {
+  constructor(private httpClient:HttpClient) {
     super();
         this.loadQuickstartMenu()
    }
@@ -58,6 +61,9 @@ export class QuickmenuService extends QuickStartMenuList {
         controlList[ctrlIdx].quicklinks[quicklinkIdx].isactualbtnclicked = newItem.isactualbtnclicked;
         controlList[ctrlIdx].quicklinks[quicklinkIdx].islinkclicked = newItem.islinkclicked;
         // controlList[ctrlIdx].quicklinks[quicklinkIdx] = newItem;
+        if(newItem.isactualbtnclicked){
+          this.addUpdateQuickStartLinks(controlList).subscribe((data)=>console.log(data,'qsmupdated..'));
+        }
         localStorage.setItem('quickmenuList', JSON.stringify(controlList));
       }
 
@@ -75,4 +81,13 @@ export class QuickmenuService extends QuickStartMenuList {
   removeQuicstartDismissStatus(){
     localStorage.removeItem('qsmDismissStatus');
   }
+
+  dismissQuickStart(status): Observable<any>{
+    return this.httpClient.post<any>(environment.apiUrl + '/quickstart/dismiss',{"is_quickstart_dismissed":status});
+  }
+
+  addUpdateQuickStartLinks(obj): Observable<any>{
+    return this.httpClient.post<any>(environment.apiUrl + '/quickstart/visitedlinks',{"quickstart_visited_links":obj});
+}
+
 }

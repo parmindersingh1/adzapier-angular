@@ -26,8 +26,8 @@
                 
                 <div class="ml-auto mr-3">
                     <button type="button" class="btn btn-sm btn-outline-secondary btn-uppercase mr-1" data-toggle="modal" [ngClass]="quickDivID == 2 && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-hightlight' : ''" 
-                        (click)="organizationModalPopup(editOrgModal,'')">   <i-feather class="feather-16" name="plus"></i-feather> 
-                    Add organization</button>
+                        (click)="organizationModalPopup(editOrgModal,'')" style="text-transform: none;font-size: smaller;">   <i-feather class="feather-16" name="plus"></i-feather> 
+                    Add Organization</button>
                 </div>
             </div>
         </div>
@@ -35,11 +35,11 @@
             <table class="table table-bordered mb-2">
                 <thead class="thead-primary">
                     <tr>
-                        <th>Name</th>
+                        <th>Organization Name</th>
                         <th>Address</th>
                         <th>City</th>
                         <th>State</th>
-                        <th>Zipcode</th>
+                        <th>ZIP code</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -110,9 +110,9 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="form-group">
-                        <label for="organizationname">Name</label>
+                        <label for="organizationname">Organization Name</label>
                         <input minlength="2" maxlength="55" type="text" class="form-control" [(ngModel)]="organizationname"
-                            formControlName="organizationname" name="organizationname"
+                            formControlName="organizationname" name="organizationname" placeholder="Enter Organization name"
                             [ngClass]="{ 'is-invalid': submitted && editOrg.organizationname?.errors }" />
                         <div *ngIf="submitted && editOrg.organizationname?.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.organizationname?.errors.required">Organization name is required</div>
@@ -130,14 +130,14 @@
                     <div class="form-group">
                         <label for="taxidnumber">Tax ID</label>
                         <input type="text" class="form-control" [(ngModel)]="taxidnumber" formControlName="taxidnumber"
-                            name="taxidnumber" />
+                            name="taxidnumber" placeholder="Enter Tax ID" />
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="addressone">Address 1</label>
+                        <label for="addressone">Address: Line 1</label>
                         <input type="text"  minlength="6" maxlength="200" class="form-control" [(ngModel)]="addressone" formControlName="addressone"
-                            name="addressone" [ngClass]="{ 'is-invalid': submitted && editOrg.addressone.errors }" />
+                            name="addressone" [ngClass]="{ 'is-invalid': submitted && editOrg.addressone.errors }" placeholder="Enter Flat, House number, and so on" />
                         <div *ngIf="submitted && editOrg.addressone.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.addressone.errors?.required">Address 1 is required</div>
                           <div *ngIf="editOrg.addressone.errors?.minlength">Address 1 must be at least 6 characters long.</div>
@@ -151,15 +151,15 @@
 
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="addresstwo">Address 2</label>
-                        <input type="text" class="form-control" [(ngModel)]="addresstwo" formControlName="addresstwo" name="addresstwo" />                         
+                        <label for="addresstwo">Address: Line 2</label>
+                        <input type="text" class="form-control" [(ngModel)]="addresstwo" formControlName="addresstwo" name="addresstwo" placeholder="Enter Street, Area, Village, and so on" />                         
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label for="city">City</label>
                         <input  minlength="2" maxlength="20" type="text" class="form-control" [(ngModel)]="cityname" formControlName="cityname"
-                            name="cityname" [ngClass]="{ 'is-invalid': submitted && editOrg.cityname.errors }" />
+                            name="cityname" [ngClass]="{ 'is-invalid': submitted && editOrg.cityname.errors }" placeholder="Enter your city" />
                         <div *ngIf="submitted && editOrg.cityname?.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.cityname?.errors.required">City is required</div>
                           <div *ngIf="editOrg.cityname?.errors.minlength">City must be at least 2 characters long.</div>
@@ -174,7 +174,7 @@
                     <div class="form-group">
                         <label for="state">State</label>
                         <input type="text" maxlength="15" class="form-control" [(ngModel)]="statename" formControlName="statename"
-                            name="statename" [ngClass]="{ 'is-invalid': submitted && editOrg.statename?.errors }" />
+                            name="statename" [ngClass]="{ 'is-invalid': submitted && editOrg.statename?.errors }" placeholder="Enter your state" />
                         <div *ngIf="submitted && editOrg.statename?.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.statename?.errors.required">State is required</div>
                           <div *ngIf="editOrg.statename?.errors.maxlength">State should not be greater than 15 characters.</div>
@@ -183,9 +183,9 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="state">Zip Code</label>
+                        <label for="state">ZIP Code</label>
                         <input type="text" class="form-control" [(ngModel)]="zipcodenum" formControlName="zipcodenum"
-                            name="zipcodenum" [ngClass]="{ 'is-invalid': submitted && editOrg.zipcodenum?.errors }" />
+                            name="zipcodenum" [ngClass]="{ 'is-invalid': submitted && editOrg.zipcodenum?.errors }" placeholder="Enter your ZIP code" />
                         <div *ngIf="submitted && editOrg.zipcodenum?.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.zipcodenum?.errors.required">Zipcode is required</div>
                             <div *ngIf="editOrg.zipcodenum?.errors">Zipcode is number</div>
@@ -199,7 +199,7 @@
                     <div class="form-group"><label for="email">Email</label>
                         <input type="text" class="form-control"  formControlName="email"
                         pattern="^\w+@[a-zA-Z_0-9]+?\.[a-zA-Z]{2,3}$"
-                        name="email" [ngClass]="{ 'is-invalid': submitted && editOrg.email?.errors }" />
+                        name="email" [ngClass]="{ 'is-invalid': submitted && editOrg.email?.errors }" placeholder="Enter your email" />
                         <div *ngIf="submitted && editOrg.email?.errors" class="invalid-feedback">
                             <div *ngIf="editOrg.email?.errors.required">Email is required</div>
                             <div *ngIf="editOrg.emailid?.errors.pattern">Please enter valid email address</div>
@@ -209,7 +209,7 @@
                 <div class="col-sm-6">
                     <div class="form-group"><label for="phone">Phone</label>
                         <input type="text" class="form-control"  formControlName="phone"
-                        name="phone" [ngClass]="{ 'is-invalid': submitted && editOrg.phone?.errors }" />
+                        name="phone" [ngClass]="{ 'is-invalid': submitted && editOrg.phone?.errors }" placeholder="Enter your phone number" />
                         <div *ngIf="submitted && editOrg.phone?.errors" class="invalid-feedback">
                             <!-- <div *ngIf="editOrg.phone?.errors.required">Phone is required</div> -->
                             <div *ngIf="editOrg.phone?.errors.pattern">Enter valid phone number</div>
