@@ -43,8 +43,8 @@
 
             </button>
           </td>
-          <td><span class="text-success pr-2" (click)="openModalUpdateConnection(updateConnection, rowData)"><i class="fas fa-edit cursorpointer"></i></span>
-            <span class="text-danger"><i class="fas fa-trash-alt cursorpointer"></i></span>
+          <td><span class="text-success pr-2" (click)="openModalUpdateConnection(updateConnection, rowData)"><i tooltip="Edit this connection" class="fas fa-edit cursorpointer"></i></span>
+            <span class="text-danger"><i tooltip="Delete this connection" class="fas fa-trash-alt cursorpointer"></i></span>
           </td>
         </tr>
       </ng-template>
