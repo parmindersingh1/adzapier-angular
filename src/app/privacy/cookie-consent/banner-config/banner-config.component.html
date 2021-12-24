@@ -1410,7 +1410,7 @@
               <app-az-banner *ngIf="currentBannerLayer === 'banner'" (currentBannerLayer)="onChangeBannerLayer($event)"
                             (showBadgeOption)="showBadgeOption = false" [formData]="BannerConfigurationForm.value"></app-az-banner>
               <app-az-preference *ngIf="currentBannerLayer === 'preference'" [formData]="BannerConfigurationForm.value" [customerBrandLogo]="customerBrandLogo"
-                                 [purposesList]="purposesList"></app-az-preference>
+                            (selectPreviewLang)="onSelectLang($event)"    [allowedLanguagesForPreview]="allowedLanguagesForPreview" [purposesList]="purposesList"></app-az-preference>
             </div>
           </ng-template>
 
@@ -1422,7 +1422,7 @@
   </form>
 </div>
 
-
+<!--Loader-->
 <div *ngIf="publishing" class="w-100 card mt-3 publish-loader">
   <h5 class="text-center">Creating Your Banner ...</h5>
   <div class="loading text-center">

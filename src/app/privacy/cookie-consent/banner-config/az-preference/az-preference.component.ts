@@ -1,4 +1,13 @@
-import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component, EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewEncapsulation
+} from '@angular/core';
 import {GdprService} from '../../../../_services/gdpr.service';
 
 @Component({
@@ -11,6 +20,8 @@ export class AzPreferenceComponent implements OnInit, OnChanges {
   @Input('formData') formData;
   @Input('purposesList') purposesList;
   @Input('customerBrandLogo') customerBrandLogo;
+  @Input('allowedLanguagesForPreview') allowedLanguagesForPreview;
+  @Output('selectPreviewLang') selectPreviewLang = new EventEmitter();
   showPreferenceType = 'ccpa';
   currentPurposeID = 0;
   gdprPurposeList = [];
@@ -60,5 +71,9 @@ export class AzPreferenceComponent implements OnInit, OnChanges {
       }
     }
     this.switchButton = switchButton;
+  }
+  onSelectPreviewLang(lang) {
+
+    this.selectPreviewLang.emit(JSON.parse(lang));
   }
 }

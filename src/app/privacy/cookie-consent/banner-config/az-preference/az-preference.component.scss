@@ -144,10 +144,17 @@ input:checked + .slider:before {
 }
 
 .company-logo {
-  max-width: 185px;
-  min-width: 185px;
+  max-width: 205px;
+  min-width: 205px;
   float: left;
 }
 .company-logo img {
   height: 35px;
+}
+
+.lang-dropdown-size{
+  height: 30px;
+  margin-top: 3px;
+  font-size: 12px;
+  width: 80px;
 }
