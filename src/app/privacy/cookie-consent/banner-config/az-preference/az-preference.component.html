@@ -12,6 +12,13 @@
             <button type="button"  style="font-size: 12px;" class="btn btn-link " [ngStyle]="{'color' :  preferenceStep === 2 ? '#2196f3' : formData.PreferenceTextColor,
             'border-bottom' : preferenceStep === 2 ? '2px solid' : null
       }"   (click)="preferenceStep = 2">Privacy</button>
+
+
+          <div class="float-right lang-dropdown-size">
+            <select *ngIf="allowedLanguagesForPreview.length > 1" (change)="onSelectPreviewLang(preViewLang.value)" #preViewLang class="form-control form-control-sm">
+              <option *ngFor="let lang of allowedLanguagesForPreview" [value]="lang | json">{{lang.title}}</option>
+            </select>
+          </div>
           </div>
           <div class="ccpa-purpose" *ngIf="preferenceStep === 1">
               <p class="tx-11 pt-3">{{formData.PreferencePurposeCcpaAndGenericDescriptionText}}</p>
@@ -105,6 +112,13 @@
           <button type="button"  style="font-size: 12px;" class="btn btn-link " [ngStyle]="{'color' :  preferenceStep === 2 ? '#2196f3' : formData.PreferenceTextColor,
             'border-bottom' : preferenceStep === 2 ? '2px solid' : null
       }"   (click)="preferenceStep = 2">Privacy</button>
+
+          <div class="float-right lang-dropdown-size">
+            <select *ngIf="allowedLanguagesForPreview.length > 1" (change)="onSelectPreviewLang(preViewLang.value)" #preViewLang class="form-control form-control-sm">
+              <option *ngFor="let lang of allowedLanguagesForPreview" [value]="lang | json">{{lang.title}}</option>
+            </select>
+          </div>
+
         </div>
         <div class="generic-purpose" *ngIf="preferenceStep === 1">
             <p class="tx-11 pt-2">{{formData.PreferencePurposeCcpaAndGenericDescriptionText}}</p>
@@ -200,6 +214,11 @@
           <button type="button"  style="font-size: 12px;" class="btn btn-link " [ngStyle]="{'color' :  preferenceStep === 2 ? '#2196f3' : formData.PreferenceTextColor,
             'border-bottom' : preferenceStep === 2 ? '2px solid' : null
       }"   (click)="preferenceStep = 2">Vendors</button>
+          <div class="float-right lang-dropdown-size">
+            <select *ngIf="allowedLanguagesForPreview.length > 1" (change)="onSelectPreviewLang(preViewLang.value)" #preViewLang class="form-control form-control-sm">
+              <option *ngFor="let lang of allowedLanguagesForPreview" [value]="lang | json">{{lang.title}}</option>
+            </select>
+          </div>
         </div>
 
         <div class="purpose" *ngIf="preferenceStep === 1">
