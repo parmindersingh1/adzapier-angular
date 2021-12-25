@@ -261,7 +261,7 @@
               <tr>
                 <td class="tabledata">{{proofs.content}}</td>
                 <td class="tabledata"><i (click)="editUser(edit, proofs)" class="pi pi-eye"
-                                         style="font-size: 0.9rem" tooltip="View Form Consent"></i></td>
+                                         style="font-size: 0.9rem" title="View Form Consent"></i></td>
                 <!-- <td>{{proofs.form}}</td> -->
                 <td class="tabledata">{{proofs.created_at | date}}</td>
                 <!-- <td style="text-align-last:right;width:40px"> <a href="#"><i class="pi pi-eye" style="font-size: 0.9rem"></i></a></td> -->
@@ -294,7 +294,7 @@
                 <td class="tabledatas">{{legalRecord.content}}</td>
                 <td class="tabledatas">{{legalRecord.created_at | date}}</td>
                 <td class="tabledatas" style="text-align-last:right;width:40px;"><i class="pi pi-eye" (click)="editLegal(editLeg,legalRecord)"
-                                                                                                style="font-size: 0.9rem;" tooltip="View details"></i>
+                                                                                                style="font-size: 0.9rem;" title="View details" ></i>
                 </td>
               </tr>
             </ng-template>

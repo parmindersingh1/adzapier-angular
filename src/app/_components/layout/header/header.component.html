@@ -300,7 +300,7 @@
     <div class="responsive-notification">
 
     <span  class="notification-number" [ngClass]="notificationsNumber == 0 ? 'hide-notification-number' : ''">{{notificationsNumber}}</span> <!--[ngClass]="{'hide-notification-number':notificationsNumber == '0'}"-->
-    <a tooltip="Notifications" class="nav-link dropdown-link p-0" (click)="onClickNotificationBell();"  dropdownToggle>
+    <a triggers="mouseenter:mouseleave mouseenter:click" tooltip="Notifications" class="nav-link dropdown-link p-0" (click)="onClickNotificationBell();"  dropdownToggle>
       <i-feather name="bell" class="feather-20 tx-white"></i-feather>
     </a>
     </div>
@@ -343,7 +343,7 @@
         </div>
         <div class="iconwrapper">
           <div *ngIf="menu.items" dropdown container="body" placement="bottom right">
-            <a tooltip="{{currentLoggedInUser}}" placement="left" class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
+            <a triggers="mouseenter:mouseleave mouseenter:click" tooltip="{{currentLoggedInUser}}" placement="left" class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
               <span class="bg-white rounded-circle tx-white">{{nameInitials(currentLoggedInUser)}}</span>
             </a>
             <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">

@@ -109,7 +109,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
               private cookieCategoryService: CookieCategoryService,
               private cd: ChangeDetectorRef,
               private modalService: BsModalService,
-              private titleService: Title 
+              private titleService: Title
 
   ) {
     const element = document.getElementById('main');
@@ -802,7 +802,12 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
     const langCode = this.BannerConfigurationForm.value.PreviewLanguage.code;
     this.onLoadContent(langCode);
   }
-
+  onSelectLang(lang) {
+    this.BannerConfigurationForm.patchValue({
+      PreviewLanguage: lang
+    });
+    this.onSelectPreviewLang();
+  }
 
   onSubmit() {
     this.submitted = true;

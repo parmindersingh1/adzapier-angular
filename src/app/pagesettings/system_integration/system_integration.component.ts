@@ -5,6 +5,8 @@ import {SystemIntegrationService} from '../../_services/system_integration.servi
 import {moduleName} from '../../_constant/module-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -45,14 +47,27 @@ export class SystemIntegrationComponent implements OnInit {
   submitted = false;
   credCount: any = 0;
   errorMessage = '';
+  deleteConnectionID: any;
+  queryOID;
+  queryPID;
   constructor(private modalService: BsModalService,
               private systemIntegrationService: SystemIntegrationService,
               private loading: NgxUiLoaderService,
-              private formBuilder: FormBuilder
+              private formBuilder: FormBuilder,
+              private activatedRoute: ActivatedRoute,
+              private titleService: Title 
+
   ) {
+    this.titleService.setTitle("System Integration - Adzapier Portal");
+
   }
 
   ngOnInit() {
+    this.activatedRoute.queryParamMap
+      .subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
     this.onGetSystemList();
     this.mailChimpForm = this.formBuilder.group({
       email: ['', Validators.required],
@@ -246,6 +261,30 @@ export class SystemIntegrationComponent implements OnInit {
         this.loading.stop();
         this.errorMessage = error;
       });
+  }
+  onDeleteConnection(id) {
+    this.loading.start();
+    this.systemIntegrationService.deleteConnection(this.constructor.name,
+      moduleName.systemIntegrationModule, id).subscribe((res: any) => {
+        this.loading.stop();
+        this.isOpen = true;
+        this.alertMsg = res.response;
+        this.alertType = 'success';
+        this.modalRef.hide();
+        this.onGetCredList();
+    }, error => {
+      this.testingSuccess = false;
+      this.isTesting = false;
+      this.loading.stop();
+      this.errorMessage = error;
+    });
+  }
+
+  openModalDelete(id, template) {
+    this.deleteConnectionID = id;
+    this.modalRef = this.modalService.show(template, {
+      animated: false, keyboard: false, ignoreBackdropClick: true
+    });
   }
   onResetTestEmailForm(){
     this.modalRef.hide();
