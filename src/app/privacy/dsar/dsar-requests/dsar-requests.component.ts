@@ -281,13 +281,13 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.storeSearchList.sort((a, b) => {
             let dateA: any = new Date(a.created_at);
             let dateB: any = new Date(b.created_at);
-            return dateB - dateA;
+            return dateA - dateB;
           });
         } else {
           this.storeSearchList.sort((a, b) => {
             let dateA: any = new Date(a.created_at);
             let dateB: any = new Date(b.created_at);
-            return dateA - dateB;
+            return dateB - dateA;
           });
         }
         if (this.storeSearchList.length >= 10) {
@@ -296,7 +296,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           this.requestsList = this.storeSearchList;
         }
       } else {
-        if (!this.issearchfilterForStatus) {
+        if (!this.issearchfilteractive) {
           this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
           if (this.currentSortorder === "desc") {
             this.storeSearchList.sort((a, b) => {
@@ -323,13 +323,13 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
             this.storeSearchList.sort((a, b) => {
               let dateA: any = new Date(a.created_at);
               let dateB: any = new Date(b.created_at);
-              return dateB - dateA;
+              return dateA - dateB;
             });
           } else {
             this.storeSearchList.sort((a, b) => {
               let dateA: any = new Date(a.created_at);
               let dateB: any = new Date(b.created_at);
-              return dateA - dateB;
+              return dateB - dateA;
             });
           }
           if (this.storeSearchList.length >= 10) {
@@ -417,6 +417,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       params = '?limit=' + this.eventRows + '&page=' + this.firstone + '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType + '&status=' + this.status + '&due_in=' + this.dueIn;
     }
     this.isloading = true;
+     //const sortOrder = this.currentSortorder !== undefined && this.currentSortorder !== ? this.currentSortorder : 'asc'
      const orderBy = '&order_by_date=' + 'asc';
     this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
     this.currrentManagedPropID, params, orderBy)
@@ -425,6 +426,19 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         const key = 'response';
         if (Object.values(data[key]).length > 0 && data[key] !== "No data found." && Object.keys(data[key].length !== 0)) {
           this.requestsList = Object.values(data[key]);
+          if(this.currentSortorder === "asc"){
+            this.requestsList.sort((a, b) => {
+              let dateA:any = new Date(a.created_at);
+              let dateB:any = new Date(b.created_at);
+              return dateA - dateB;
+            });
+          }else{
+            this.requestsList.sort((a, b) => {
+              let dateA:any = new Date(a.created_at);
+              let dateB:any = new Date(b.created_at);
+              return dateB - dateA;
+            });
+          }
           this.storeSearchList = [...this.requestsList];
           this.reloadRequestList = [...this.requestsList];
           this.totalRecords = data.count;
@@ -458,7 +472,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.requestType = "";
       this.issearchfilterForReq = false;
       this.issearchfilteractive = false;
-      if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
+      if(this.issearchfilterForSub || this.issearchfilterForStatus || this.searchbydaterange !== null || this.searchbydaterange !== undefined){
         this.searchFilter();
       }else{
         this.onRefreshDSARList();
@@ -475,7 +489,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.status = "";
       this.issearchfilterForStatus = false;
       this.issearchfilteractive = false;
-      if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
+      if(this.issearchfilterForSub || this.issearchfilterForReq || this.searchbydaterange !== null || this.searchbydaterange !== undefined){
         this.searchFilter();
       }else{
         this.onRefreshDSARList();
@@ -504,7 +518,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.subjectType = "";
       this.issearchfilteractive = false;
       this.issearchfilterForSub = false;
-      if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
+      if(this.issearchfilterForReq || this.issearchfilterForStatus || this.searchbydaterange !== null || this.searchbydaterange !== undefined){
         this.searchFilter();
       }else{
         this.onRefreshDSARList();
@@ -632,6 +646,19 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         const key = 'response';
         if (Object.values(data[key]).length > 0 && data[key] !== "No data found.") {
           this.requestsList = Object.values(data[key]);
+          if(sortOrder === "asc"){
+            this.requestsList.sort((a, b) => {
+              let dateA:any = new Date(a.created_at);
+              let dateB:any = new Date(b.created_at);
+              return dateA - dateB;
+            });
+          }else{
+            this.requestsList.sort((a, b) => {
+              let dateA:any = new Date(a.created_at);
+              let dateB:any = new Date(b.created_at);
+              return dateB - dateA;
+            });
+          }
           this.reloadRequestList = [...this.requestsList];
         this.totalRecords = data.count;
         }else{
@@ -715,10 +742,23 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           const key = 'response';
           if(data[key] !== "No data found."){
             this.requestsList = Object.values(data[key]);
+            if(this.currentSortorder === "asc"){
+              this.requestsList.sort((a, b) => {
+                let dateA:any = new Date(a.created_at);
+                let dateB:any = new Date(b.created_at);
+                return dateA - dateB;
+              });
+            }else{
+              this.requestsList.sort((a, b) => {
+                let dateA:any = new Date(a.created_at);
+                let dateB:any = new Date(b.created_at);
+                return dateB - dateA;
+              });
+            }
             this.storeSearchList = this.requestsList;
             this.rows = data[key].length;
             this.totalRecords = data.count;
-            this.loadrequestsListLazy(this.lazyEvent);
+           // this.loadrequestsListLazy(this.lazyEvent);
           }else{
             this.requestsList = [];
           }
