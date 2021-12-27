@@ -405,7 +405,11 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       distinctUntilChanged(),
     ).subscribe((term: string) => {
       this.debouncedInputValue = term;
-      this.searchFilter();
+      if(this.debouncedInputValue || this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus || this.searchbydaterange !== ""){
+        this.searchFilter();
+      }else{
+        this.onRefreshDSARList();
+      }
     });
   }
 
@@ -472,9 +476,10 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.requestType = "";
       this.issearchfilterForReq = false;
       this.issearchfilteractive = false;
-      if(this.issearchfilterForSub || this.issearchfilterForStatus || this.searchbydaterange !== null || this.searchbydaterange !== undefined){
+      if(this.issearchfilterForSub || this.issearchfilterForStatus || this.searchbydaterange !== ""){
         this.searchFilter();
       }else{
+        this.issearchfilteractive = false;
         this.onRefreshDSARList();
       }
     }
@@ -489,7 +494,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.status = "";
       this.issearchfilterForStatus = false;
       this.issearchfilteractive = false;
-      if(this.issearchfilterForSub || this.issearchfilterForReq || this.searchbydaterange !== null || this.searchbydaterange !== undefined){
+      if(this.issearchfilterForSub || this.issearchfilterForReq || this.searchbydaterange !== ""){
         this.searchFilter();
       }else{
         this.onRefreshDSARList();
@@ -518,7 +523,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.subjectType = "";
       this.issearchfilteractive = false;
       this.issearchfilterForSub = false;
-      if(this.issearchfilterForReq || this.issearchfilterForStatus || this.searchbydaterange !== null || this.searchbydaterange !== undefined){
+      if(this.issearchfilterForReq || this.issearchfilterForStatus || this.searchbydaterange !== ""){
         this.searchFilter();
       }else{
         this.onRefreshDSARList();
@@ -629,7 +634,8 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.dpsubjectType = "";
     this.isSelected = true;
     this.selectedDateRange = "";
-    this.searchbydaterange = "";    
+    this.searchbydaterange = "";
+    this.clearDueInSearchfield();    
     this.onRefreshDSARList();
   }
 
@@ -758,6 +764,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
             this.storeSearchList = this.requestsList;
             this.rows = data[key].length;
             this.totalRecords = data.count;
+            this.pTable.reset();
            // this.loadrequestsListLazy(this.lazyEvent);
           }else{
             this.requestsList = [];
