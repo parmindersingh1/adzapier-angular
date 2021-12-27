@@ -47,6 +47,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   @Output() onClickEmitQSLinkobj : EventEmitter<any> = new EventEmitter<any>();
   @Output() onClickDismiss : EventEmitter<any> = new EventEmitter<any>();
   @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
+  @Input() checkchanges:any;
   quickStartMenuList:any = [];
   insideqsmenu = false;
   textmsg:string = "check";
@@ -409,6 +410,9 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
 
   ngOnChanges(changes: SimpleChanges) {
     this.cdRef.detectChanges();
+    if (this.checkchanges) {
+      this.getLoggedInUserDetails();
+    }
     // let updatedqsMenu = this.quickmenuService.getQuerymenulist();
     //  this.quickStartMenuList = [...updatedqsMenu];
   }
