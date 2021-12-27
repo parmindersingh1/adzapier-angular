@@ -65,6 +65,7 @@ export class AppComponent implements OnInit {
   isSidemenuMouseOut:boolean = false;
   isSidemenuClick:boolean = false;
   checkSidemenuVisibility:boolean = false;
+  checkQSMStatus$ = this.quickmenuService.isClickedOnQSMenu;
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private modalService: BsModalService,
