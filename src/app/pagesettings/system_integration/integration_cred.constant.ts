@@ -81,10 +81,9 @@ export const credForm = {
       required: true
     },
       {
-        key: 'authorization',
+        key: 'authorization_header',
         secret_1: '',
-        type: 'select',
-        options: ['Authorization', 'Api Key'],
+        type: 'text',
         required: false
       },
        {
