@@ -40,7 +40,7 @@
         <div class="form-group w-75">
           <label><span class="text-danger">*</span> Method Type </label>
           <select formControlName="method_type" class="form-control" >
-            <option selected value="get">GET</option>
+            <option  value="get" selected>GET</option>
           </select>
           <div *ngIf="submitted && f.method_type.errors" class="text-danger">
             <div *ngIf="f.method_type.errors.required">This Field is required</div>
@@ -60,7 +60,7 @@
 
       <div class="col-md-6">
         <div class="form-group w-75">
-          <label>Authorization header</label>
+          <label>Authorization Header</label>
           <input type="text" formControlName="authorization" placeholder="authorization" class="form-control" />
         </div>
       </div>

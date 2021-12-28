@@ -67,7 +67,7 @@ export class UpdateRestApiComponent implements OnInit {
         this.mySqlForm.patchValue({
           full_url: cred.secret_1
         });
-      } else if (cred.key === "authorization") {
+      } else if (cred.key === "authorization_header") {
         this.mySqlForm.patchValue({
           authorization: cred.secret_1
         });
@@ -113,7 +113,7 @@ export class UpdateRestApiComponent implements OnInit {
       secret_1: this.mySqlForm.value.full_url
     });
     payload.integration_cred.push({
-      key: 'authorization',
+      key: 'authorization_header',
       secret_1: this.mySqlForm.value.authorization
     });
     payload.integration_cred.push({
