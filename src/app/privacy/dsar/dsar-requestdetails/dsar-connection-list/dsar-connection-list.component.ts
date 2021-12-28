@@ -54,7 +54,11 @@ export class DsarConnectionListComponent implements OnInit {
   onShowRestAPIData(type, data) {
     this.currentStep = type;
     this.type = 2;
-    this.connectionDetails = data.response[data.responsePath];
+    if (data.responsePath) {
+      this.connectionDetails = data.response[data.responsePath];
+    } else {
+      this.connectionDetails = data.response;
+    }
     this.connectionDetailsKeys = Object.keys(this.connectionDetails[0]);
     this.cd.detectChanges();
   }

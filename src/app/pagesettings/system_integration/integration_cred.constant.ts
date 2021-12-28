@@ -66,36 +66,32 @@ export const credForm = {
         required: true
       }
     ],
-    http: [{
-      key: 'url',
-      secret_1: '',
-      type: 'text',
-      required: true
-    }, {
-      key: 'protocol',
-      secret_1: '',
-      type: 'select',
-      options: ['http', 'https'],
-      required: true
-    },
+    http: [
       {
-        key: 'request_type',
+        key: 'method_type',
         secret_1: '',
         type: 'select',
-        options: ['Authorization'],
+        options: ['GET'],
         required: true
       },
       {
-        key: 'auth_type',
+      key: 'full_url',
+      secret_1: '',
+      type: 'text',
+      required: true
+    },
+      {
+        key: 'authorization',
         secret_1: '',
         type: 'select',
-        options: ['Bearer'],
-        required: true
-      }, {
+        options: ['Authorization', 'Api Key'],
+        required: false
+      },
+       {
         key: 'token',
         secret_1: '',
         type: 'text',
-        required: true
+        required: false
       }
     ],
   activecampaign: [{
