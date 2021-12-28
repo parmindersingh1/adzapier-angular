@@ -25,22 +25,22 @@
         <div class="col-md-3">
             <div class="form-group">
               <label for="exampleInputField{{i}}">Key</label>
-              <input type="email" class="form-control" id="exampleInputField{{i}}" formControlName="field" placeholder="Key">
-              <div *ngIf="submitted && obj.get('field').errors" class="text-danger">
-                <div *ngIf="obj.get('field').errors.required">This Field is required</div>
+              <input type="email" class="form-control" id="exampleInputField{{i}}" formControlName="value_1" placeholder="Key">
+              <div *ngIf="submitted && obj.get('value_1').errors" class="text-danger">
+                <div *ngIf="obj.get('value_1').errors.required">This Field is required</div>
               </div>
             </div>
         </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="exampleInputValue{{i}}">Value</label>
-          <select class="form-control" formControlName="value_1" id="exampleInputValue{{i}}">
+          <select class="form-control" formControlName="value_2" id="exampleInputValue{{i}}">
             <ng-container  *ngFor="let option of formObject.request_form">
               <option [value]="option.controlId">form.{{option.controllabel}}</option>
             </ng-container>
           </select>
-          <div *ngIf="submitted && obj.get('value_1').errors" class="text-danger">
-            <div *ngIf="obj.get('value_1').errors.required">This Field is required</div>
+          <div *ngIf="submitted && obj.get('value_2').errors" class="text-danger">
+            <div *ngIf="obj.get('value_2').errors.required">This Field is required</div>
           </div>
         </div>
       </div>
