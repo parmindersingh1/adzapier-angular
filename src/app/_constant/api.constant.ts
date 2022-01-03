@@ -97,6 +97,9 @@ export const apiConstant = {
   //Login Registration
   REGISTRATION_ADD_COMPANY_ORG_PROP:'/billing/checkout/trialsession',
 
+  SCAN_BEHIND_LOGIN:'/scanner/sbl/:propid',
+  SCAN_BEHIND_LOGIN_UPDATE:'/scanner/update/sbl/:propid',
+
   //Cart
   ADDTOCART : '/cart',
   UPDATECART : '/cart/update'
