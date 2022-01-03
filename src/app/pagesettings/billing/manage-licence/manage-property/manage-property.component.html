@@ -7,7 +7,7 @@
 
     </ol>
   </nav>
-  <h4 class="mg-b-0 tx-spacing--1">Manage License to Properties</h4>
+  <h4 class="mg-b-0 tx-spacing--1">Add or Remove Properties to Subscription</h4>
 
 <div class="card mt-4">
     <h5 class=" col-md-12 mt-4 plan-name cl-gray" style="font-weight: bold;">
@@ -15,7 +15,7 @@
       <ngx-skeleton-loader  *ngIf="skLoading" count="1" [theme]="{height: '30px', width: '60%'}"></ngx-skeleton-loader>
     </h5>
     <div class=" col-md-12">
-      <h4 class="assign-text cl-gray">{{assigneLicence}}/{{totalLicence}} Licenses Used</h4>
+      <h4 class="assign-text cl-gray">{{assigneLicence}}/{{totalLicence}} Properties Assigned</h4>
       <div class="col-md-4">
         <div class="progress" style="height:16px">
           <div class="progress-bar" [ngStyle]="{width: percents.assigneLicence +'%'}" style=" background-color: #11188f">
@@ -62,7 +62,7 @@
         <th></th>
         <th>Domain</th>
         <th>Organization</th>
-        <th>License Status</th>
+        <th>Status</th>
       </tr>
       </thead>
       <tbody>
@@ -72,8 +72,8 @@
 
 
 
-          <div class="btn-group" dropdown>
-            <button  id="button-basic" dropdownToggle type="button" class="btn btn-default"
+          <div class="btn-group"  dropdown>
+            <button triggers="mouseenter:mouseleave mouseenter:click" tooltip="Remove this property from subscription" id="button-basic" dropdownToggle type="button" class="btn btn-default"
                     aria-controls="dropdown-basic">
                     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
             </button>
@@ -139,14 +139,14 @@
     </form>
   </div>
 </ng-template>
-<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
-  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" >{{  alertMsg}}</alert>
+<div class="col-sm-5 mr-0 float-right flotingdiv">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible" (onClosed)="onClosed(alertMsg)">{{  alertMsg}}</alert>
 </div>
 
 
 <ng-template #delConfirm>
   <div class="modal-body text-center">
-    <p>Are you sure you want to remove the license?</p>
+    <p>Are you sure you want to remove this property from subscription?</p>
     <button type="button" class="btn btn-default" (click)="onRemoveProperty(delPropID)" >Yes</button>
     <button type="button" class="btn btn-primary" (click)="decline()" >No</button>
   </div>

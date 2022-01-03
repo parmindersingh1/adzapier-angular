@@ -47,6 +47,15 @@ export class SystemIntegrationService {
       }));
   }
 
+  deleteConnection(componentName, moduleName, connectionID) {
+    const path = `/integration/connection/` + connectionID;
+    return this.http.delete(environment.apiUrl + path)
+      .pipe(catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getWorkflow, componentName, moduleName, path);
+        return throwError(error);
+      }));
+  }
+
 
   SaveConnectionIntegration(componentName, moduleName, payload) {
     const path = '/integration/connection';

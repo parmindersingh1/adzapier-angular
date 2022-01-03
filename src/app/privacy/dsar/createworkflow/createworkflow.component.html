@@ -23,7 +23,7 @@
                     <button class="btn btn-xs btn-primary d-flex align-items-center mg-r-5" 
                     [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
                     [attr.disabled]="(workflowStatus === 'draft' && !isworkflowSaved) ? true:null"
-                        (click)="editWorkflow($event,workflowStatus)" title="Finalize and activate this workflow">
+                        (click)="editWorkflow($event,workflowStatus)">
                         <span class="d-none d-sm-inline">
                             <i *ngIf="workflowStatus == 'active'" class="fa fa-pen mr-1" aria-hidden="true"></i>
                             {{workflowStatus == 'active' ? 'Edit' : 'Activate'}}</span></button>
@@ -31,7 +31,7 @@
                     <button class="btn btn-xs btn-white d-flex align-items-center mg-r-5" type="button"
                     [ngClass]="{'hideEditSave-btn':workflowType == 'default', '': workflowType !== 'default'}"
                     [attr.disabled]="workflowStatus == 'active' ? true : null"
-                        (click)="saveWorkflow(quillEditorForm, workflowStatus)" title="Save as draft">
+                        (click)="saveWorkflow(quillEditorForm, workflowStatus)">
                         <span class="d-none d-sm-inline">
                             <i class="fa fa-plus" aria-hidden="true"></i>
                             Save</span></button>

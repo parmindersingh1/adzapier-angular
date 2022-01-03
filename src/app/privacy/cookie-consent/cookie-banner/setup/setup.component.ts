@@ -8,6 +8,8 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {ActivatedRoute, Router} from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { apiConstant } from 'src/app/_constant/api.constant';
+import { Title } from '@angular/platform-browser';
+
 
 
 @Component({
@@ -50,7 +52,12 @@ export class SetupComponent implements OnInit {
     private router: Router,
     private activateRoute: ActivatedRoute,
     private orgservice: OrganizationService,
-  ) { }
+    private titleService: Title 
+
+  ) {
+    this.titleService.setTitle("Cookie Consent Setup - Adzapier Portal");
+
+   }
 
   ngOnInit() {
     this.activateRoute.queryParams

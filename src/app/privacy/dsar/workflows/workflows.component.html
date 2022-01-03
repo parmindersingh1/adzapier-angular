@@ -127,7 +127,7 @@
                         <label for="workflowName"
                             class="tx-11 tx-medium tx-spacing-1 mg-b-5 tx-color-03">Name</label>
                         <input type="text" class="form-control" formControlName="workflowName"
-                            [ngClass]="{ 'is-invalid': submitted && addWorkflow.workflowName.errors }" />
+                            [ngClass]="{ 'is-invalid': submitted && addWorkflow.workflowName.errors }" placeholder="Enter workflow name" />
                         <div *ngIf="submitted && addWorkflow.workflowName.errors" class="invalid-feedback">
                             <div *ngIf="addWorkflow.workflowName.errors.required">Workflow name is required</div>
                             <div *ngIf="addWorkflow.workflowName.hasError('trimError')" > {{ addWorkflow.workflowName.errors.trimError.value }} </div>

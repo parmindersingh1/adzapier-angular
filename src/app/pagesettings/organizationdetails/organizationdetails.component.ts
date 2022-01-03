@@ -14,10 +14,12 @@ import { featuresName } from 'src/app/_constant/features-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import { Location } from '@angular/common';
 import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
-
+import { isBs3 } from 'ngx-bootstrap/utils';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Title } from '@angular/platform-browser';
+
 // import { CompanyService } from '../company.service';
 @Component({
   selector: 'app-organizationdetails',
@@ -115,7 +117,9 @@ export class OrganizationdetailsComponent implements OnInit {
               private loading: NgxUiLoaderService,
               private location: Location,
               private quickmenuService: QuickmenuService,
-              private cdref: ChangeDetectorRef) {
+              private cdref: ChangeDetectorRef,
+              private titleService: Title 
+              ) {
     // this.orgService.currentProperty.subscribe((data) => {
     //   this.currentManagedOrgID = data.organization_id || data.response.oid;
     //   this.currrentManagedPropID = data.property_id || data.response.id;
@@ -126,6 +130,8 @@ export class OrganizationdetailsComponent implements OnInit {
       totalItems: this.propertyTotalCount, id: 'propertyPagination'
     };
    
+    this.titleService.setTitle("Organization details - Adzapier Portal");
+
 
   }
 
@@ -268,7 +274,8 @@ export class OrganizationdetailsComponent implements OnInit {
       isactualbtnclicked: true,
       islinkclicked: true
     };
-    
+    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+    this.quickmenuService.updateQuerymenulist(quickLinkObj);
     if (type === 'invite') {
       if (! await this.onCheckSubscription()) {
         return false;
@@ -286,8 +293,6 @@ export class OrganizationdetailsComponent implements OnInit {
     }, (reason) => {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
-    this.quickmenuService.updateQuerymenulist(quickLinkObj);
 
   }
 

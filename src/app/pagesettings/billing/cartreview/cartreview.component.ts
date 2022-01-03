@@ -5,6 +5,8 @@ import { moduleName } from 'src/app/_constant/module-name.constant';
 import { UserService } from 'src/app/_services';
 import { BillingService } from 'src/app/_services/billing.service';
 import { environment } from 'src/environments/environment';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-cartreview',
@@ -34,7 +36,12 @@ export class CartreviewComponent implements OnInit {
     private loading: NgxUiLoaderService,
     private userService : UserService,
     private activatedroute: ActivatedRoute,
-    ) { }
+    private titleService: Title 
+
+    ) { 
+      this.titleService.setTitle("Cart Review - Adzapier Portal");
+
+    }
 
   ngOnInit() {
     this.onGetCartRecord();
@@ -89,7 +96,11 @@ export class CartreviewComponent implements OnInit {
         email: this.userEmail
       };
       this.loading.start();
-      this.billingService.getSessionId(payloads, this.constructor.name, moduleName.pricingModule).subscribe(res => {
+      const queryParams = {
+        pid: this.queryPID,
+        oid: this.queryOID
+      }
+      this.billingService.getSessionId(payloads, queryParams, this.constructor.name, moduleName.pricingModule).subscribe(res => {
         this.loading.stop();
         const result: any = res;
         if (result.status === 200) {
@@ -117,13 +128,13 @@ export class CartreviewComponent implements OnInit {
 
   onGetCartRecord() {
     this.loading.start();
-    
+
     this.billingService.GetCart(this.constructor.name, moduleName.billingModule)
       .subscribe((res: any) => {
         this.loading.stop();
         const result: any = res;
         if (result.status === 200) {
-         
+
           this.cartRecordList = result.response;
           this.cartRecordCount = Number(result.count);
           this.onNavigateToDetails(this.cartRecordCount)
@@ -133,8 +144,8 @@ export class CartreviewComponent implements OnInit {
               this.subTotal += Number(item.Price * item.Quantity);
             }
           }
-      
-          
+
+
         }
       }, error => {
         this.loading.stop();

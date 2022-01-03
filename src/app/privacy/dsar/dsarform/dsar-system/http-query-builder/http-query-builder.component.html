@@ -7,37 +7,41 @@
   <form [ngStyle]="{display: pageStep === 1 ? 'block' : 'none'}"  (ngSubmit)="onSubmit()">
   <div class="card-body" [formGroup]="httpQueryBuilderForm">
     <a href="javascript:;" class="back-to-list-btn mb-2" (click)="backHome.emit(true)"><i class="fas fa-chevron-left"></i> GoBack</a>
-
+    <h5>API Response Path</h5>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 p-0">
           <div class="form-group">
-            <label for="exampleFormControlInput1">API Response Path</label>
+            <label for="exampleFormControlInput1">Path</label>
             <input type="email" class="form-control" formControlName="path" id="exampleFormControlInput1" placeholder="response.data">
-            <div *ngIf="submitted && f.path.errors" class="invalid-feedback">
+            <div *ngIf="submitted && f.path.errors" class="text-danger">
               <div *ngIf="f.path.errors.required">This Field is required</div>
             </div>
           </div>
         </div>
     </div>
+    <h5>Configure Query Params</h5>
     <ng-container formArrayName="queryParams" *ngFor="let obj of httpQueryBuilderForm.controls.queryParams['controls']; let i=index">
     <div class="row" [formGroupName]="i">
         <div class="col-md-3">
             <div class="form-group">
               <label for="exampleInputField{{i}}">Key</label>
-              <input type="email" class="form-control" id="exampleInputField{{i}}" formControlName="field" placeholder="Key">
-<!--              <small id="key" class="form-text text-danger mt-2">Key is Required.</small>-->
+              <input type="email" class="form-control" id="exampleInputField{{i}}" formControlName="value_1" placeholder="Key">
+              <div *ngIf="submitted && obj.get('value_1').errors" class="text-danger">
+                <div *ngIf="obj.get('value_1').errors.required">This Field is required</div>
+              </div>
             </div>
         </div>
       <div class="col-md-4">
         <div class="form-group">
           <label for="exampleInputValue{{i}}">Value</label>
-          <select class="form-control" formControlName="value_1" id="exampleInputValue{{i}}">
+          <select class="form-control" formControlName="value_2" id="exampleInputValue{{i}}">
             <ng-container  *ngFor="let option of formObject.request_form">
-              <option [value]="option.controlId">form.{{option.controllabel}}</option>
               <option [value]="option.controlId">form.{{option.controllabel}}</option>
             </ng-container>
           </select>
-<!--          <small id="value" class="form-text text-danger mt-2">Value is Required.</small>-->
+          <div *ngIf="submitted && obj.get('value_2').errors" class="text-danger">
+            <div *ngIf="obj.get('value_2').errors.required">This Field is required</div>
+          </div>
         </div>
       </div>
       <div class="col-md-2">

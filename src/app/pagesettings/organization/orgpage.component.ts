@@ -13,6 +13,8 @@ import { Subject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
 import { QuickStart } from 'src/app/_models/quickstart';
+import { Title } from '@angular/platform-browser';
+
 
 
 @Component({
@@ -89,10 +91,14 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
               private loading: NgxUiLoaderService,
               private activatedRoute: ActivatedRoute,
               private quickmenuService: QuickmenuService,
-              private cdRef: ChangeDetectorRef
+              private cdRef: ChangeDetectorRef,
+              private titleService: Title 
+
   ) {
     this.paginationConfig = { itemsPerPage: this.pageSize, currentPage: this.p, totalItems: this.totalCount };
-   }
+    this.titleService.setTitle("Organizations - Adzapier Portal");
+
+  }
 
   ngOnInit() {
     this.showQuickStartTooltip();    
@@ -213,7 +219,7 @@ export class OrgpageComponent implements OnInit,AfterViewInit,OnDestroy {
         city: this.editOrganisationForm.value.cityname,
         state: this.editOrganisationForm.value.statename,
         zipcode: this.editOrganisationForm.value.zipcodenum,
-        email: this.editOrganisationForm.value.email,
+        email: this.editOrganisationForm.value.email.toLowerCase(),
         phone: this.editOrganisationForm.value.phone
       };
       this.loading.start();

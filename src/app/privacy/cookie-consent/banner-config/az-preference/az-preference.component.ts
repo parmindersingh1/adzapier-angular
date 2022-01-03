@@ -1,4 +1,13 @@
-import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ViewEncapsulation} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component, EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewEncapsulation
+} from '@angular/core';
 import {GdprService} from '../../../../_services/gdpr.service';
 
 @Component({
@@ -10,12 +19,15 @@ import {GdprService} from '../../../../_services/gdpr.service';
 export class AzPreferenceComponent implements OnInit, OnChanges {
   @Input('formData') formData;
   @Input('purposesList') purposesList;
+  @Input('customerBrandLogo') customerBrandLogo;
+  @Input('allowedLanguagesForPreview') allowedLanguagesForPreview;
+  @Output('selectPreviewLang') selectPreviewLang = new EventEmitter();
   showPreferenceType = 'ccpa';
   currentPurposeID = 0;
   gdprPurposeList = [];
   iabVendorsList = [];
   preferenceStep = 1;
-  switchButton = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+  switchButton = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21 , 22, 23, 24, 25, 26];
    privacyContent = [
     {title: 'Why do you need my consent?', desc: 'What are cookies used? Whit this information is created a user profile based on this and other Data. It is anonymous and only linked to a device or in in combination with your browser.'},
     {title: 'What about cookies?', desc: 'How they work\n' +
@@ -59,5 +71,9 @@ export class AzPreferenceComponent implements OnInit, OnChanges {
       }
     }
     this.switchButton = switchButton;
+  }
+  onSelectPreviewLang(lang) {
+
+    this.selectPreviewLang.emit(JSON.parse(lang));
   }
 }

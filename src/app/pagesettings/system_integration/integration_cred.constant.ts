@@ -66,36 +66,31 @@ export const credForm = {
         required: true
       }
     ],
-    http: [{
-      key: 'url',
-      secret_1: '',
-      type: 'text',
-      required: true
-    }, {
-      key: 'protocol',
-      secret_1: '',
-      type: 'select',
-      options: ['http', 'https'],
-      required: true
-    },
+    http: [
       {
-        key: 'request_type',
+        key: 'method_type',
         secret_1: '',
         type: 'select',
-        options: ['Authorization'],
+        options: ['GET'],
         required: true
       },
       {
-        key: 'auth_type',
+      key: 'full_url',
+      secret_1: '',
+      type: 'text',
+      required: true
+    },
+      {
+        key: 'authorization_header',
         secret_1: '',
-        type: 'select',
-        options: ['Bearer'],
-        required: true
-      }, {
+        type: 'text',
+        required: false
+      },
+       {
         key: 'token',
         secret_1: '',
         type: 'text',
-        required: true
+        required: false
       }
     ],
   activecampaign: [{
@@ -107,7 +102,7 @@ export const credForm = {
       {
         key: 'api_token',
         secret_1: '',
-        type: 'textarea',
+        type: 'text',
         required: true
       },
     ],
@@ -121,7 +116,7 @@ export const credForm = {
   sendgrid: [{
     key: 'authorization',
     secret_1: '',
-    type: 'textarea',
+    type: 'text',
     required: true
   },
   ],
@@ -129,7 +124,7 @@ export const credForm = {
     {
       key: 'api_key',
       secret_1: '',
-      type: 'textarea',
+      type: 'text',
       required: true
     },
     {
@@ -143,7 +138,7 @@ export const credForm = {
     {
       key: 'api_key',
       secret_1: '',
-      type: 'textarea',
+      type: 'text',
       required: true
     }
   ]

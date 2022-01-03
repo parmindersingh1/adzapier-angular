@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment';
 import { User } from './../_models';
 import { BehaviorSubject, Observable, Subject, throwError } from 'rxjs';
-import { map, shareReplay, retry, catchError } from 'rxjs/operators';
+import { map, shareReplay, retry, catchError, take } from 'rxjs/operators';
 import { LokiService } from './loki.service';
 import { LokiFunctionality, LokiStatusType } from '../_constant/loki.constant';
 import { apiConstant } from '../_constant/api.constant';
@@ -124,6 +124,15 @@ export class UserService {
         }));
     }
 
+    inviteusersetpassword(componentName, moduleName, user_id:string ,token, newpassword, confirmnewpassword): Observable<any> {
+        const path = '/invite/user/setpassword/' + user_id + '?token=' + token ;
+        return this.http.post<any>(environment.apiUrl + path , { newpassword, confirmnewpassword })
+        .pipe(catchError(error => {
+            this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.resetPassword, componentName, moduleName, path);
+            return throwError(error);
+          }));
+    }
+    
     onPushConsentData(suppData) {
         return new Promise(resolve => {
           resolve(this.SupportData.next(suppData));
@@ -157,7 +166,21 @@ export class UserService {
 
     getLoggedInUserDetails(componentName, moduleName): Observable<User> {
         const path = '/user';
-        return this.http.get<User>(environment.apiUrl + path).pipe(shareReplay(1),
+        return this.http.get<User>(environment.apiUrl + path).pipe(take(1),
+            catchError(error => {
+                this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getLoggedInUserDetails, componentName, moduleName, path);
+                return throwError(error);
+            })
+        );
+    }
+
+    getLoggedQSMList(componentName, moduleName): Observable<any> {
+        const path = '/user';
+        return this.http.get<any>(environment.apiUrl + path).pipe(take(1),
+            map((result) => {
+                return result.response;
+            }),
+
             catchError(error => {
                 this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getLoggedInUserDetails, componentName, moduleName, path);
                 return throwError(error);

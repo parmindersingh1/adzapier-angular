@@ -11,6 +11,8 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { QuickmenuService } from 'src/app/_services/quickmenu.service';
+import { Title } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-pricing',
@@ -77,7 +79,8 @@ export class PricingComponent implements OnInit, AfterViewInit {
   showpopup = [];
   queryOID: string;
   queryPID: string;
-
+  userRole:any;
+  userRole$ = this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.manageSubscriptionsModule);
   constructor(private router: Router,
               private loading: NgxUiLoaderService,
               private dataService: DataService,
@@ -87,8 +90,12 @@ export class PricingComponent implements OnInit, AfterViewInit {
               private billingService: BillingService,
               private cdRef: ChangeDetectorRef,
               private activatedroute: ActivatedRoute,
+              private titleService: Title 
+
               ) {
               // this.onGetActivePlan();
+              this.titleService.setTitle("Pricing - Adzapier Portal");
+
   }
 
   ngOnInit() {
@@ -121,6 +128,11 @@ export class PricingComponent implements OnInit, AfterViewInit {
     element.style.margin = '0px';
 
     this.onGetCartRecord();
+    this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.manageSubscriptionsModule).subscribe((res: any) => {
+      if (res.status === 200) {
+        this.userRole = res.response.role;
+      }
+   });
   }
 
 
@@ -236,36 +248,36 @@ export class PricingComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onSelectPlan() {
-    const plans = [];
-    for (const pricing of this.cartItem) {
-      plans.push({plan_id: pricing.id, units: pricing.unit});
-    }
-    if (this.userEmail) {
-      let payloads = {};
-      payloads = {
-        coupon_code: this.isPromoCodeActive ? this.promoCode : '',
-        plan_details: plans,
-        email: this.userEmail
-      };
-      this.loading.start();
-      this.billingService.getSessionId(payloads, this.constructor.name, moduleName.pricingModule).subscribe(res => {
-        this.loading.stop();
-        const result: any = res;
-        if (result.status === 200) {
-          this.onCheckOut(result.response);
-        }
-      }, error => {
-        this.loading.stop();
-        const err: any = JSON.parse(error);
-        this.isOpen = true;
-        this.alertMsg = err.message;
-        this.alertType = 'danger';
-      });
-    } else {
-      location.reload();
-    }
-  }
+  // onSelectPlan() {
+  //   const plans = [];
+  //   for (const pricing of this.cartItem) {
+  //     plans.push({plan_id: pricing.id, units: pricing.unit});
+  //   }
+  //   if (this.userEmail) {
+  //     let payloads = {};
+  //     payloads = {
+  //       coupon_code: this.isPromoCodeActive ? this.promoCode : '',
+  //       plan_details: plans,
+  //       email: this.userEmail
+  //     };
+  //     this.loading.start();
+  //     this.billingService.getSessionId(payloads, this.constructor.name, moduleName.pricingModule).subscribe(res => {
+  //       this.loading.stop();
+  //       const result: any = res;
+  //       if (result.status === 200) {
+  //         this.onCheckOut(result.response);
+  //       }
+  //     }, error => {
+  //       this.loading.stop();
+  //       const err: any = JSON.parse(error);
+  //       this.isOpen = true;
+  //       this.alertMsg = err.message;
+  //       this.alertType = 'danger';
+  //     });
+  //   } else {
+  //     location.reload();
+  //   }
+  // }
 
   onSelectCookieConsentBillingCycle(e, type) {
     try {
@@ -312,6 +324,14 @@ export class PricingComponent implements OnInit, AfterViewInit {
       const indexId = this.quickDivID == 18 ? 5 : this.quickDivID == 11 ? 4 : 3;
       this.checkForQuickDivIDWithIndex();
       const a = this.quickmenuService.getQuerymenulist();
+      let quickLinkObj = {
+        linkid: this.quickDivID,
+        indexid: 3,
+        isactualbtnclicked: true,
+        islinkclicked: true
+      };
+      this.quickmenuService.onClickEmitQSLinkobj.next(quickLinkObj);
+      this.quickmenuService.updateQuerymenulist(quickLinkObj);
       if (a.length !== 0) {
         const idx = a.findIndex((t) => t.index == indexId);
         if (a[idx].quicklinks.filter((t) => t.linkid == this.quickDivID).length > 0) {
@@ -331,7 +351,7 @@ export class PricingComponent implements OnInit, AfterViewInit {
               this.subTotal += Number(item.priceTotal);
             }
           }
-          
+
         }
       }
     } else{
@@ -621,5 +641,8 @@ export class PricingComponent implements OnInit, AfterViewInit {
     this.quickmenuService.updateQuerymenulist(quickLinkObj);
   }
 
+  isOrgAdmin():boolean {
+    return this.userRole === "Organization Administrator";
+  }
 
 }

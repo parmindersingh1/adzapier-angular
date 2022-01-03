@@ -9,6 +9,8 @@ import { DataService } from 'src/app/_services/data.service';
 import { BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 import {Location} from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+
 
 declare var jQuery: any;
 
@@ -93,8 +95,12 @@ export class ConsentSolutionComponent implements OnInit {
               private modalService: BsModalService,
               private _location: Location,
               private router:Router,
-              private activatedroute: ActivatedRoute
+              private activatedroute: ActivatedRoute,
+              private titleService: Title 
               ) {
+
+                this.titleService.setTitle("Consent Preference Dashboard - Adzapier Portal");
+
   }
 
   ngOnInit() {

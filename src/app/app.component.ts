@@ -65,6 +65,7 @@ export class AppComponent implements OnInit {
   isSidemenuMouseOut:boolean = false;
   isSidemenuClick:boolean = false;
   checkSidemenuVisibility:boolean = false;
+  checkQSMStatus$ = this.quickmenuService.isClickedOnQSMenu;
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private modalService: BsModalService,
@@ -96,24 +97,21 @@ export class AppComponent implements OnInit {
         }
       }
     );
-    this.quickmenuService.isClickedOnQSMenu.subscribe((data) => {
-      if (data) {
-        this.qsMenuList = this.quickmenuService.getQuerymenulist();
-        // console.log(updatedqsMenu,'constructor..appcomp');
-        // this.qsMenuList =  [...updatedqsMenu];
-      }
-    })
-
   }
 
   async ngOnInit() {
-    this.quickmenuService.isClickedOnQSMenu.subscribe((data) => {
-      if (data) {
-        this.qsMenuList = this.quickmenuService.getQuerymenulist();
-        // console.log(updatedqsMenu,'constructor..appcomp');
-        // this.qsMenuList =  [...updatedqsMenu];
-      }
-    });
+    if (this.location.path().indexOf('/resetpswd') !== -1){
+      this.hideHeaderFooter = false;
+      this.authenticationService.logout();
+      localStorage.removeItem('currentUser');
+      this.userService.getCurrentUser.unsubscribe();
+      localStorage.clear();
+      this.ccpaFormConfigurationService.removeControls();
+      this.dsarformService.removeControls();
+      this.organizationService.removeControls();
+      this.router.navigateByUrl(this.location.path());
+      return false;
+    }
     await this.onInitCPSDK();
     this.openUnAuthModal();
     this.router.events.subscribe((event) => {
@@ -121,7 +119,7 @@ export class AppComponent implements OnInit {
         if (event.url.indexOf('welcome') !== -1) {
           this.hideHeaderFooter = true;
         }
-        if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1 || event.url.indexOf('invited-user-verify-email') !== -1) {
+        if (event.url.indexOf('/resetpswd') !== -1 || event.url.indexOf('/verify-email') !== -1 || event.url.indexOf('invited-user-verify-email') !== -1 || event.url.indexOf('/setpassword') !== -1) {
           this.hideHeaderFooter = false;
           this.authenticationService.logout();
           localStorage.removeItem('currentUser');
@@ -151,7 +149,6 @@ export class AppComponent implements OnInit {
       //  console.log(this.queryPID,'queryPID..');
       // }
     });
-    this.qsMenuList = this.quickmenuService.getQuerymenulist();
     let obj;
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => obj = data);
 
@@ -223,10 +220,9 @@ export class AppComponent implements OnInit {
     // if(Object.values(obj).length !== 0){
     //   this.quickmenuService.updateQuerymenulist(obj);
     // }else{
-    this.quickmenuService.updateQuerymenulist($event);
+    //this.quickmenuService.updateQuerymenulist($event); //Note this
     // }
     //this.quickstartmenuComponent.getupdatedQuickStartMenu();
-    this.qsMenuList = this.quickmenuService.getQuerymenulist();
 
   }
 
@@ -252,8 +248,6 @@ export class AppComponent implements OnInit {
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => this.quicklinkclickedObj = data);
     this.cdRef.detectChanges();
-    let updatedqsMenu = this.quickmenuService.getQuerymenulist();
-    this.qsMenuList = [...updatedqsMenu];
     this.cdRef.detectChanges();
   }
 
@@ -261,9 +255,11 @@ export class AppComponent implements OnInit {
   //   this.qsMenuList = this.quickstartmenuComponent.getupdatedQuickStartMenu();
   // }
   ngAfterViewChecked() {
-
+    if (this.location.path().indexOf('welcome') !== -1) {
+      this.hideHeaderFooter = true;
+    } //after reset password when user login this block required.
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
-    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1) {
+    if (this.location.path().indexOf('/login') !== -1 || this.location.path().indexOf('signup') !== -1 || this.location.path().indexOf('resetpswd') !== -1 || this.location.path().indexOf('invited-user-verify-email') !== -1 || this.location.path().indexOf('setpassword') !== -1) {
       this.isloginpage = false; // quick start will not be visible
     } else {
       this.isloginpage = true;

@@ -10,6 +10,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {BsDatepickerConfig, DatepickerDateCustomClasses} from 'ngx-bootstrap/datepicker';
 import {ChartDataSets, ChartOptions, ChartType} from 'chart.js';
 import {Label} from 'ng2-charts';
+import { Title } from '@angular/platform-browser';
+
 
 const colorCodes = ['#f77eb9', '#fdb16d', '#c693f9', '#65e0e0', '#69b2f8', '#6fd39b'];
 
@@ -168,12 +170,16 @@ export class CookieConsentComponent implements OnInit {
               private modalService: BsModalService,
               private _location: Location,
               private router: Router,
-              private activateRoute: ActivatedRoute
+              private activateRoute: ActivatedRoute,
+              private titleService: Title 
+
   ) {
     this.dateCustomClasses = [
       {date: new Date(), classes: ['theme-dark-blue']},
     ];
     this.searchbydaterange = [new Date(new Date().setDate(new Date().getDate() - 30)), new Date()]
+    this.titleService.setTitle("Cookie Consent Dashboard - Adzapier Portal");
+
   }
 
   ngOnInit() {

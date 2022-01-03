@@ -13,6 +13,8 @@ import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { OrganizationService } from 'src/app/_services';
 import { trimValidator } from 'src/app/_helpers/trimspace.validator';
 import { DirtyComponents } from 'src/app/_models/dirtycomponents';
+import { Title } from '@angular/platform-browser';
+
 // import { strings } from "ngx-timeago/language-strings/en";
 // import { TimeagoIntl } from "ngx-timeago";
 @Component({
@@ -65,7 +67,9 @@ export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponent
               private formBuilder: FormBuilder,
               private loading: NgxUiLoaderService,
               private cdRef: ChangeDetectorRef,
-              private orgservice: OrganizationService
+              private orgservice: OrganizationService,
+              private titleService: Title 
+
             //  intl: TimeagoIntl
   ) {
   //  intl.strings = strings;
@@ -76,6 +80,9 @@ export class WorkflowsComponent implements OnInit, AfterViewInit, DirtyComponent
       this.queryOID = params.get('oid');
       this.queryPID = params.get('pid');
     });
+
+    this.titleService.setTitle("DSAR Workflows - Adzapier Portal");
+
   }
 
   ngOnInit() {

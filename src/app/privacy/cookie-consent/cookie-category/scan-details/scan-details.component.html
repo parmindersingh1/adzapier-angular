@@ -209,10 +209,10 @@
             <div *ngIf="lastScan.scanner_status === 'completed'">
             <canvas baseChart
                     [chartType]="chartType"
+                    [labels]="chartTypeLabels"
                     [options]="doughnutChartOptions"
                     [colors]="pieColors"
-                    [labels]="chartTypeLabels"
-                    [data]="chartTypeData">
+                    [datasets]="chartTypeData">
             </canvas>
             </div>
           </div>

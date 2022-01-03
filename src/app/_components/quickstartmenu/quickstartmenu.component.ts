@@ -6,7 +6,7 @@ import { findPropertyIDFromUrl } from 'src/app/_helpers/common-utility';
 import { AuthenticationService, UserService } from 'src/app/_services';
 import { QuickmenuService} from 'src/app/_services/quickmenu.service';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
-
+import { moduleName } from 'src/app/_constant/module-name.constant';
 @Component({
   selector: 'app-quickstartmenu',
   templateUrl: './quickstartmenu.component.html',
@@ -47,7 +47,8 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   @Output() onClickEmitQSLinkobj : EventEmitter<any> = new EventEmitter<any>();
   @Output() onClickDismiss : EventEmitter<any> = new EventEmitter<any>();
   @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
-  @Input() quickStartMenuList:any = [];
+  @Input() checkchanges:any;
+  quickStartMenuList:any = [];
   insideqsmenu = false;
   textmsg:string = "check";
   currentUser:any;
@@ -58,6 +59,8 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   alertType;
   dismissible = true;
   isClickedonDismissed:boolean = false;
+  currentloggedInUser:any;
+  skeletonLoading = true;
   constructor(private location: Location,
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -74,16 +77,20 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
      }
 
   ngOnInit(): void {
-   this.headingtextarray = ["Getting started","Subscription","Data Subjects Rights Management"]
-    this.windowWidth = window.innerWidth;
-    //this.userService.onClickTopmenu.subscribe((status) => this.istopmenuclicked = status)
-    this.activatedroute.queryParamMap.subscribe(params => {
-      this.queryOID = params.get('oid');
-      this.queryPID = params.get('pid');
-    });
-    this.oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
-    this.getupdatedQuickStartMenu();
-  }
+  this.headingtextarray = ["Getting started", "Subscription", "Data Subjects Rights Management"]
+      this.windowWidth = window.innerWidth;
+      //this.userService.onClickTopmenu.subscribe((status) => this.istopmenuclicked = status)
+      this.activatedroute.queryParamMap.subscribe(params => {
+        this.queryOID = params.get('oid');
+        this.queryPID = params.get('pid');
+      });
+      this.oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
+      if (this.quickStartMenuList.length == 0 || this.quickStartMenuList === null) {
+        this.getLoggedInUserDetails();
+      //  this.getupdatedQuickStartMenu();
+      }
+    }
+  
 
   expanddiv(){
     this.isOpen = !this.isOpen
@@ -304,9 +311,9 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   }
 
   getupdatedQuickStartMenu(){
-    
+    this.skeletonLoading = false;
     let updatedqsMenu = this.quickmenuService.getQuerymenulist();
-    return this.quickStartMenu = [...updatedqsMenu];
+    return this.quickStartMenuList = [...updatedqsMenu];
     
   }
 
@@ -317,7 +324,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     }
     if (currentobj.linkid !== 1 && currentobj.linkid !== 17) { //temporary commented
 
-      if (a.length !== 0) {
+      if (a !== undefined && a.length !== 0) {
         const idx = a.findIndex((t) => t.index == objindex);
         const linkIndex = a[idx].quicklinks.findIndex((t) => t.linkid == currentobj.linkid);
         if (linkIndex > 0) {
@@ -363,8 +370,8 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     
     let obj;
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => obj = data);
-    let updatedqsMenu = this.quickmenuService.getQuerymenulist();
-    return this.quickStartMenu = [...updatedqsMenu];
+    // let updatedqsMenu = this.quickmenuService.getQuerymenulist();
+    // return this.quickStartMenu = [...updatedqsMenu];
   }
 
   ngAfterViewChecked(){
@@ -377,10 +384,37 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     this.cdRef.detectChanges();
   }
 
+  getLoggedInUserDetails() {
+    this.authService.currentUser.subscribe(async x => {
+      if(x !== null){
+        const data = await this.userService.getLoggedInUserDetails(this.constructor.name, moduleName.headerModule).toPromise();
+          if(data){
+            this.currentloggedInUser = data;
+            this.quickStartMenuList = this.currentloggedInUser.response.quickstart_visited_links;
+            if(this.quickStartMenuList !== undefined && this.quickStartMenuList !== null){
+              this.quickmenuService.setQuerymenulist(this.quickStartMenuList);
+            }else{
+              let updatedqsMenu = this.quickmenuService.getQuerymenulist();
+              return this.quickStartMenuList = [...updatedqsMenu];
+            }
+          }
+      }else{
+        return false;
+      }
+    });
+  }
+
+  trackById(index, datalist) {
+    return datalist.indexid;
+  }
+
   ngOnChanges(changes: SimpleChanges) {
     this.cdRef.detectChanges();
-    let updatedqsMenu = this.quickmenuService.getQuerymenulist();
-     this.quickStartMenuList = [...updatedqsMenu];
+    if (this.checkchanges) {
+      this.getLoggedInUserDetails();
+    }
+    // let updatedqsMenu = this.quickmenuService.getQuerymenulist();
+    //  this.quickStartMenuList = [...updatedqsMenu];
   }
 
 }
