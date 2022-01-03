@@ -243,7 +243,7 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onCheckEnterpriseSubscription(){
     this.enterpriseData = this.dataService.getCurrentPropertyPlanDetails();
-    if(this.enterpriseData.response.plan_details.cookieConsent.plan_name == 'Enterprise'){
+    if(this.enterpriseData.response.plan_details.cookieConsent.product_name == 'Cookie Consent Management - Enterprise'){
       this.show = true;
     }else{
       this.show = false;
