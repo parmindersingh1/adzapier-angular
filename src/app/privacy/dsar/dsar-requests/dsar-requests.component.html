@@ -12,6 +12,15 @@
         Data Subject Access Requests
     </span>
       <div class="datepickerwrapper col-sm-9 pr-0 mr-0 ml-auto">
+          <button (click)="onExportToCSV()" type="button" tooltip="Export DSAR records as a CSV file"
+            class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22 mr-2"
+            style="text-transform: none;font-size: 12px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-download mg-r-5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg> Export to CSV</button>
         <button (click)="onRefresh()" type="reset" class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22" style="text-transform: none;font-size: 12px;">
           <i class="fas fa-sync feather-16"></i> Refresh</button>
       <div class="col-sm-5 pr-0 pl-2 mr-2 d-flex row-reverse">
