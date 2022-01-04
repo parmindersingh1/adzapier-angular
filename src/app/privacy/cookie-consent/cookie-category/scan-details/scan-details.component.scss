@@ -14,6 +14,14 @@
   margin-left: 10px;
 }
 
+.flotingdiv{
+  position: fixed;
+  bottom: 0;
+  top: 84%;
+  right:0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 // .scan-details ::ng-deep .p-datatable .p-paginator-bottom {
 //   border-bottom: 0;
 //   display: flex;
