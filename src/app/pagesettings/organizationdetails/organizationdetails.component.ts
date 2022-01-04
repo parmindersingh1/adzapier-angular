@@ -31,6 +31,7 @@ export class OrganizationdetailsComponent implements OnInit {
   @ViewChild('propertyModal', { static: true }) propertyModal: TemplateRef<any>;
   @ViewChild('confirmTemplate') confirmModal: TemplateRef<any>;
   @ViewChild('deletePropertyAlert') deleteAlertModal: TemplateRef<any>;
+  @ViewChild('PingpropertyModal', { static: true }) PingpropertyModal: TemplateRef<any>;
   modalRef: BsModalRef;
   organisationPropertyForm: FormGroup;
   editOrganisationForm: FormGroup;
@@ -93,6 +94,7 @@ export class OrganizationdetailsComponent implements OnInit {
   confirmTeammember: any;
   selectedTeamMember: any;
   userList: any = [];
+  showpingpopup = true;
   noResult = false;
   private orgPlanDetails: any;
   orgLicensedPlanName;
@@ -428,20 +430,28 @@ export class OrganizationdetailsComponent implements OnInit {
 
   }
 
-  onSubmit() {
-    this.submitted = true;
+  cancelpingmodal(){
+    this.modalRef.hide();
+    if (!this.isEditProperty) {
+    this.organisationPropertyForm.reset();
+    this.organisationPropertyForm.patchValue({
+      protocol:this.protocol
+    })
+  }
+  }
 
-    if (this.organisationPropertyForm.invalid) {
-      return false;
-    } else {
+  onForceSubmit() {
+    this.submitted = true;
       if (!this.isEditProperty) {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
           website: this.organisationPropertyForm.value.protocol + this.organisationPropertyForm.value.website,
-          logo_url: this.organisationPropertyForm.value.logourl
+          logo_url: this.organisationPropertyForm.value.logourl,
+          force_save:"true"
         };
         this.orgService.addProperties(this.organizationID, reqObj).subscribe((result) => {
           if (result) {
+            this.modalRef.hide();
             this.alertMsg = 'New property has been added!';
             this.isOpen = true;
             this.alertType = 'success';
@@ -464,7 +474,90 @@ export class OrganizationdetailsComponent implements OnInit {
         const reqObj = {
           name: this.organisationPropertyForm.value.propertyname,
           website: this.organisationPropertyForm.value.protocol + this.organisationPropertyForm.value.website,
-          logo_url: this.organisationPropertyForm.value.logourl
+          logo_url: this.organisationPropertyForm.value.logourl,
+          force_save:"true"
+        };
+        this.orgService.editProperties(this.myContext.oid, this.myContext.pid, reqObj).subscribe((res) => {
+          if (res) {
+            this.modalRef.hide();
+            this.alertMsg = 'Property has been updated!';
+            this.isOpen = true;
+            this.alertType = 'success';
+            this.getPropertyList(res.response.oid);
+            this.orgService.isPropertyUpdated.next(true);
+            if (res.response.id === this.currrentManagedPropID) {
+              this.orgService.changeCurrentSelectedProperty(res);
+              res['user_id'] = this.userID;
+              res['organization_name'] = this.organizationName;
+              this.orgService.setCurrentOrgWithProperty(res);
+              const orgDetails = this.orgService.getCurrentOrgWithProperty();
+              this.orgService.isPropertyUpdated.next(true);
+              this.orgService.updateEditedProperty(res);
+            }
+          }
+          // this.orgService.isOrganizationUpdated.next(true);
+          this.organisationPropertyForm.reset();
+          this.modalService.dismissAll();
+          this.submitted = false;
+          this.checkForQsTooltip();
+        }, (error) => {
+            this.alertMsg = error;
+            this.isOpen = true;
+            this.alertType = 'danger';
+            this.onCancelClickProperty();
+          
+        });
+        this.checkForQsTooltip();
+      }
+
+  }
+
+  onSubmit() {
+    this.submitted = true;
+    if (this.organisationPropertyForm.invalid) {
+      return false;
+    } else {
+      if (!this.isEditProperty) {
+        const reqObj = {
+          name: this.organisationPropertyForm.value.propertyname,
+          website: this.organisationPropertyForm.value.protocol + this.organisationPropertyForm.value.website,
+          logo_url: this.organisationPropertyForm.value.logourl,
+          force_save:"false"
+        };
+        this.orgService.addProperties(this.organizationID, reqObj).subscribe((result) => {
+          if (result) {
+            this.alertMsg = 'New property has been added!';
+            this.isOpen = true;
+            this.alertType = 'success';
+            this.organisationPropertyForm.reset();
+            this.getPropertyList(this.organizationID);
+            this.orgService.isOrganizationUpdated.next(true);
+            this.organisationPropertyForm.patchValue({
+              protocol:this.protocol
+            })
+          }
+        }, (error) => {
+          if(error.error.Error){
+          this.openModalsecond(this.PingpropertyModal);
+          this.alertMsg = error.error?.Error;
+          this.isOpen = true;
+          this.alertType = 'danger';
+          }else{
+            this.alertMsg = error;
+            this.isOpen = true;
+            this.alertType = 'danger';
+          }
+        });
+        this.submitted = false;
+        // this.organisationPropertyForm.reset();
+        this.modalService.dismissAll('Data Saved!');
+        this.checkForQsTooltip();
+      } else {
+        const reqObj = {
+          name: this.organisationPropertyForm.value.propertyname,
+          website: this.organisationPropertyForm.value.protocol + this.organisationPropertyForm.value.website,
+          logo_url: this.organisationPropertyForm.value.logourl,
+          force_save:"false"
         };
         this.orgService.editProperties(this.myContext.oid, this.myContext.pid, reqObj).subscribe((res) => {
           if (res) {
@@ -489,10 +582,18 @@ export class OrganizationdetailsComponent implements OnInit {
           this.submitted = false;
           this.checkForQsTooltip();
         }, (error) => {
-          this.alertMsg = error;
+          if(error.error.Error){
+          this.openModalsecond(this.PingpropertyModal);
+          this.alertMsg = error.error?.Error;
           this.isOpen = true;
           this.alertType = 'danger';
-          this.onCancelClickProperty();
+          }else{
+            this.alertMsg = error;
+            this.isOpen = true;
+            this.alertType = 'danger';
+            this.onCancelClickProperty();
+          }
+          
         });
         this.checkForQsTooltip();
       }
@@ -852,6 +953,10 @@ export class OrganizationdetailsComponent implements OnInit {
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.bsmodalService.show(template, { class: '' });
+  }
+
+  openModalsecond(template: TemplateRef<any>) {
+    this.modalRef = this.bsmodalService.show(template, { class: 'modal-lg' });
   }
 
   showControlContent(): string {
