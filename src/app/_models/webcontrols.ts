@@ -164,6 +164,7 @@ loadWebControls() {
                 indexCount: 'footer_text_Index',
                 footerText: `<p>Adzapier <br/> 123 Main Street Capital City, ST, USA 10001 +1-800-000-0000 emailprivacy@generitech.com</p>`,
                 footerTextColor: '#333333',
+                footerBackgroundColor: '#f0b323',
                 footerFontSize: '13',
                 preferControlOrder: ''
             }

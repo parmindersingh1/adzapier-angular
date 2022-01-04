@@ -78,7 +78,16 @@ export class ErrorInterceptor implements HttpInterceptor {
                 const error = err.error.error || err.statusText;
                 //this.dataService.openUnAuthModal.next({isTrue: true, error: err})
                 return throwError(error);
-              }else{
+              } else if(err.url.indexOf('/api/v1/ccpa/form') !== -1){
+                const error = err.error.error || err.statusText;
+                //this.dataService.openUnAuthModal.next({isTrue: true, error: err})
+                const oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
+                if(oIDPIDFromURL !== undefined){
+                  this.router.navigate(['home/welcome'],{ queryParams: { oid: oIDPIDFromURL[0], pid: oIDPIDFromURL[1] }});
+                }else{
+                  return throwError(error);
+                }
+              } else{
                 const error = err.error.error || err.statusText;
                 const oIDPIDFromURL = findPropertyIDFromUrl(this.location.path());
                 if(oIDPIDFromURL !== undefined){
@@ -117,6 +126,9 @@ export class ErrorInterceptor implements HttpInterceptor {
                 const error = err.error.error || err.statusText;
                 return throwError(error);
               } else if(err.url.indexOf('/api/v1/ccpa/data') !== -1){
+                const error = err.error.error || err.statusText;
+                return throwError(error);
+              } else if(err.url.indexOf('/api/v1/billing/list/subscription') !== -1){
                 const error = err.error.error || err.statusText;
                 return throwError(error);
               } else{
