@@ -17,8 +17,6 @@ export class InternalerrorComponent implements OnInit {
  .subscribe(params => {
    this.queryOID = params.get('oid');
    this.queryPID = params.get('pid');
-   console.log(this.queryOID,'queryOID..');
-   console.log(this.queryPID,'queryPID..');
 
    
 //   this.updatedUrlWithPID = params.get('pid');  

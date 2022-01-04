@@ -465,6 +465,19 @@
                       <div class="col-sm-12 mb-1">
                         <div class="formgroup d-flex justify-content">
                           <div class="col-md-5 p-0">
+                            <label class="col-form-label-sm tx-11 tx-medium tx-spacing-1">Footer Color</label>
+                          </div>
+                          <div class="col-md-6 d-flex color-controlwrapper">
+                            <input type="color" [(ngModel)]="footerBackgroundColor" (ngModelChange)="onColorSelection($event,'footerBackgroundColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
+                            <input type="text" class="form-control form-control-sm ml-1" (ngModelChange)="onColorSelection($event,'footerBackgroundColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
+                                   [(ngModel)]="footerBackgroundColor" />
+                          </div>
+
+                        </div>
+                      </div>
+                      <div class="col-sm-12 mb-1">
+                        <div class="formgroup d-flex justify-content">
+                          <div class="col-md-5 p-0">
                             <label class="col-form-label-sm tx-11 tx-medium tx-spacing-1">Footer Text Color</label>
                           </div>
                           <div class="col-md-6 d-flex color-controlwrapper">
@@ -841,7 +854,7 @@
                   </div>
 
                 </form>
-                <div class="quilleditor-wrapper py-2 border-top">
+                <div class="quilleditor-wrapper p-0 border-top">
                   <div class="quilleditor" [ngStyle]="footerStyle()"
                        [innerHTML]="editorDataFooter?(editorDataFooter | safe: 'html'):footerText">
                   </div>

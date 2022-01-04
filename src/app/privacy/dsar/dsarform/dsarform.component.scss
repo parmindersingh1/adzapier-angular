@@ -1346,6 +1346,10 @@ padding: 3px 5px 2px 5px;
   width: 40% !important;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  color: inherit;
+}
+
 @media(min-width:767px) and (max-width:1024px) {
 
 .draftspan {
