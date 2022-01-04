@@ -79,7 +79,7 @@
             <label class="text-capitalize"><span *ngIf="credForm[systemName][i].required" class="text-danger">*</span> {{mySqlForm.value.credential[i].key.replaceAll('_', ' ')}}</label>
             <input type="hidden" formControlName="key" [value]="credential.key" />
             <select formControlName="secret_1" class="form-control" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" >
-              <option *ngFor="let optionText of credForm[systemName][i].options" [value]="optionText">{{optionText}}</option>
+              <option *ngFor="let optionText of credForm[systemName][i].options; let j = index" [value]="optionText">{{optionText}}</option>
             </select>
             <!--              <input type="number" formControlName="secret_1" class="form-control" [ngClass]="{ 'is-invalid': submitted && credential.get('secret_1').errors }" />-->
             <div *ngIf="submitted && credential.get('secret_1').errors" class="invalid-feedback">

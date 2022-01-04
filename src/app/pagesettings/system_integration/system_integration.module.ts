@@ -12,6 +12,7 @@ import {HttpQueryBuilderComponent} from '../../privacy/dsar/dsarform/dsar-system
 import {ButtonModule} from 'primeng/button';
 import {RippleModule} from 'primeng/ripple';
 import { AuthGuard } from 'src/app/_helpers';
+import { UpdateRestApiComponent } from './update-rest-api/update-rest-api.component';
 
 
 const router: Routes = [
@@ -19,7 +20,7 @@ const router: Routes = [
 ];
 
 @NgModule({
-    declarations: [SystemIntegrationComponent, MysqlFormComponent, ConnectionFormComponent, UpdateConnectionFormComponent, HttpQueryBuilderComponent],
+    declarations: [SystemIntegrationComponent, MysqlFormComponent, ConnectionFormComponent, UpdateConnectionFormComponent, HttpQueryBuilderComponent, UpdateRestApiComponent],
   exports: [
     MysqlFormComponent,
     HttpQueryBuilderComponent

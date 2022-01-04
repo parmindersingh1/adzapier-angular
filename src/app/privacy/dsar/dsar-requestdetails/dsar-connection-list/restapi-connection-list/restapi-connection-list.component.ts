@@ -12,7 +12,6 @@ export class RestapiConnectionListComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('connectionDetails', this.connectionDetails);
   }
   goBack(){
     this.currentStep.emit(true);

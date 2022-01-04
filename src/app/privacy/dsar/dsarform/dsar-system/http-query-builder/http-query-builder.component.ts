@@ -34,6 +34,7 @@ export class HttpQueryBuilderComponent implements OnInit,  AfterViewInit {
   orgID = null;
   pageStep = 1;
   updateData = [];
+  isUpdate = false;
   constructor(private formBuilder: FormBuilder,
               private cd: ChangeDetectorRef,
               private loading: NgxUiLoaderService,
@@ -45,7 +46,7 @@ export class HttpQueryBuilderComponent implements OnInit,  AfterViewInit {
       this.orgID =  params.oid;
     });
     this.httpQueryBuilderForm = this.formBuilder.group({
-      path: ['', Validators.required],
+      path: [''],
       queryParams: this.formBuilder.array([])
     });
     this.onGetSavedData();
@@ -57,7 +58,7 @@ export class HttpQueryBuilderComponent implements OnInit,  AfterViewInit {
       if (res.status === 200) {
         if (res.response.length > 0) {
           this.updateData = res.response;
-          // this.isUpdate = true;
+          this.isUpdate = true;
           this.fillSavedData();
         } else {
           this.addSkills();
@@ -81,14 +82,15 @@ export class HttpQueryBuilderComponent implements OnInit,  AfterViewInit {
           path: obj.value_1
         });
       } else {
-        this.skills.push(this.fillSaved(obj.field, obj.value_1));
+        this.skills.push(this.fillSaved(obj.field, obj.value_1, obj.value_2));
       }
     }
   }
-  fillSaved(field, value_1): FormGroup {
+  fillSaved(field, value_1, value_2): FormGroup {
     return this.formBuilder.group({
-      field: [field, Validators.required],
+      field: ['queryParam'],
       value_1: [value_1, Validators.required],
+      value_2: [value_2, Validators.required],
       system_name: [this.systemName]
     });
   }
@@ -104,8 +106,9 @@ export class HttpQueryBuilderComponent implements OnInit,  AfterViewInit {
 
   newSkill(): FormGroup {
     return this.formBuilder.group({
-      field: ['', Validators.required],
+      field: ['queryParam'],
       value_1: ['', Validators.required],
+      value_2: ['', Validators.required],
       system_name: [this.systemName]
     });
   }
@@ -131,6 +134,10 @@ export class HttpQueryBuilderComponent implements OnInit,  AfterViewInit {
     if (this.httpQueryBuilderForm.invalid) {
       return;
     }
+    if (this.isUpdate) {
+      this.onUpdate();
+      return false;
+    }
     const payload = [...this.httpQueryBuilderForm.value.queryParams];
     payload.push({
       field: 'path',
@@ -153,6 +160,30 @@ export class HttpQueryBuilderComponent implements OnInit,  AfterViewInit {
       this.alertType = 'danger';
     })
   }
+  onUpdate() {
+    const payload = [...this.httpQueryBuilderForm.value.queryParams];
+    payload.push({
+      field: 'path',
+      value_1: this.httpQueryBuilderForm.value.path,
+      system_name: this.systemName
+    });
+    this.loading.start();
+    this.systemIntegrationService.updateQueryBuilder(this.constructor.name, moduleName.systemIntegrationModule, payload, this.orgID, this.connectionId, this.formID).subscribe((res: any) => {
+      this.loading.stop();
+      if (res.status === 201) {
+        this.isOpen = true;
+        this.alertMsg = 'Record Update';
+        this.alertType = 'info';
+        this.pageStep = 2;
+      }
+    }, error => {
+      this.loading.stop();
+      this.isOpen = true;
+      this.alertMsg = error;
+      this.alertType = 'danger';
+    });
+  }
+
   onConnectionListPage() {
     this.backHome.emit(true)
   }
