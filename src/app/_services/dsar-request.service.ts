@@ -13,20 +13,28 @@ export class DsarRequestService {
   subTasklist$: Observable<any[]>;
   constructor(private http: HttpClient, private lokiService: LokiService) { }
 
-  getDsarRequestList(componentName, moduleName, orgId, propsID, pagelimit, orderBy?, dateRange?): Observable<any> {
+  getDsarRequestList(componentName, moduleName, orgId, propsID, pagelimit, orderBy?, dateRange?,isExport?): Observable<any> {
     let path = '/ccpa/data/' + orgId + '/' + propsID + pagelimit;
-    if (orderBy === undefined) {
+    if (orderBy === undefined && isExport == undefined) {
       return this.http.get<any>(environment.apiUrl + path)
         .pipe(shareReplay(1), catchError(error => {
           this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getDsarRequestList, componentName, moduleName, path);
           return throwError(error);
         }));
-    } else if(dateRange !== undefined){
+    } else if(dateRange !== "" && dateRange !== undefined && isExport == undefined){
       return this.http.get<any>(environment.apiUrl + path + dateRange)
       .pipe(shareReplay(1), catchError(error => {
         this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getDsarRequestList, componentName, moduleName, path);
         return throwError(error);
       }));
+    } else if(isExport !== undefined){
+      if(isExport.includes("true")){
+      return this.http.get(environment.apiUrl + path + dateRange + isExport,{ responseType: 'blob'})
+        .pipe(shareReplay(1), catchError(error => {
+          this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.getDsarRequestList, componentName, moduleName, path);
+          return throwError(error);
+        }));
+      }
     } else {
       path = '/ccpa/data/' + orgId + '/' + propsID + pagelimit + orderBy;
       return this.http.get<any>(environment.apiUrl + path)
