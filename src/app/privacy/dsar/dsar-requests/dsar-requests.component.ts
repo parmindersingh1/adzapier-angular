@@ -84,6 +84,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   bsConfig: Partial<BsDatepickerConfig>;
   dateCustomClasses: DatepickerDateCustomClasses[];
   searchbydaterange: any = '';
+  searchparams:any;
   date1: Date = new Date('yyyy-mm-dd');
   ranges: any = [
     {
@@ -414,17 +415,17 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   private searchFilter(): void {
-    let params = "";
+    this.searchparams = "";
     if(this.selectedDateRange !== undefined){
-    params = '?limit=' + this.eventRows + '&page=' + this.firstone + '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType + '&status=' + this.status + '&due_in=' + this.dueIn +  this.selectedDateRange;
+    this.searchparams = '?limit=' + this.eventRows + '&page=' + this.firstone + '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType + '&status=' + this.status + '&due_in=' + this.dueIn +  this.selectedDateRange;
     }else{
-      params = '?limit=' + this.eventRows + '&page=' + this.firstone + '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType + '&status=' + this.status + '&due_in=' + this.dueIn;
+      this.searchparams = '?limit=' + this.eventRows + '&page=' + this.firstone + '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType + '&status=' + this.status + '&due_in=' + this.dueIn;
     }
     this.isloading = true;
      //const sortOrder = this.currentSortorder !== undefined && this.currentSortorder !== ? this.currentSortorder : 'asc'
      const orderBy = '&order_by_date=' + 'asc';
     this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
-    this.currrentManagedPropID, params, orderBy)
+    this.currrentManagedPropID, this.searchparams, orderBy)
       .subscribe((data) => {
         this.isloading = false;
         const key = 'response';
@@ -831,6 +832,27 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
+  onExportToCSV(){
+    const pagelimit = this.searchparams !== undefined ? this.searchparams : '?limit=' + 5000 + '&page=' + 1;
+    const sortOrder =  this.currentSortorder !== undefined ? this.currentSortorder : 'asc';
+    const orderBy = '&order_by_date=' + sortOrder; //+ this.selectedDateRange;
+    const isExport = '&export_to_csv=' + true;
+    const dateRange = this.selectedDateRange !== undefined ? this.selectedDateRange : "";
+    this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
+    this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
+    this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
+      this.currrentManagedPropID, pagelimit, orderBy,dateRange, isExport)
+      .subscribe((data) => { 
+          const fileName = 'DSAR-Requests' + '.csv';
+          this.downLoadFile(data, 'text/csv', fileName );
+      }, error => {
+        this.loading.stop();
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      });
+  }
+
   clearDatePicker(){
     this.issearchfilteractive = false;
     this.selectedDateRange = "";
@@ -840,5 +862,14 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     }else{
       this.searchFilter();
     }
+  }
+
+  downLoadFile(data: any, type: string, fileName) {
+    const blob = new Blob([data], { type});
+    const url = window.URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.download = fileName;
+    anchor.href = url;
+    anchor.click();
   }
 }
