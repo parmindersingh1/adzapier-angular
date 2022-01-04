@@ -283,14 +283,19 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     return true;
   }
 
+  onScanBehindLoginScan(){
+    this.modalRef.hide();
+    this.onRescanCookie();
+  }
+
   onRescanCookie() {
     if (!this.onCheckSubscription()) {
       return false;
     }
+    this.isOpen = false;
     this.isScanning = true;
     this.service.cookieScanning(this.constructor.name, moduleName.cookieCategoryModule).subscribe((res: any) => {
       // this.onGetScanningStatus();
-      this.modalRef.hide();
       this.isScanning = false;
       this.lastScan.scanner_status = 'inQueue';
       this.onGetSubscriptionData();
@@ -301,10 +306,17 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.alertType = 'success';
       this.authService.notificationUpdated.next(true);
     }, error => {
+      if(error.Error){
       this.isScanning = false;
       this.isOpen = true;
       this.alertMsg = error.Error;
       this.alertType = 'danger';
+      }else{
+        this.isScanning = false;
+        this.isOpen = true;
+        this.alertMsg = error;
+        this.alertType = 'danger';
+      }
     });
   }
 

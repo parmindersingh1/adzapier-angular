@@ -378,7 +378,7 @@
     <h6 class="ml-2">Your information has been saved..</h6>
   </div>
     <div style="text-align: center;align-items: center;justify-content: center;">
-      <button type="button" (click)="onRescanCookie()" class="btn btn-success">Scan Now</button>
+      <button type="button" (click)="onScanBehindLoginScan()" class="btn btn-success">Scan Now</button>
       <button type="button" (click)="hidediv()" class="btn btn-secondary ml-4">Scan Later</button>
     </div>
   </div>
@@ -462,7 +462,7 @@
           <div class="modal-footer">
             <button type="button" (click)="onCancelClick()" class="btn btn-white" data-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-primary">Update</button>
-            <button type="button" *ngIf="!isScanning" (click)="onRescanCookie()" class="btn btn-success pull-left">Start Scan</button>
+            <button type="button" *ngIf="!isScanning" (click)="onScanBehindLoginScan()" class="btn btn-success pull-left">Start Scan</button>
 
           </div>
         </div>
