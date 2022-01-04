@@ -33,7 +33,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   cols: any[];
   selectedCols: any[];
   @ViewChild('editor', { static: true }) editor;
-  @ViewChild("ptable") pTable: Table;
+  @ViewChild("ptable",{ static: false }) pTable: Table;
   submitted: boolean;
   propertyname: any;
   reloadRequestList = [];
@@ -84,6 +84,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   bsConfig: Partial<BsDatepickerConfig>;
   dateCustomClasses: DatepickerDateCustomClasses[];
   searchbydaterange: any = '';
+  searchparams:any;
   date1: Date = new Date('yyyy-mm-dd');
   ranges: any = [
     {
@@ -219,7 +220,6 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   loadrequestsListLazy(event: LazyLoadEvent) {
-    this.lazyEvent = event;
     if (!this.issearchfilteractive) {
       this.isloading = true;
       this.eventRows = event.rows;
@@ -227,12 +227,14 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
 
         if (event.first === 0) {
           this.firstone = 1;
+          this.first = 0;
+          this.lazyEvent = event;
         } else {
           this.firstone = (event.first / event.rows) + 1;
         }
         const pagelimit = '?limit=' + this.eventRows + '&page=' + this.firstone;
         const sortOrder = event.sortOrder === -1 ? 'asc' : 'desc';
-        // const orderBy = '&orderby=' + event.sortField + ' ' + sortOrder;
+        this.currentSortorder = sortOrder;
         const orderBy = '&order_by_date=' + sortOrder;
         this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
         this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
@@ -269,17 +271,74 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           });
       }
     } else {//in case of filter applied subject/request type/status/duein
-     // if (this.searchbydaterange !== '' || this.searchbydaterange !== null) {
         if (event.first === 0) {
           this.firstone = 1;
         } else {
           this.firstone = (event.first / event.rows) + 1;
         }
-        if (this.firstone > 1 && event.first !== 0) {
+      if (this.firstone > 1 && event.first !== 0) {
+        this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+        if (this.currentSortorder === "desc") {
+          this.storeSearchList.sort((a, b) => {
+            let dateA: any = new Date(a.created_at);
+            let dateB: any = new Date(b.created_at);
+            return dateA - dateB;
+          });
+        } else {
+          this.storeSearchList.sort((a, b) => {
+            let dateA: any = new Date(a.created_at);
+            let dateB: any = new Date(b.created_at);
+            return dateB - dateA;
+          });
+        }
+        if (this.storeSearchList.length >= 10) {
           this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
         } else {
-          // this.requestsList = this.storeSearchList.slice(0, event.rows); //event.first
+          this.requestsList = this.storeSearchList;
+        }
+      } else {
+        if (!this.issearchfilteractive) {
           this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+          if (this.currentSortorder === "desc") {
+            this.storeSearchList.sort((a, b) => {
+              let dateA: any = new Date(a.created_at);
+              let dateB: any = new Date(b.created_at);
+              return dateB - dateA;
+            });
+          } else {
+            this.storeSearchList.sort((a, b) => {
+              let dateA: any = new Date(a.created_at);
+              let dateB: any = new Date(b.created_at);
+              return dateA - dateB;
+            });
+          }
+          // this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+          if (this.storeSearchList.length >= 10) {
+            this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+          } else {
+            this.requestsList = this.storeSearchList;
+          }
+        } else {
+          this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+          if (this.currentSortorder === "desc") {
+            this.storeSearchList.sort((a, b) => {
+              let dateA: any = new Date(a.created_at);
+              let dateB: any = new Date(b.created_at);
+              return dateA - dateB;
+            });
+          } else {
+            this.storeSearchList.sort((a, b) => {
+              let dateA: any = new Date(a.created_at);
+              let dateB: any = new Date(b.created_at);
+              return dateB - dateA;
+            });
+          }
+          if (this.storeSearchList.length >= 10) {
+            this.requestsList = this.storeSearchList.slice(event.first, (event.first + event.rows));
+          } else {
+            this.requestsList = this.storeSearchList;
+          }
+        }
         }
      // }
     }
@@ -347,40 +406,62 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       distinctUntilChanged(),
     ).subscribe((term: string) => {
       this.debouncedInputValue = term;
-      this.searchFilter();
+      if(this.debouncedInputValue || this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus || this.searchbydaterange !== ""){
+        this.searchFilter();
+      }else{
+        this.onRefreshDSARList();
+      }
     });
   }
 
   private searchFilter(): void {
-    let params;
+    this.searchparams = "";
     if(this.selectedDateRange !== undefined){
-    params = '?limit=' + this.eventRows + '&page=' + this.firstone +
-      '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
-      + '&status=' + this.status + '&due_in=' + this.dueIn + this.selectedDateRange;
+    this.searchparams = '?limit=' + this.eventRows + '&page=' + this.firstone + '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType + '&status=' + this.status + '&due_in=' + this.dueIn +  this.selectedDateRange;
     }else{
-      params = '?limit=' + this.eventRows + '&page=' + this.firstone +
-      '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType
-      + '&status=' + this.status + '&due_in=' + this.dueIn;
+      this.searchparams = '?limit=' + this.eventRows + '&page=' + this.firstone + '&name=' + this.inputValue + '&subject_type=' + this.subjectType + '&request_type=' + this.requestType + '&status=' + this.status + '&due_in=' + this.dueIn;
     }
     this.isloading = true;
-    this.dsarRequestService.getDsarRequestFilterList(this.currentManagedOrgID, this.currrentManagedPropID, params,
-      this.constructor.name, moduleName.dsarRequestModule)
-      .subscribe(res => {
+     //const sortOrder = this.currentSortorder !== undefined && this.currentSortorder !== ? this.currentSortorder : 'asc'
+     const orderBy = '&order_by_date=' + 'asc';
+    this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
+    this.currrentManagedPropID, this.searchparams, orderBy)
+      .subscribe((data) => {
         this.isloading = false;
-        this.issearchfilteractive = true;
         const key = 'response';
-        if (Object.values(res[key]).length > 0 && res[key] !== "No data found.") {
-          this.storeSearchList = Object.values(res[key]);
-          this.totalRecords = res['count'];
-          this.loadrequestsListLazy(this.lazyEvent);
-        }
-        else {
-          this.requestsList = [];
-          this.totalRecords = 0
+        if (Object.values(data[key]).length > 0 && data[key] !== "No data found." && Object.keys(data[key].length !== 0)) {
+          this.requestsList = Object.values(data[key]);
+          if(this.currentSortorder === "asc"){
+            this.requestsList.sort((a, b) => {
+              let dateA:any = new Date(a.created_at);
+              let dateB:any = new Date(b.created_at);
+              return dateA - dateB;
+            });
+          }else{
+            this.requestsList.sort((a, b) => {
+              let dateA:any = new Date(a.created_at);
+              let dateB:any = new Date(b.created_at);
+              return dateB - dateA;
+            });
+          }
+          this.storeSearchList = [...this.requestsList];
+          this.reloadRequestList = [...this.requestsList];
+          this.totalRecords = data.count;
+          this.issearchfilteractive = true;
+          if(data.count != 0){
+            this.loadrequestsListLazy(this.lazyEvent);
+            this.pTable.reset();
+          }
+        }else{
+          this.requestsList = Object.values(data[key]);
+          this.totalRecords = data.count;
+          if(data.count != 0){
+            this.loadrequestsListLazy(this.lazyEvent);
+            this.pTable.reset();
+          }
         }
       }, error => {
-        this.isloading = false;
-        this.issearchfilteractive = false;
+        this.loading.stop();
         this.alertMsg = error;
         this.isOpen = true;
         this.alertType = 'danger';
@@ -396,9 +477,10 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.requestType = "";
       this.issearchfilterForReq = false;
       this.issearchfilteractive = false;
-      if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
+      if(this.issearchfilterForSub || this.issearchfilterForStatus || this.searchbydaterange !== ""){
         this.searchFilter();
       }else{
+        this.issearchfilteractive = false;
         this.onRefreshDSARList();
       }
     }
@@ -413,7 +495,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.status = "";
       this.issearchfilterForStatus = false;
       this.issearchfilteractive = false;
-      if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
+      if(this.issearchfilterForSub || this.issearchfilterForReq || this.searchbydaterange !== ""){
         this.searchFilter();
       }else{
         this.onRefreshDSARList();
@@ -442,7 +524,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       this.subjectType = "";
       this.issearchfilteractive = false;
       this.issearchfilterForSub = false;
-      if(this.issearchfilterForSub || this.issearchfilterForReq || this.issearchfilterForStatus){
+      if(this.issearchfilterForReq || this.issearchfilterForStatus || this.searchbydaterange !== ""){
         this.searchFilter();
       }else{
         this.onRefreshDSARList();
@@ -553,13 +635,14 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.dpsubjectType = "";
     this.isSelected = true;
     this.selectedDateRange = "";
-    this.searchbydaterange = "";    
+    this.searchbydaterange = "";
+    this.clearDueInSearchfield();    
     this.onRefreshDSARList();
   }
 
   onRefreshDSARList(){
     const pagelimit = '?limit=' + 10 + '&page=' + 1;
-    const sortOrder = 'desc';
+    const sortOrder =  this.currentSortorder !== undefined ? this.currentSortorder : 'asc';
     const orderBy = '&order_by_date=' + sortOrder + this.selectedDateRange;
     this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
     this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
@@ -570,6 +653,19 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
         const key = 'response';
         if (Object.values(data[key]).length > 0 && data[key] !== "No data found.") {
           this.requestsList = Object.values(data[key]);
+          if(sortOrder === "asc"){
+            this.requestsList.sort((a, b) => {
+              let dateA:any = new Date(a.created_at);
+              let dateB:any = new Date(b.created_at);
+              return dateA - dateB;
+            });
+          }else{
+            this.requestsList.sort((a, b) => {
+              let dateA:any = new Date(a.created_at);
+              let dateB:any = new Date(b.created_at);
+              return dateB - dateA;
+            });
+          }
           this.reloadRequestList = [...this.requestsList];
         this.totalRecords = data.count;
         }else{
@@ -653,10 +749,24 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
           const key = 'response';
           if(data[key] !== "No data found."){
             this.requestsList = Object.values(data[key]);
+            if(this.currentSortorder === "asc"){
+              this.requestsList.sort((a, b) => {
+                let dateA:any = new Date(a.created_at);
+                let dateB:any = new Date(b.created_at);
+                return dateA - dateB;
+              });
+            }else{
+              this.requestsList.sort((a, b) => {
+                let dateA:any = new Date(a.created_at);
+                let dateB:any = new Date(b.created_at);
+                return dateB - dateA;
+              });
+            }
             this.storeSearchList = this.requestsList;
             this.rows = data[key].length;
             this.totalRecords = data.count;
-            this.loadrequestsListLazy(this.lazyEvent);
+            this.pTable.reset();
+           // this.loadrequestsListLazy(this.lazyEvent);
           }else{
             this.requestsList = [];
           }
@@ -722,10 +832,44 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     }
   }
 
+  onExportToCSV(){
+    const pagelimit = this.searchparams !== undefined ? this.searchparams : '?limit=' + 5000 + '&page=' + 1;
+    const sortOrder =  this.currentSortorder !== undefined ? this.currentSortorder : 'asc';
+    const orderBy = '&order_by_date=' + sortOrder; //+ this.selectedDateRange;
+    const isExport = '&export_to_csv=' + true;
+    const dateRange = this.selectedDateRange !== undefined ? this.selectedDateRange : "";
+    this.currentManagedOrgID == undefined ? this.currentManagedOrgID = this.queryOID : this.currentManagedOrgID;
+    this.currrentManagedPropID == undefined ? this.currrentManagedPropID = this.queryPID : this.currrentManagedPropID;
+    this.dsarRequestService.getDsarRequestList(this.constructor.name, moduleName.dsarRequestModule, this.currentManagedOrgID,
+      this.currrentManagedPropID, pagelimit, orderBy,dateRange, isExport)
+      .subscribe((data) => { 
+          const fileName = 'DSAR-Requests' + '.csv';
+          this.downLoadFile(data, 'text/csv', fileName );
+      }, error => {
+        this.loading.stop();
+        this.alertMsg = error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      });
+  }
+
   clearDatePicker(){
     this.issearchfilteractive = false;
     this.selectedDateRange = "";
-    this.searchbydaterange = "";    
+    this.searchbydaterange = "";
+    if(this.inputValue == "" && this.subjectType == "" && this.requestType == "" && this.status == ""){
     this.onRefreshDSARList();
+    }else{
+      this.searchFilter();
+    }
+  }
+
+  downLoadFile(data: any, type: string, fileName) {
+    const blob = new Blob([data], { type});
+    const url = window.URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.download = fileName;
+    anchor.href = url;
+    anchor.click();
   }
 }

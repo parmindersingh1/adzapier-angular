@@ -153,7 +153,8 @@
     </button>
   </div>
   <div class="modal-body">
-      <app-update-connection-form (refreshConnectionList)="onRefreshList()" (close)="modalRef.hide()" [updateConnectionData]="updateConnectionData" [systemName]="updateSystemName" ></app-update-connection-form>
+      <app-update-connection-form *ngIf="updateSystemName !== 'http'"  (refreshConnectionList)="onRefreshList()" (close)="modalRef.hide()" [updateConnectionData]="updateConnectionData" [systemName]="updateSystemName" ></app-update-connection-form>
+      <app-update-rest-api  *ngIf="updateSystemName === 'http'"  (refreshConnectionList)="onRefreshList()" (close)="modalRef.hide()" [updateConnectionData]="updateConnectionData" [systemName]="updateSystemName" ></app-update-rest-api>
   </div>
 </ng-template>
 

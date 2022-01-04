@@ -129,6 +129,42 @@ export class CookieCategoryService {
   }
 
   //
+
+  scanbehindLogin(componentName, moduleName , payload ): Observable<any> {
+    const path = apiConstant.SCAN_BEHIND_LOGIN.replace(':propid',this.currrentManagedPropID);
+    return this.http.post(environment.apiUrl + path, payload).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  scanbehindLoginRecord(componentName, moduleName ): Observable<any> {
+    const path = apiConstant.SCAN_BEHIND_LOGIN.replace(':propid',this.currrentManagedPropID);
+    return this.http.get(environment.apiUrl + path).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  scanbehindLoginUpdate(componentName, moduleName , payload ): Observable<any> {
+    const path = apiConstant.SCAN_BEHIND_LOGIN_UPDATE.replace(':propid',this.currrentManagedPropID);
+    return this.http.put(environment.apiUrl + path, payload).pipe(map(res => res),
+      catchError(error => {
+        this.onSendLogs(LokiStatusType.ERROR, error, LokiFunctionality.cookieCategory, componentName, moduleName, path);
+        return throwError(error);
+      }),
+    );
+  }
+
+  
+
+
+
+  //
   getCategoriesList(componentName, moduleName): Observable<any> {
     const path = apiConstant.COOKIE_CATEGORY;
     return this.http.get(environment.apiUrl + path).pipe(map(res => res),
