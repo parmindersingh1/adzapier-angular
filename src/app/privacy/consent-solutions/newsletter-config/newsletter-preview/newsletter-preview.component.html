@@ -1,0 +1,47 @@
+<div class="row" [ngStyle]="{
+float: ConfigForm.LayoutType === 'bottom-right' || ConfigForm.LayoutType === 'top-right' ? 'right' : null
+}"
+[ngClass]="{'right-bottom' : ConfigForm.LayoutType === 'bottom-right',
+  'left-bottom': ConfigForm.LayoutType === 'bottom-left'
+}"
+>
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header text-center" [ngStyle]="{background: ConfigForm.HeaderBackgroundColor, color: ConfigForm.HeaderTextColor}">
+        <i [ngStyle]="{color: ConfigForm.HeaderTextColor}" class="fas fa-times tx-20 float-right"></i>
+
+        <img [src]="customerBrandLogo" height="45" class="img-fluid logo-img" />
+        <h2 [ngStyle]="{color: ConfigForm.HeaderTextColor}"> {{ConfigForm.Title}}</h2>
+        <p>{{ConfigForm.Description}}</p>
+      </div>
+      <div class="card-body" [ngStyle]="{background: ConfigForm.BodyBackgroundColor, color: ConfigForm.BodyTextColor, borderTop: '3px solid ' + ConfigForm.BorderColor}">
+        <div class="row">
+          <ng-container *ngFor="let form of ConfigForm.FormInputs">
+            <div *ngIf="form.key !== 'privacy_Policy' && form.display" class="form-group mb-1 col-md-6">
+              <label for="inputsm" class="tx-12 text-capitalize">{{form.key.replaceAll('_', ' ')}}</label>
+              <input class="form-control input-sm" id="inputsm" type="text">
+            </div>
+
+
+            <div  *ngIf="form.key === 'privacy_Policy' && form.display" class="checkbox col-md-12">
+              <label class="tx-12"><input type="checkbox" class="pr-3"> I  agree to the Terms and Conditions & Privacy Policy</label>
+            </div>
+
+            <div *ngIf="form.key === 'email' && (ConfigForm.FormInputs.length === 1 || ConfigForm.FormInputs.length === 2)" class="form-group mb-1 col-md-12">
+              <label for="inputsm" class="tx-12 text-capitalize">{{form.key.replaceAll('_', ' ')}}</label>
+              <input class="form-control input-sm" id="inputsm" type="text">
+            </div>
+          </ng-container>
+          <div class="col-md-12 text-center">
+            <button type="button" style="border: none" [ngStyle]="{background: ConfigForm.SubscribeButtonBackgroundColor, color: ConfigForm.SubscribeButtonTextColor}" class="btn btn-sm pl-5 pr-5 btn-primary">
+              {{ConfigForm.SubscribeButtonText}}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

@@ -99,7 +99,9 @@ export const apiConstant = {
 
   //Cart
   ADDTOCART : '/cart',
-  UPDATECART : '/cart/update'
+  UPDATECART : '/cart/update',
+  // NewsLetter
+  NEWS_LETTER_CONFIG: '/newsletter/newsletter-configuration/:oid/:pid',
 };
 
 // {
