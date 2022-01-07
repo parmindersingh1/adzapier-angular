@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {
   LanguageListNewsletter,
   newsLetterContent, NewsLetterDarkTheme,
@@ -11,6 +11,7 @@ import {moduleName} from '../../../_constant/module-name.constant';
 import {NgxUiLoaderService} from 'ngx-ui-loader';
 import {NewsletterServiceService} from '../../../_services/newsletter-service.service';
 import {debounceTime, map} from 'rxjs/operators';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-newsletter-config',
@@ -28,6 +29,7 @@ export class NewsletterConfigComponent implements OnInit {
     code: 'enUS',
     countryFlag: 'us',
   }];
+  modalRef?: BsModalRef;
   customLang = [];
   colorPicker = {...NewsLetterLightTheme};
   themeType = 'light';
@@ -39,6 +41,7 @@ export class NewsletterConfigComponent implements OnInit {
     error: false,
     msg: ''
   };
+  @ViewChild('publish', {static: true}) publishModal: ElementRef;
   displayFrequency = NewsLetterDisplayFrequency;
   showInput = 0;
   submitted = false;
@@ -49,7 +52,14 @@ export class NewsletterConfigComponent implements OnInit {
   isOpen = false;
   alertType: any;
   customLanguageConfig = {...newsLetterContent};
+
+  //newsletter
+  scriptUrl: any;
+  addScript = `<script type="application/javascript" src="`;
+  closeScript = `"></script>`;
+  isCopied = false;
   constructor(   private formBuilder: FormBuilder,
+                 private modalService: BsModalService,
                  private cd: ChangeDetectorRef,
                  private NewsLetterService: NewsletterServiceService,
                  private loading: NgxUiLoaderService
@@ -367,7 +377,11 @@ export class NewsletterConfigComponent implements OnInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         this.publishing = false;
+        this.scriptUrl = res.JSPath;
         this.onGetNewsLetterConfiguration();
+        if (this.publishType === 'publish') {
+          this.openModal(this.publishModal);
+        }
       }, error => {
         this.isOpen = true;
         this.alertMsg = error;
@@ -375,6 +389,11 @@ export class NewsletterConfigComponent implements OnInit {
         this.loading.stop();
         this.publishing = false;
       });
+  }
+  openModal(template) {
+    this.modalRef = this.modalService.show(template, {class: 'modal-lg setup-modal ',
+      animated: false, keyboard: false, ignoreBackdropClick: true
+    });
   }
 
   onUpdateForm() {
@@ -394,7 +413,11 @@ export class NewsletterConfigComponent implements OnInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         this.publishing = false;
+        this.scriptUrl = res.JSPath;
         this.onGetNewsLetterConfiguration();
+        if (this.publishType === 'publish') {
+          this.openModal(this.publishModal);
+        }
       }, error => {
         this.isOpen = true;
         this.alertMsg = error;
@@ -501,6 +524,23 @@ export class NewsletterConfigComponent implements OnInit {
       this.customerBrandLogo = myReader.result;
     };
     myReader.readAsDataURL(file);
+  }
+  copyToClipboard() {
+    this.isCopied = true;
+    const copyText: any =
+      this.addScript + '//' + this.scriptUrl + this.closeScript;
+    let textarea = null;
+    textarea = document.createElement('textarea');
+    textarea.style.height = '0px';
+    textarea.style.left = '-100px';
+    textarea.style.opacity = '0';
+    textarea.style.position = 'fixed';
+    textarea.style.top = '-100px';
+    textarea.style.width = '0px';
+    document.body.appendChild(textarea);
+    textarea.value = copyText.trim();
+    textarea.select();
+    document.execCommand('copy');
   }
 
 }
