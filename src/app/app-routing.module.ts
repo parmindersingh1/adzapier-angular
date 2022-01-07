@@ -61,7 +61,7 @@ const routes: Routes = [
       .then(m => m.CookieConsentModule), canActivate: [AuthGuard,RouteguardService,LicenseguardPropertyService]
   },
   {
-    path: 'consent-solutions', loadChildren: () => import('./privacy/consent-solutions/consent-solutions.module')
+    path: 'consent-preference', loadChildren: () => import('./privacy/consent-solutions/consent-solutions.module')
       .then(m => m.ConsentSolutionsModule), canActivate: [AuthGuard,RouteguardService,LicenseGuardConsentPreferenceService]
   },
   { path: 'privacy/dsar/createworkflow', loadChildren: () => import('./privacy/dsar/createworkflow/createworkflow.module')

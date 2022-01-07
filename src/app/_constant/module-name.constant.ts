@@ -27,6 +27,7 @@ export const moduleName = {
   forgotPasswordModule: 'ForgotPasswordModule',
   manageSubscriptionsModule: 'ManageSubscriptionModule',
   consentSolutionModule: 'ConsentSolutionModule',
-  inviteUserModule:'InviteuserpasswordModule',
-  systemIntegrationModule: 'SystemIntegrationModule'
+  inviteUserModule: 'InviteuserpasswordModule',
+  systemIntegrationModule: 'SystemIntegrationModule',
+  consentPreferenceNewsLetter: 'ConsentPreferenceNewsletter'
 };

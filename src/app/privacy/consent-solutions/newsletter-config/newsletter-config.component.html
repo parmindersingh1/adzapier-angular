@@ -1,0 +1,551 @@
+<div class="container-fluid" *ngIf="!publishing">
+  <div class="col-md-12 ml-4">
+    <div class="d-sm-flex align-items-center justify-content-between">
+      <div>
+        <nav aria-label="breadcrumb" class="bredcrub-row" style="margin-left:-14px;">
+          <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+            <li class="breadcrumb-item">Privacy</li>
+            <li class="breadcrumb-item"><a routerLink="/home/dashboard/cookie-consent">Consent Preference</a></li>
+            <li class="breadcrumb-item active">Newsletter Configuration</li>
+
+          </ol>
+        </nav>
+      </div>
+    </div> <!-- breadcrumb -->
+  </div>
+  <form [formGroup]="ConfigurationForm"(ngSubmit)="onSubmit()">
+    <div class="card">
+      <div class="card-header">
+        <div class="row">
+          <h5 class="main-heading col-md-4 pt-1 pl-4">Newsletter Configuration </h5>
+          <div class="col-md-8 pl-0 text-right">
+<!--            <button pButton pRipple type="button"-->
+<!--                    [disabled]="contentSaving === 'saving'"-->
+<!--                    (click)="openModal(resetConfig)" label="Reset to Default" class="p-button-secondary action-btn mr-2"></button>-->
+
+            <button pButton pRipple type="submit"
+                    [disabled]="contentSaving === 'saving' || ConfigurationForm.invalid"
+                    (click)="publishType = 'draft'" label="Save" class="p-button-warning action-btn mr-2"></button>
+            <button pButton pRipple type="submit" class="action-btn"  (click)="publishType = 'publish'"
+                    [disabled]="contentSaving === 'saving' || ConfigurationForm.invalid"
+                    label="Publish"></button>
+
+          </div>
+        </div>
+      </div>
+      <div class="card-body pb-0 pt-0 pl-3">
+        <div class="row">
+          <div class="col-md-1 p-0" style="background:  #eaf1fe">
+            <div class="d-flex step-bg pt-2 pb-0 flex-column" (click)="step = 1"
+                 [ngClass]="{'step-active' : step === 1}">
+              <p class="mb-2 p-0 text-center"><i class="fas fa-cogs tx-35"></i></p>
+              <p class="p-0 mb-2 text-center tx-14 font-weight-bold">Config</p>
+            </div>
+            <div class="d-flex step-bg pt-2 pb-0 flex-column" (click)="step = 2"
+                 [ngClass]="{'step-active' : step === 2}">
+              <p class="mb-2 p-0 text-center"><i class="fas fa-language tx-35"></i></p>
+              <p class="p-0 mb-2 text-center tx-14 font-weight-bold">Language</p>
+            </div>
+            <div class="d-flex step-bg pt-2 pb-0 flex-column " (click)="step = 3"
+                 [ngClass]="{'step-active' : step === 3}">
+              <p class="mb-2 p-0 text-center"><i class="fas fa-file-alt tx-35"></i></p>
+              <p class="p-0 mb-2 text-center tx-14 font-weight-bold">Content</p>
+            </div>
+            <div class="d-flex step-bg pt-2 pb-0 flex-column " (click)="step = 4"
+                 [ngClass]="{'step-active' : step === 4}">
+              <p class="mb-2 p-0 text-center"><i class="fas fa-fill-drip tx-35"></i></p>
+              <p class="p-0 mb-2 text-center tx-14 font-weight-bold"> Layout</p>
+            </div>
+            <div class="d-flex step-bg pt-2 pb-0 flex-column " (click)="step = 5"
+                 [ngClass]="{'step-active' : step === 5}">
+              <p class="mb-2 p-0 text-center"><i class="fas  fa-table tx-35"></i></p>
+              <p class="p-0 mb-2 text-center tx-14 font-weight-bold"> Form</p>
+            </div>
+            <div style="border-bottom: 0px" class="d-flex step-bg pt-1 pb-0 flex-column " (click)="step = 6" [ngClass]="{'step-active' : step === 6}">
+              <p class="col-md-12 mt-2  p-0 text-center"><i class="fas fa-tv tx-32"></i></p>
+              <p class="col-md-12 p-0  mb-1 text-center tx-14 mb-3 font-weight-bold">Display <br/> Frequency</p>
+            </div>
+
+          </div>
+          <div class="col-md-11 p-0">
+            <p-splitter [style]="{'height': '550px'}" [panelSizes]="[26, 80]" [minSizes]="[24,50]"
+                        stateStorage="session"
+                        styleClass="p-mb-5">
+
+              <ng-template pTemplate>
+                  <div class="steppers">
+                  <div class="step-1 config-wrapper" [ngStyle]="{'display' : step === 1 ? 'block' : 'none'}">
+                    <div class="allow-regulations  mt-3">
+                      <!--                <h5 class="col-md-12 ml-1 mb-3 head-tx">Allow Regulations</h5>-->
+                      <p-divider align="left" type="dashed">
+                        <b>General Configuration</b>
+                      </p-divider>
+                    </div>
+
+                    <div class="banner-box-type ml-4">
+                      <p-divider align="left" type="dashed">
+                        <b class="tx-15">Layout Types</b>
+                      </p-divider>
+                      <div class="row">
+                        <div tooltip="Select to see the preview" class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('center')">
+                          <i *ngIf="ConfigurationForm.value.LayoutType === 'center'"
+                             class="fas fa-check-circle banner-types"></i>
+                          <img class="w-100" src="assets/imgs/banner-types/popup-center.svg"/>
+                        </div>
+                        <div tooltip="Select to see the preview" class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('bottom-left')">
+                          <i *ngIf="ConfigurationForm.value.LayoutType === 'bottom-left'"
+                             class="fas fa-check-circle banner-types"></i>
+                          <img class="w-100" src="assets/imgs/banner-types/az-box-bottom-left.svg"/>
+                        </div>
+                        <div tooltip="Select to see the preview" class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('bottom-right')">
+                          <i *ngIf="ConfigurationForm.value.LayoutType === 'bottom-right'"
+                             class="fas fa-check-circle banner-types"></i>
+                          <img class="w-100" src="assets/imgs/banner-types/az-box-bottom-right.svg"/>
+                        </div>
+
+                        <div tooltip="Select to see the preview" class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('top-left')">
+                          <i *ngIf="ConfigurationForm.value.LayoutType === 'top-left'"
+                             class="fas fa-check-circle banner-types"></i>
+                          <img class="w-100" src="assets/imgs/banner-types/az-box-top-left.svg"/>
+                        </div>
+
+                        <div tooltip="Select to see the preview" class="col-md-4 mb-4 cursor-pointer" (click)="onSetBannerType('top-right')">
+                          <i *ngIf="ConfigurationForm.value.LayoutType === 'top-right'"
+                             class="fas fa-check-circle banner-types"></i>
+                          <img class="w-100" src="assets/imgs/banner-types/az-box-top-right.svg"/>
+                        </div>
+
+
+
+                      </div>
+
+                      <div class="row mt-3">
+                        <div class="col-md-8">
+                          <p class=" mb-0  input-label pt-2">Mute Popup</p>
+                        </div>
+                        <div class="col-md-4">
+                          <p-inputSwitch formControlName="MutePopup" tooltip="If enabled, the cookie notice won't be displayed on the domain"></p-inputSwitch>
+                        </div>
+                      </div>
+
+
+                      <div class="row mt-3">
+                        <div class="col-md-8">
+                          <p class=" mb-0  input-label pt-2">Show Watermark
+                            <i-feather class="feather-16" name="info"
+                                       tooltip="If enabled, an Adzapier branding watermark appears on the footer of the privacy settings pop-up"></i-feather>
+                          </p>
+                        </div>
+                        <div class="col-md-4" >
+                          <p-inputSwitch formControlName="ShowWatermark"></p-inputSwitch>
+                        </div>
+                      </div>
+
+                      <div class="customer-logo ml-4">
+                        <p-divider align="left" type="dashed">
+                          <b class="tx-15">Branding</b>
+                        </p-divider>
+
+                        <div class="row mt-3">
+                          <div class="col-md-4">
+                            <p class=" mb-0  input-label pt-2">Company Logo</p>
+                          </div>
+                          <div class="col-md-8">
+                            <p class="mb-1 tx-12">File Type: .jgp, .png and .jpeg supported</p>
+                            <input type="file" accept="image/png, image/jpg, image/jpeg" (change)="changeListener($event)">
+                            <p *ngIf="companyLogoValidation.error" class="text-danger">{{companyLogoValidation.msg}}</p>
+                          </div>
+                          <div class="col-md-12">
+
+                            <div class="mt-4 img-preview">
+                              <img *ngIf="customerBrandLogo"  class="img-preview-tag" [src]="customerBrandLogo" />
+                              <h5 *ngIf="!customerBrandLogo" class="text-center mt-4 mb-4 pt-1"><i class="far fa-image"></i> Image Preview</h5>
+                            </div>
+                            <button *ngIf="customerBrandLogo" (click)="customerBrandLogo = null" class="btn btn-link mt-1" type="button">Remove</button>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="step-2  lang-config" [ngStyle]="{'display' : step === 2 ? 'block' : 'none'}">
+                    <p-divider align="left" type="dashed">
+                      <b>Manage Language</b>
+                    </p-divider>
+                    <div class="card">
+                      <p-table [value]="languages" styleClass="p-datatable">
+                        <ng-template pTemplate="header">
+                          <tr>
+                            <th style="width:20%">
+                              <p-checkbox (onChange)="onAllowAllLanguage($event)" name="group1"
+                                          class="col-md-2"></p-checkbox>
+                            </th>
+                            <th style="width:40%">Language</th>
+                            <th style="width:20%"></th>
+                            <th style="width:20%; text-align: right">Default</th>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-language>
+                          <tr>
+                            <td>
+                              <input type="checkbox" [checked]="selectedLanguage.includes(language.code)"
+                                     class="lang-checkbox ml-1" (change)="onSetLanguage($event, language.code)"
+                                     [value]="language.code"/>
+                            </td>
+                            <td style="font-size: 14px">
+                              {{language.title}}</td>
+                            <td>
+                              <button *ngIf="customLang.includes(language.code)" type="button"
+                                      (click)="onResetLang(language.code)" class="btn btn-link"> Reset
+                              </button>
+                            </td>
+                            <td class="text-right">
+                              <p-radioButton [disabled]="!selectedLanguage.includes(language.code)"
+                                             formControlName="DefaultLanguage" [value]="language.code"
+                              ></p-radioButton>
+                            </td>
+                          </tr>
+                        </ng-template>
+                      </p-table>
+                    </div>
+                  </div>
+                  <div class="step-3 content" *ngIf="step === 3">
+                    <p-divider align="left" type="dashed">
+                      <b>Content</b>
+                    </p-divider>
+
+                    <div class="row mb-3">
+                      <div class="col-md-4">
+                        <p class=" mb-0  input-label pt-2" for="ccpa_target">Preview Language</p>
+                      </div>
+                      <div class="col-md-8">
+                        <p-dropdown [options]="allowedLanguagesForPreview" formControlName="PreviewLanguage"
+                                    (onChange)="onSelectPreviewLang()"
+                                    [showClear]="false" placeholder="Select a Language">
+                          <ng-template pTemplate="selectedItem">
+                            <div class="country-item country-item-value row"
+                                 *ngIf="ConfigurationForm.value.PreviewLanguage">
+                              <span class="pl-2">  {{ConfigurationForm.value.PreviewLanguage.title}} </span>
+                            </div>
+                          </ng-template>
+                          <ng-template let-lang pTemplate="item">
+                            <div class="country-item row">
+                              <span class="pl-2">{{lang.title}} </span>
+                            </div>
+                          </ng-template>
+                        </p-dropdown>
+                      </div>
+                    </div>
+
+
+                    <div id="cookieNotice">
+
+                      <p-divider></p-divider>
+                      <div class="az-input-group">
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Title</label> <br/>
+                          <input formControlName="Title" type="text" class="az-input" pInputText/>
+                          <div *ngIf="f.Title.errors" class="text-danger mt-1">
+                            <small *ngIf="f.Title.errors.required">Title is required</small>
+                          </div>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Description</label> <br/>
+                          <textarea pInputTextarea class="az-input" formControlName="Description"></textarea>
+                          <div *ngIf="f.Description.errors" class="text-danger mt-1">
+                            <small *ngIf="f.Description.errors.required">Description is required</small>
+                          </div>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Terms and Conditions Link</label> <br/>
+                          <input formControlName="TermAndConditionLink" type="text" class="az-input"
+                                 pInputText/>
+                          <div *ngIf="f.TermAndConditionLink.errors" class="text-danger mt-1">
+                            <small *ngIf="f.TermAndConditionLink.errors.required">This field is required</small>
+                          </div>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Privacy Policy Link</label> <br/>
+                          <input type="text" formControlName="PrivacyLink" class="az-input" pInputText/>
+                          <div *ngIf="f.PrivacyLink.errors" class="text-danger mt-1">
+                            <small *ngIf="f.PrivacyLink.errors.required">This field is required</small>
+                          </div>
+                        </div>
+
+                        <div class="p-field">
+                          <label for="title" class="input-label ">Subscribe Button</label> <br/>
+                          <input type="text" formControlName="SubscribeButtonText" class="az-input" pInputText/>
+                          <div *ngIf="f.SubscribeButtonText.errors" class="text-danger mt-1">
+                            <small *ngIf="f.SubscribeButtonText.errors.required">This field is required</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="step-4 layout content" *ngIf="step === 4">
+                    <p-divider align="left" type="dashed">
+                      <b>Layout</b>
+                    </p-divider>
+                  <div class="card-theme mb-3 mt-2 ml-2 mr-2">
+                    <div class="theme-btn-light mt-2" (click)="onSelectThemeType('light')">
+                      <i class="fas fa-tint" style="color: #4e98fa;"></i> <span class="pl-3">Light Theme</span> <span
+                      class="allowSign" *ngIf="themeType === 'light'"><i class="fas fa-check-circle"></i></span>
+                    </div>
+                    <div class="theme-btn-dark mt-2" (click)="onSelectThemeType('dark')">
+                      <i class="fas fa-tint"></i> <span class="pl-3">Dark Theme</span>
+                      <span class="allowSign" *ngIf="themeType === 'dark'"><i class="fas fa-check-circle"></i></span>
+                    </div>
+                    <div class="theme-btn-light mt-2" (click)="onSelectThemeType('custom')">
+                      <i class="fas fa-palette"></i> <span class="pl-3">Custom Colors</span>
+                      <span class="allowSign" *ngIf="themeType === 'custom'"><i
+                        class="fas fa-check-circle"></i></span>
+                    </div>
+                  </div>
+
+                  <div class="banner-color-wrap mt-3"
+                       [ngStyle]="{'display' : themeType === 'custom' ? 'block' : 'none'}">
+                    <p-divider align="left" type="dashed">
+                      <b><i class="fas fa-tools mr-2"></i> <span class="tx-15"> Customization</span> </b>
+                    </p-divider>
+                  <p-divider></p-divider>
+                  <div class="az-input-group">
+                    <div class="row mr-0">
+                      <div class="p-field col-md-12">
+                        <label for="title" class="input-label ">Header Background Color</label> <br/>
+                        <div class="row">
+                          <p-colorPicker  class="col-md-3 pr-0"
+                                         formControlName="HeaderBackgroundColor"
+                                         [showTransitionOptions]="'50ms'"
+                                         [(ngModel)]="colorPicker.HeaderBackgroundColor"
+                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                          <input type="text" formControlName="HeaderBackgroundColor"
+                                 [(ngModel)]="colorPicker.HeaderBackgroundColor"
+                                 class="pl-0 color-input col-md-9"
+                                 pInputText/>
+                        </div>
+                      </div>
+
+                      <div class="p-field col-md-12">
+                        <label for="title" class="input-label ">Header Text Color</label> <br/>
+                        <div class="row">
+                          <p-colorPicker format="hex" class="col-md-3 pr-0" [showTransitionOptions]="'50ms'"
+                                         formControlName="HeaderTextColor"
+                                         [(ngModel)]="colorPicker.HeaderTextColor"
+                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                          <input type="text" formControlName="HeaderTextColor"
+                                 class="pl-0 color-input col-md-9"
+                                 [(ngModel)]="colorPicker.HeaderTextColor" pInputText/>
+                        </div>
+                      </div>
+
+                      <div class="p-field col-md-12">
+                        <label for="title" class="input-label ">Border Color</label> <br/>
+                        <div class="row">
+                          <p-colorPicker format="hex" class="col-md-3 pr-0" [showTransitionOptions]="'50ms'"
+                                         formControlName="BorderColor"
+                                         [(ngModel)]="colorPicker.BorderColor"
+                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                          <input type="text" formControlName="BorderColor"
+                                 class="pl-0 color-input col-md-9"
+                                 [(ngModel)]="colorPicker.BorderColor" pInputText/>
+                        </div>
+                      </div>
+
+                      <div class="p-field col-md-12">
+                        <label for="title" class="input-label ">Body Background Color</label> <br/>
+                        <div class="row">
+                          <p-colorPicker format="hex" class="col-md-3 pr-0"
+                                         formControlName="BodyBackgroundColor"
+                                         [showTransitionOptions]="'50ms'"
+                                         [(ngModel)]="colorPicker.BodyBackgroundColor"
+                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                          <input type="text" formControlName="BodyBackgroundColor"
+                                 [(ngModel)]="colorPicker.BodyBackgroundColor"
+                                 class="pl-0 color-input col-md-9"
+                                 pInputText/>
+                        </div>
+                      </div>
+
+                      <div class="p-field col-md-12">
+                        <label for="title" class="input-label ">Body Text Color</label> <br/>
+                        <div class="row">
+                          <p-colorPicker format="hex" class="col-md-3 pr-0" [showTransitionOptions]="'50ms'"
+                                         formControlName="BodyTextColor"
+                                         [(ngModel)]="colorPicker.BodyTextColor"
+                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                          <input type="text" formControlName="BodyTextColor"
+                                 class="pl-0 color-input col-md-9"
+                                 [(ngModel)]="colorPicker.BodyTextColor" pInputText/>
+                        </div>
+                      </div>
+                      <div class="p-field col-md-12">
+                        <label for="title" class="input-label ">Subscribe button Background Color</label> <br/>
+                        <div class="row">
+                          <p-colorPicker format="hex" class="col-md-3 pr-0" [showTransitionOptions]="'50ms'"
+                                         formControlName="SubscribeButtonBackgroundColor"
+                                         [(ngModel)]="colorPicker.SubscribeButtonBackgroundColor"
+                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                          <input type="text" formControlName="SubscribeButtonBackgroundColor"
+                                 class="pl-0 color-input col-md-9"
+                                 [(ngModel)]="colorPicker.SubscribeButtonBackgroundColor" pInputText/>
+                        </div>
+                      </div>
+
+                      <div class="p-field col-md-12">
+                        <label for="title" class="input-label ">Subscribe button Text Color</label> <br/>
+                        <div class="row">
+                          <p-colorPicker format="hex" class="col-md-3 pr-0" [showTransitionOptions]="'50ms'"
+                                         formControlName="SubscribeButtonTextColor"
+                                         [(ngModel)]="colorPicker.SubscribeButtonTextColor"
+                                         [hideTransitionOptions]="'50ms'"></p-colorPicker>
+                          <input type="text" formControlName="SubscribeButtonTextColor"
+                                 class="pl-0 color-input col-md-9"
+                                 [(ngModel)]="colorPicker.SubscribeButtonTextColor" pInputText/>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+
+                  <div class="step-5 FormBuilder content" *ngIf="step === 5">
+                    <p-divider align="left" type="dashed">
+                      <b>Form</b>
+                    </p-divider>
+                  <div class="card" formArrayName="FormInputs">
+                    <ng-container  *ngFor="let form of formInputs.controls; let i=index">
+                    <div [formGroupName]="i" [ngStyle]="{background: form.value?.display ?  null : 'whitesmoke'}" class="card-body pt-2 pl-2 pr-2 pb-0 w-100">
+                      <p class="float-left tx-13 text-capitalize"> {{form.value?.key.replaceAll('_', ' ')}} </p>
+                      <div class="float-right">
+                        <input type="checkbox"
+                               class="lang-checkbox mt-1" formControlName="display" />
+                        <button type="button" (click)="showInput = i + 1" class="btn btn-default"><i class="ml-3 fas fa-sliders-h"></i></button>
+                      </div>
+                      <div *ngIf="showInput ===  i + 1" class="input-configuration w-100">
+                        <p-divider align="left" class="config-divider" type="dashed">
+                          <b class="tx-12">Configure Validation</b>
+                        </p-divider>
+                        <div *ngIf="form.value.hasOwnProperty('required')" class="form-group mb-0 row w-100">
+                          <label class="col-sm-8 tx-13 col-form-label">Required</label>
+                          <div class="col-sm-4">
+                            <input type="checkbox" [disabled]="!form.value?.display" class="lang-checkbox" formControlName="required" />
+                          </div>
+                        </div>
+
+                        <div *ngIf="form.value.hasOwnProperty('emailValidation')" class="form-group mb-0 row w-100">
+                          <label class="col-sm-8 tx-13 col-form-label">Email Validation</label>
+                          <div class="col-sm-4">
+                            <input type="checkbox" [disabled]="!form.value?.display" class="lang-checkbox" formControlName="emailValidation" />
+                          </div>
+                        </div>
+
+                        <div  *ngIf="form.value.hasOwnProperty('minLength')" class="form-group mb-0 row w-100">
+                          <label class="col-sm-6 tx-13 col-form-label">Min Length</label>
+                          <div class="col-sm-6">
+                            <input type="number" min="1" [disabled]="!form.value?.display" aria-label="Small" aria-describedby="inputGroup-sizing-sm" class="input-sm form-control" formControlName="minLength" />
+                          </div>
+                        </div>
+
+                        <div *ngIf="form.value.hasOwnProperty('maxLength')" class="form-group mb-0 row w-100">
+                          <label class="col-sm-6 tx-13 col-form-label">Max Length</label>
+                          <div class="col-sm-6">
+                            <input type="number" min="1" [disabled]="!form.value?.display" aria-label="Small" aria-describedby="inputGroup-sizing-sm" class="input-sm form-control" formControlName="maxLength" />
+                          </div>
+                        </div>
+
+
+                      </div>
+                    </div>
+                    <hr class="m-0" />
+                    </ng-container>
+                  </div>
+
+                  </div>
+
+                    <div class="step-6 content display-frequency" *ngIf="step === 6">
+                      <p-divider align="left" type="dashed">
+                        <b>Display Frequency
+                          <i-feather name="info" class="feather-16"
+                                     tooltip="Control how often the cookie banner appears on the domain based on user’s consents"></i-feather>
+                        </b>
+                      </p-divider>
+
+
+                      <div id="displayFrequency">
+
+
+                        <div class="p-field mt-4">
+                          <label for="title" class="input-label ">For Close Newsletter Popup - Show Popup Every
+                            <i-feather name="info" class="feather-16"
+                                       tooltip="Show consent banner to users who haven’t accepted the cookies yet every"></i-feather>
+                          </label> <br/>
+                          <div class="row m-0">
+                            <p-inputNumber class="az-input col-md-6 p-0 m-0" mode="decimal" inputId="withoutgrouping"
+                                           min="1" formControlName="DisplayClosedConsent" maxlength="8" [useGrouping]="false">
+                            </p-inputNumber>
+                            <p-dropdown class="col-md-6 p-0 m-0" formControlName="DisplayClosedConsentType"
+                                        [options]="displayFrequency" optionLabel="name" optionValue="code"></p-dropdown>
+                          </div>
+                        </div>
+
+                      </div>
+
+                    </div>
+
+                  </div>
+              </ng-template>
+
+              <ng-template pTemplate>
+                <div class="newsletter-popup" style="margin: auto" [ngStyle]="{margin: ConfigurationForm.value.LayoutType === 'center' ? 'auto' : null,
+                width: ConfigurationForm.value.LayoutType !== 'center' ? '100%' : null}">
+                  <app-newsletter-preview [ConfigForm]="ConfigurationForm.value" [customerBrandLogo]="customerBrandLogo"></app-newsletter-preview>
+                </div>
+              </ng-template>
+            </p-splitter>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<!--Loader-->
+<div *ngIf="publishing" class="w-100 card mt-3 publish-loader">
+  <h5 class="text-center">Creating Your Newsletter ...</h5>
+  <div class="loading text-center">
+    <div class="spinner-grow text-primary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-secondary" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-success" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-danger" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-warning" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-info" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-light" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+    <div class="spinner-grow text-dark" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+</div>
+<div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">
+  <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"><span
+    [innerHTML]="alertMsg"></span></alert>
+</div>
