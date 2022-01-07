@@ -1822,6 +1822,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         const orgid = this.oidpidforstrip !== undefined && this.oidpidforstrip.organization_id !== undefined ? this.oidpidforstrip.organization_id : this.oIDPIDFromURL[0];
         const propid = this.oidpidforstrip !== undefined && this.oidpidforstrip.property_id !== undefined ? this.oidpidforstrip.property_id : this.oIDPIDFromURL[1];
         this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: orgid, pid: propid}, queryParamsHandling: 'merge', skipLocationChange: false });
+      } else if (this.location.path().indexOf("manage?success=false") !== -1) { //for stripe redirect on press back button
+        const orgid = this.oidpidforstrip !== undefined && this.oidpidforstrip.organization_id !== undefined ? this.oidpidforstrip.organization_id : this.oIDPIDFromURL[0]; 
+        const propid = this.oidpidforstrip !== undefined && this.oidpidforstrip.property_id !== undefined ? this.oidpidforstrip.property_id : this.oIDPIDFromURL[1];
+        this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: orgid, pid: propid}, queryParamsHandling: 'merge', skipLocationChange: false });
       } else if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
         this.oIDPIDFromURL = this.findPropertyIDFromUrl(this.currentNavigationUrl || this.location.path());
         const url = this.location.path() == '/' ? '/home/welcome' : this.getCurrentRoute();
