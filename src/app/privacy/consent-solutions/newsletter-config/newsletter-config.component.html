@@ -503,9 +503,9 @@
               </ng-template>
 
               <ng-template pTemplate>
-                <div class="newsletter-popup" style="margin: auto" [ngStyle]="{margin: ConfigurationForm.value.LayoutType === 'center' ? 'auto' : null,
+                <div *ngIf="!ConfigurationForm.value.MutePopup" class="newsletter-popup" style="margin: auto" [ngStyle]="{margin: ConfigurationForm.value.LayoutType === 'center' ? 'auto' : null,
                 width: ConfigurationForm.value.LayoutType !== 'center' ? '100%' : null}">
-                  <app-newsletter-preview [ConfigForm]="ConfigurationForm.value" [customerBrandLogo]="customerBrandLogo"></app-newsletter-preview>
+                  <app-newsletter-preview [ConfigForm]="ConfigurationForm.value" [customLanguageConfig]="customLanguageConfig"  [customerBrandLogo]="customerBrandLogo"></app-newsletter-preview>
                 </div>
               </ng-template>
             </p-splitter>
@@ -549,3 +549,31 @@
   <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"><span
     [innerHTML]="alertMsg"></span></alert>
 </div>
+<ng-template #publish>
+  <div class="modal-body text-center">
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+    <div class="card mt-3">
+      <div  class="card-header"><h6 style="float: left"><b>Production CDN </b></h6>
+
+        <button (click)="copyToClipboard()" style="float: right" type="button" class=" pull-right btn-sm btn btn-primary"><i class="mr-1 fa fa-clipboard" aria-hidden="true"></i>
+          {{ isCopied ? 'Copied' : 'Copy Script'}}</button>
+
+      </div>
+      <div  style="background: #282a36" class="card-body">
+        <p  class="text-danger codeText">
+          <span>
+          <code style="color: rgb(116, 116, 116)">//Please copy and paste this code into the header for each page on your website(s). It is important that this code be the first script in your document.  </code>
+        </span> <br />
+          <span>
+            <code style="color: #8be9fd">{{addScript}}</code>
+          </span>
+          <span style="color: #fff; font-size: 16px">//{{scriptUrl}}</span>
+          <span><code style="color: #8be9fd">{{closeScript}}</code></span> <br />
+        </p>
+      </div>
+    </div>
+
+  </div>
+</ng-template>

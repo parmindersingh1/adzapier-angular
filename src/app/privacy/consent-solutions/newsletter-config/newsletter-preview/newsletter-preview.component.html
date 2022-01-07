@@ -14,17 +14,19 @@ float: ConfigForm.LayoutType === 'bottom-right' || ConfigForm.LayoutType === 'to
         <h2 [ngStyle]="{color: ConfigForm.HeaderTextColor}"> {{ConfigForm.Title}}</h2>
         <p>{{ConfigForm.Description}}</p>
       </div>
-      <div class="card-body" [ngStyle]="{background: ConfigForm.BodyBackgroundColor, color: ConfigForm.BodyTextColor, borderTop: '3px solid ' + ConfigForm.BorderColor}">
+      <div class="card-body pb-2" [ngStyle]="{background: ConfigForm.BodyBackgroundColor, color: ConfigForm.BodyTextColor, borderTop: '3px solid ' + ConfigForm.BorderColor}">
         <div class="row">
           <ng-container *ngFor="let form of ConfigForm.FormInputs">
             <div *ngIf="form.key !== 'privacy_Policy' && form.display" class="form-group mb-1 col-md-6">
-              <label for="inputsm" class="tx-12 text-capitalize">{{form.key.replaceAll('_', ' ')}}</label>
+              <label for="inputsm" class="tx-12 text-capitalize">
+                {{customLanguageConfig[ConfigForm.PreviewLanguage.code][form.key.replaceAll('_', '')]}}
+              </label>
               <input class="form-control input-sm" id="inputsm" type="text">
             </div>
 
 
             <div  *ngIf="form.key === 'privacy_Policy' && form.display" class="checkbox col-md-12">
-              <label class="tx-12"><input type="checkbox" class="pr-3"> I  agree to the Terms and Conditions & Privacy Policy</label>
+              <label class="tx-12"><input type="checkbox" class="pr-3"> {{customLanguageConfig[ConfigForm.PreviewLanguage.code].privacyText}} {{customLanguageConfig[ConfigForm.PreviewLanguage.code].termAndCondition}}  & {{customLanguageConfig[ConfigForm.PreviewLanguage.code].privacyPolicy}} </label>
             </div>
 
             <div *ngIf="form.key === 'email' && (ConfigForm.FormInputs.length === 1 || ConfigForm.FormInputs.length === 2)" class="form-group mb-1 col-md-12">
@@ -37,6 +39,9 @@ float: ConfigForm.LayoutType === 'bottom-right' || ConfigForm.LayoutType === 'to
               {{ConfigForm.SubscribeButtonText}}
             </button>
           </div>
+        </div>
+        <div class="row mr-3 mt-1 float-right "  *ngIf="ConfigForm.ShowWatermark">
+          <p class="power-by-tx mb-0"  style="color: gray">      {{customLanguageConfig[ConfigForm.PreviewLanguage.code].poweredByText}}: <span>Adzapier</span></p>
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import {Component, Input, OnInit} from '@angular/core';
 export class NewsletterPreviewComponent implements OnInit {
   @Input('customerBrandLogo') customerBrandLogo;
   @Input('ConfigForm') ConfigForm;
+  @Input('customLanguageConfig') customLanguageConfig;
   constructor() { }
 
   ngOnInit(): void {
