@@ -234,7 +234,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
           this.loadNotification();
         }
       });
-  
+
       this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => {
         //this.actuallinkstatus = data.isactualbtnclicked;
         if(data.islinkclicked && data.isactualbtnclicked){
@@ -242,7 +242,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
           this.actuallinkstatus = true;
           //this.actualBackdropclicked = true;
         }
-  
+
       })
       // this.router.routeReuseStrategy.shouldReuseRoute = () => {
       //   return false;
@@ -252,7 +252,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.queryOID = params.get('oid');
         this.queryPID = params.get('pid');
        });
-  
+
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
           this.isPrivacyActivelinkMatched = event.url.indexOf('privacy') >= 0 || event.url.indexOf('home') >= 0
@@ -282,14 +282,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       // this.orgservice.removeControls();
       this.userService.getCurrentUser.unsubscribe();
       localStorage.clear();
-      this.selectedOrgProperties.length = 0; 
+      this.selectedOrgProperties.length = 0;
       const a = this.location.path().split("/");
       if (a[1].indexOf('/invited-user-verify-email') == -1) {
         this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
       }
     }
 
-   
+
   //  this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
   // this.renderer.listen('window', 'click', (e:Event) => {
   //   if(e.target === this.dropdownTriggers.nativeElement){
@@ -299,7 +299,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   ngOnInit() {
-    
+
     if(!this.isLoginOrSignupPage()){
       this.authService.logout();
       this.isCollapsed = true;
@@ -315,10 +315,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       // }
     }
     this.billingService.PlanDetails.subscribe(res => {
-      
-    
-       this.count = res;      
-    
+
+
+       this.count = res;
+
     }, error => {
       console.error(error);
 
@@ -342,7 +342,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.quickDivIDSub = res.linkid;
     });
     this.isLoginOrSignupPage();
-    
+
   //  this.isloginpage = this.location.path().indexOf('login') == -1 && this.location.path().indexOf('signup') == -1;
     this.userService.onClickTopmenu.subscribe((status) => this.istopmenuclicked = status);
  //   this.loadOrganizationWithProperty();
@@ -414,7 +414,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
               const tokenid = a[0].split("/verify-email/");
               this.router.navigate(["/signup"], { queryParams: { id: tokenid[1] } });
             }
-          } 
+          }
           if (this.location.path().indexOf('/invited-user-verify-email') !== -1) {
             const a = this.location.path().split("/");
             if (a[1].indexOf('/invited-user-verify-email') !== -1) {
@@ -511,7 +511,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   onGetCartRecord() {
-    
+
     this.billingService.GetCart(this.constructor.name, moduleName.billingModule)
       .subscribe((res: any) => {
         const result: any = res;
@@ -670,8 +670,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       showlink: 'Consent Preference',
         subcategory: [
           { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
-          { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
-          { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
+          { showlink: 'Consent Records', routerLink: '/consent-preference/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
+          { showlink: 'Newsletter Config', routerLink: '/consent-preference/newsletter-config', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:23 },
+          { showlink: 'Setup', routerLink: '/consent-preference/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
         ]
       }
         // { showlink: 'Billing', routerLink: '/settings/billing/manage' }
@@ -954,7 +955,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
                if(findOidIndex !== -1){
                  activePro = this.orgPropertyMenu[findOidIndex] //based on oid finding propid
                }
-               
+
               const proIndex = activePro.property.findIndex((t) => t.property_id === this.oIDPIDFromURL[1]);
               this.activeProp = activePro.property[proIndex];
               const obj = {
@@ -985,7 +986,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
                } else {
                  this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
                }
-              
+
           }
           else {
             let activePro;
@@ -1056,7 +1057,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       const orgIndex = this.orgPropertyMenu.findIndex((t) => {
         if (this.queryOID !== null || this.queryOID !== undefined) {
           t.organization_id === this.queryOID
-        } 
+        }
       });
       if (orgIndex === -1) {
         this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
@@ -1148,7 +1149,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.openModal(this.confirmModal);
         return false;
       }
-      this.currentClickedMenuItem = [{ 
+      this.currentClickedMenuItem = [{
         showlink: 'DSAR',
         tooltip:'Data Subject Access Request',
       subcategory: [
@@ -1830,7 +1831,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
       }
       if (this.location.path().indexOf("manage?success=true") !== -1) { //for stripe success redirect
-        const orgid = this.oidpidforstrip !== undefined && this.oidpidforstrip.organization_id !== undefined ? this.oidpidforstrip.organization_id : this.oIDPIDFromURL[0]; 
+        const orgid = this.oidpidforstrip !== undefined && this.oidpidforstrip.organization_id !== undefined ? this.oidpidforstrip.organization_id : this.oIDPIDFromURL[0];
         const propid = this.oidpidforstrip !== undefined && this.oidpidforstrip.property_id !== undefined ? this.oidpidforstrip.property_id : this.oIDPIDFromURL[1];
         this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: orgid, pid: propid}, queryParamsHandling: 'merge', skipLocationChange: false });
       } else if (this.location.path().indexOf("manage?success=false") !== -1) { //for stripe redirect on press back button
@@ -1848,7 +1849,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
           if (a[1].indexOf('/invited-user-verify-email') !== -1) {
             this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
           }
-        } 
+        }
       } else {
         this.router.navigate(['/login']);
       }
@@ -2643,7 +2644,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     } else if (this.location.path().indexOf('/home/dashboard/ccpa-dsar') !== -1 || this.location.path().indexOf('/privacy/dsar/webforms') !== -1 || this.location.path().indexOf('/privacy/dsar/requests') !== -1 || this.location.path().indexOf('/privacy/dsar/workflows') !== -1 || this.location.path().indexOf('dsar') !== -1) {
       this.showSidemenu = true;
       this.userService.isSideMenuVisible = this.showSidemenu;
-      this.currentClickedMenuItem =  [{ 
+      this.currentClickedMenuItem =  [{
         showlink: 'DSAR',
         tooltip:'Data Subject Access Request',
       subcategory: [
