@@ -66,6 +66,8 @@ export class AppComponent implements OnInit {
   isSidemenuClick:boolean = false;
   checkSidemenuVisibility:boolean = false;
   checkQSMStatus$ = this.quickmenuService.isClickedOnQSMenu;
+  isqsmheadingClicked:boolean = false;
+  isquickstartClosedbtnClicked:boolean = false;
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
     private modalService: BsModalService,
@@ -199,6 +201,10 @@ export class AppComponent implements OnInit {
     this.isquickstartopen = $event;
   }
 
+  onCloseQuickStart($event){
+    this.isquickstartClosedbtnClicked = $event;
+  }
+
   onDismissQSM($event){
     this.isQuickstartmenuDismissed = $event;
   }
@@ -211,19 +217,11 @@ export class AppComponent implements OnInit {
     this.quickmenuService.qsMenuobjwithIndexid = $event;
     this.qsmenulinkobj = $event;
     this.qsmenulinkobj.islinkclicked = true;
-    if(this.qsmenulinkobj.islinkclicked){
-      this.isquickLinkclicked = true;
-    }else{
-      this.isquickLinkclicked = false;
-    }
+    this.isquickLinkclicked = true;
+  }
 
-    // if(Object.values(obj).length !== 0){
-    //   this.quickmenuService.updateQuerymenulist(obj);
-    // }else{
-    //this.quickmenuService.updateQuerymenulist($event); //Note this
-    // }
-    //this.quickstartmenuComponent.getupdatedQuickStartMenu();
-
+  onClickQSMHeading($event){
+    this.isqsmheadingClicked = $event;
   }
 
   onNavbarClick($event) {
@@ -247,7 +245,6 @@ export class AppComponent implements OnInit {
     }
     this.isquickstartopen = this.quickmenuService.isquickstartopen;
     this.quickmenuService.onClickEmitQSLinkobj.subscribe((data) => this.quicklinkclickedObj = data);
-    this.cdRef.detectChanges();
     this.cdRef.detectChanges();
   }
 

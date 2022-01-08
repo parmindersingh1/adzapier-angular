@@ -545,7 +545,7 @@
                 </div>
               </div>
 
-              <div cdkDropList [cdkDropListData]="webFormControlList" class="example-list"
+              <div cdkDropList [cdkDropListData]="webFormControlList" class="dsarcontrols-list"
                    (cdkDropListDropped)="drop($event)">
 
                 <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
@@ -854,7 +854,7 @@
                   </div>
 
                 </form>
-                <div class="quilleditor-wrapper p-0 border-top">
+                <div class="quilleditor-wrapper p-0 mt-3 border-top">
                   <div class="quilleditor" [ngStyle]="footerStyle()"
                        [innerHTML]="editorDataFooter?(editorDataFooter | safe: 'html'):footerText">
                   </div>

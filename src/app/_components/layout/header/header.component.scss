@@ -90,11 +90,12 @@ i {
 .dropdown-menu-right{
   right: 0px !important;
   left: auto !important;
+  top:-10px !important;
 }
 .notification-menu-right{
-  right: 54px !important;
-  width: 35%;
-  top: 59px !important;
+  right:-15px !important;
+  width: 500px;
+  top: 19px !important;
   left: auto !important;
   position: absolute;
   padding: 0 !important;
@@ -102,9 +103,9 @@ i {
 }
 
 .helpcenter-menu-right{
-  right: 100px !important;
+  right: -23px !important;
   width: auto;
-  top: 59px !important;
+  top: 10px !important;
   left: auto !important;
   position: absolute;
   padding: 0 !important;
