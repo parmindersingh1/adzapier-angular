@@ -2460,11 +2460,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 16){
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[0], 'addbg-menuitem');
       } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 20){
-        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[2], 'addbg-menuitem');
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[3], 'addbg-menuitem');
       } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 21){
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[1], 'addbg-menuitem');
       } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 22){
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[0], 'addbg-menuitem');
+      } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 23){
+        this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[3], 'addbg-menuitem');
       } if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid === 7){
         this.renderer.addClass(this.dropdownTriggers.nativeElement.querySelectorAll('div > div > ul')[2], 'addbg-menuitem');
       } else if(this.quickLinkObj !== undefined && this.quickLinkObj.linkid == 8){
