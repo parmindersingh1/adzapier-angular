@@ -666,7 +666,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         subcategory: [
           { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
           { showlink: 'Consent Records', routerLink: '/consent-preference/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
-          { showlink: 'Newsletter Config', routerLink: '/consent-preference/newsletter-config', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:23 },
+          { showlink: 'Newsletter Configuration', routerLink: '/consent-preference/newsletter-config', icon: 'fas fa-cog feather-16',indexid:5,navmenuid:23 },
           { showlink: 'Setup', routerLink: '/consent-preference/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
         ]
       }
@@ -1823,7 +1823,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         const propid = this.oidpidforstrip !== undefined && this.oidpidforstrip.property_id !== undefined ? this.oidpidforstrip.property_id : this.oIDPIDFromURL[1];
         this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: orgid, pid: propid}, queryParamsHandling: 'merge', skipLocationChange: false });
       } else if (this.location.path().indexOf("manage?success=false") !== -1) { //for stripe redirect on press back button
-        const orgid = this.oidpidforstrip !== undefined && this.oidpidforstrip.organization_id !== undefined ? this.oidpidforstrip.organization_id : this.oIDPIDFromURL[0]; 
+        const orgid = this.oidpidforstrip !== undefined && this.oidpidforstrip.organization_id !== undefined ? this.oidpidforstrip.organization_id : this.oIDPIDFromURL[0];
         const propid = this.oidpidforstrip !== undefined && this.oidpidforstrip.property_id !== undefined ? this.oidpidforstrip.property_id : this.oIDPIDFromURL[1];
         this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: orgid, pid: propid}, queryParamsHandling: 'merge', skipLocationChange: false });
       } else if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
