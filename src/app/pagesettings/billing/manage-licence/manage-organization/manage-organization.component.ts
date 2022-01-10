@@ -208,6 +208,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
         // this.licenseAvailabilityForFormAndRequestPerOrg(this.orgForm.value.orgID);
         this.orgForm.reset()
         this.onGetAssingedOrg()
+        this.getAllOrgList();
         this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID)
         this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
       }, err => {
@@ -260,6 +261,7 @@ export class ManageOrganizationComponent implements OnInit, OnDestroy {
         this.isOpen = true;
         this.alertMsg = res.response;
         this.alertType = 'info';
+        this.getAllOrgList();
         this.isCurrentPropertySelected(this.currentManagedOrgID, this.currrentManagedPropID);
         this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
       }, err => {
