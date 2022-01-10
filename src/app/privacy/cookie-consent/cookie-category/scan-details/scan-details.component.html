@@ -28,6 +28,14 @@
                                   aria-hidden="true"></span>
           Scanning...
         </button>
+        <button *ngIf="!update && show" (click)="openModal(scan)"
+                class="btn float-right mb-3 ml-3  btn-sm btn-uppercase btn-success" style="width: 170px">
+          <i class="fas fa-eye"></i> Scan Behind Login
+        </button>
+              <button *ngIf="update && show" (click)="editscanDetails(editscan)"
+                class="btn float-right mb-3 ml-3  btn-sm btn-uppercase btn-success" style="width: 170px">
+          <i class="fas fa-eye"></i> Scan Behind Login
+        </button>
         <button (click)="onGetLastScanJobs()"
                 class="btn float-right mb-3  btn-sm btn-uppercase btn-outline-secondary" style="width: 102px;text-transform: none;font-size: 12px;">
           <i class="fas fa-sync"></i> Refresh
@@ -281,6 +289,186 @@
     </div>
   </div>
 </div>
+
+<ng-template #scan>
+  <form [formGroup]="scanForm" (ngSubmit)=" ScanbehindLogin()"  *ngIf="step == 0">
+    <div class="modal-header ">
+      Scan Behind Login
+      <button type="button" class="close pull-right" aria-label="Close" (click)="onCancelClick()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body ">
+      <div class="form-group mg-b-5">
+        <div>
+          <label>Website URL </label>
+          <div class="input-group">
+            <input formControlName="loginurl" class="form-control" placeholder="https://www.example.com/login">
+          </div>
+          <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+            <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+          </div> -->
+        </div>
+        <div class="mt-3">
+          <label>Redirect URL : </label>
+          <div class="input-group">
+            <input formControlName="redirecturl" class="form-control" placeholder="https://www.example.com/home">
+          </div>
+          <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+            <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+          </div> -->
+        </div>
+        <div class="mt-3">
+          <label>Email/Username type </label>
+          <div class="input-group">
+            <input formControlName="username" class="form-control" placeholder="example - input[name='email']">
+          </div>
+          <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+            <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+          </div> -->
+        </div>
+        <div class="mt-3">
+          <label>Email/Username </label>
+          <div class="input-group">
+            <input formControlName="usernamevalue" class="form-control" placeholder="Enter your email">
+          </div>
+          <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+            <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+          </div> -->
+        </div>
+        <div class="mt-3">
+          <label>Password Type</label>
+          <div class="input-group">
+            <input formControlName="password" class="form-control" placeholder="example - input[name='password']">
+          </div>
+          <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+            <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+          </div> -->
+        </div>
+       
+        <div class="mt-3">
+          <label>Password </label>
+          <div class="input-group">
+            <input type="password" formControlName="passwordvalue" class="form-control" placeholder="Enter your password">
+          </div>
+          <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+            <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+          </div> -->
+        </div>
+        <div class="mt-3">
+          <label>Button Type </label>
+          <div class="input-group">
+            <input formControlName="submitbutton" class="form-control" placeholder="button[type='submit']">
+          </div>
+          <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+            <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+          </div> -->
+        </div>
+        
+        <div class="modal-footer">
+          <button type="button" (click)="onCancelClick()" class="btn btn-white" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Validate</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="modal-body" *ngIf="step == 1">
+    <div style="display: flex;">
+    <i class="pi pi-check ml-2" style="font-size: 1.0rem; color:#5cb85c;"></i>
+    <h6 class="ml-2">Your information has been saved..</h6>
+  </div>
+    <div style="text-align: center;align-items: center;justify-content: center;">
+      <button type="button" (click)="onScanBehindLoginScan()" class="btn btn-success">Scan Now</button>
+      <button type="button" (click)="hidediv()" class="btn btn-secondary ml-4">Scan Later</button>
+    </div>
+  </div>
+  </ng-template>
+
+  <ng-template #editscan>
+    <form [formGroup]="editscanForm" (ngSubmit)=" ScanbehindLoginUpdate()">
+      <div class="modal-header ">
+        Update
+        <button type="button" class="close pull-right" aria-label="Close" (click)="onCancelClick()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body ">
+        <div class="form-group mg-b-5">
+          <div>
+            <label>Website URL </label>
+            <div class="input-group">
+              <input formControlName="loginurl" class="form-control">
+            </div>
+            <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+              <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+            </div> -->
+          </div>
+          <div class="mt-3">
+            <label>Redirect URL : </label>
+            <div class="input-group">
+              <input formControlName="redirecturl" class="form-control">
+            </div>
+            <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+              <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+            </div> -->
+          </div>
+          <div class="mt-3">
+            <label>Username type </label>
+            <div class="input-group">
+              <input formControlName="username" class="form-control">
+            </div>
+            <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+              <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+            </div> -->
+          </div>
+          <div class="mt-3">
+            <label>Email </label>
+            <div class="input-group">
+              <input formControlName="usernamevalue" class="form-control">
+            </div>
+            <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+              <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+            </div> -->
+          </div>
+          <div class="mt-3">
+            <label>Password Type </label>
+            <div class="input-group">
+              <input formControlName="password" class="form-control">
+            </div>
+            <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+              <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+            </div> -->
+          </div>
+         
+          <div class="mt-3">
+            <label>Password </label>
+            <div class="input-group">
+              <input formControlName="passwordvalue" class="form-control">
+            </div>
+            <!-- <div *ngIf="submitted && f.passwordvalue.errors" class="text-danger">
+              <div *ngIf="f.passwordvalue.errors.required">Please re-enter your Password</div>
+            </div> -->
+          </div>
+          <div class="mt-3">
+            <label>Button Type </label>
+            <div class="input-group">
+              <input formControlName="submitbutton" class="form-control">
+            </div>
+            <!-- <div *ngIf="submitted && f.AuthID.errors" class="text-danger">
+              <div *ngIf="f.AuthID.errors.required">Authentication ID is required</div>
+            </div> -->
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" (click)="onCancelClick()" class="btn btn-white" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <button type="button" *ngIf="!isScanning" (click)="onScanBehindLoginScan()" class="btn btn-success pull-left">Start Scan</button>
+
+          </div>
+        </div>
+      </div>
+    </form>
+    </ng-template>
 
 
 <div class="col-sm-5 mr-0 float-right flotingdiv" [ngClass]="{'hide':!isOpen}">

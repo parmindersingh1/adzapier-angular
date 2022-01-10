@@ -451,6 +451,29 @@
     </div>
 </ng-template>
 
+<ng-template #PingpropertyModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Alert!</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <h6>
+            We were unable to reach your website kindly check the URL once . Do you still want to continue with same Website URL?
+        </h6>
+        <div class="pull-right-btn">
+            <div class="text-right">
+            <button class="btn btn-link tx-decoration-underline" type="button" (click)="cancelpingmodal()">Cancel</button>
+            <button class="btn btn-primary" type="button" (click)="onForceSubmit()">Save</button>
+             <!-- <div class="col-sm-6"> -->
+        <!-- </div> -->
+            </div>
+        </div>
+</div>
+</ng-template>
+
 <ng-template #propertyModal let-modal>
     <div class="modal-header">
         <h4 class="modal-title" id="modal-basic-title" *ngIf="!isEditProperty;else editHeading">Add Property</h4>

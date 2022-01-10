@@ -188,8 +188,8 @@ deploy-to-swarm-develop:
     TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
     RESERVE_CPU: "'0.5'"
     LIMIT_CPU: "'1'"
-    RESERVE_MEMORY: 256M
-    LIMIT_MEMORY: 512M
+    RESERVE_MEMORY: 128M
+    LIMIT_MEMORY: 256M
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}
@@ -303,8 +303,8 @@ deploy-to-swarm-qa:
     TAGS: ${CI_COMMIT_REF_NAME}-${TAG}
     RESERVE_CPU: "'0.5'"
     LIMIT_CPU: "'1'"
-    RESERVE_MEMORY: 256M
-    LIMIT_MEMORY: 512M
+    RESERVE_MEMORY: 128M
+    LIMIT_MEMORY: 256M
   image: docker:19
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD ${CI_REGISTRY}

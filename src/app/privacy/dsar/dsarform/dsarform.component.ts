@@ -103,6 +103,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
   welcomeTextColor: any;
   welcomeFontSize: any;
   footerTextColor: any;
+  footerBackgroundColor: any;
   footerFontSize: any;
   formObject: any;
   sideMenuRequestTypeOptions: any = [];
@@ -389,8 +390,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
             this.workflow = data.workflow_id !== undefined ? data.workflow_id : data.response.workflow;
           }
           // this.requestFormControls = data.request_form;
-          if (data.request_form) {
-            this.selectedwebFormControlList = this.rearrangeFormSequence(data.request_form);
+          if (data !== undefined && data.response !== undefined && data.response.request_form !== undefined) {
+            this.selectedwebFormControlList = this.rearrangeFormSequence(data.response.request_form);
             this.webFormControlList = this.selectedwebFormControlList;
           } else {
             this.selectedwebFormControlList = this.rearrangeFormSequence(this.ccpaFormConfigService.getFormControlList());
@@ -401,6 +402,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
             if (t.controlId === 'footertext') {
               this.footerText = t.footerText;
               this.footerTextColor = t.footerTextColor;
+              this.footerBackgroundColor = t.footerBackgroundColor;
               this.footerFontSize = t.footerFontSize;
             } else if (t.controlId === 'welcometext') {
               this.welcomeText = t.welcomeText;
@@ -433,6 +435,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         if (t.controlId === 'footertext') {
           this.footerText = t.footerText;
           this.footerTextColor = t.footerTextColor;
+          this.footerBackgroundColor = t.footerBackgroundColor;
           this.footerFontSize = t.footerFontSize;
         } else if (t.controlId === 'welcometext') {
           this.welcomeText = t.welcomeText;
@@ -1087,6 +1090,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         indexCount: 'footer_text_Index',
         footerText: this.editorDataFooter,
         footerTextColor: this.footerTextColor || '#000',
+        footerBackgroundColor : this.footerBackgroundColor || '#f0b323',
         footerFontSize: this.footerFontSize || '13px',
         preferControlOrder: ''
       };
@@ -1291,6 +1295,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.webFormControlList.filter((t) => {
           if (t.controlId === 'footertext') {
             t.footerTextColor = this.footerTextColor;
+            t.footerBackgroundColor = this.footerBackgroundColor; 
             t.footerFontSize = this.footerFontSize;
           } else if (t.controlId === 'welcometext') {
             t.welcomeTextColor = this.welcomeTextColor;
@@ -1306,6 +1311,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
         this.webFormControlList.filter((t) => {
           if (t.controlId === 'footertext') {
             t.footerTextColor = this.footerTextColor;
+            t.footerBackgroundColor = this.footerBackgroundColor;
             t.footerFontSize = this.footerFontSize;
           } else if (t.controlId === 'welcometext') {
             t.welcomeTextColor = this.welcomeTextColor;
@@ -1773,6 +1779,8 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
 
     return {
       'color': this.footerTextColor,
+      'background':this.footerBackgroundColor,
+      'padding':'5px',
       'font-size': this.footerFontSize + 'px'
     };
   }
@@ -1925,6 +1933,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
           } else if (t.controlId === 'footertext') {
             this.footerText = t.footerText;
             this.footerTextColor = t.footerTextColor;
+            this.footerBackgroundColor = t.footerBackgroundColor;
             this.footerFontSize = t.footerFontSize;
           } else if (t.controlId === 'welcometext') {
             this.welcomeText = t.welcomeText;
@@ -2372,6 +2381,7 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
                   this.footerText = t.footerText;
                   this.footerTextColor = t.footerTextColor;
                   this.footerFontSize = t.footerFontSize;
+                  this.footerBackgroundColor = t.footerBackgroundColor;
                   this.editorDataFooter = this.footerText;
                 } else if (t.controlId === 'welcometext') {
                   this.welcomeText = t.welcomeText;
@@ -2533,6 +2543,9 @@ export class DsarformComponent implements OnInit, AfterContentChecked, AfterView
       this.isDirty = true;
     } else if(modelName === 'footerTextColor'){
       this.footerTextColor = updatedColor;
+      this.isDirty = true;
+    } else if(modelName === 'footerBackgroundColor'){
+      this.footerBackgroundColor = updatedColor;
       this.isDirty = true;
     }
   }

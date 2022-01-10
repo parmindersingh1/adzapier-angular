@@ -58,15 +58,15 @@
   <!--menu after login-->
   <div class="collapse navbar-collapse mr-auto" [collapse]="!isCollapsed"
     [ngClass]="{'hidemenu':!currentUser, 'showmenu':currentUser}">
-    <ul *ngIf="orgPropertyMenu" class="navbar-nav nav-mr" dropdown container="body">
-      <a class="nav-link dropdown-link"  dropdownToggle (click)="false" triggers="mouseenter:mouseleave mouseenter:click" tooltip="Select Organization/Property">
+    <ul *ngIf="orgPropertyMenu" class="navbar-nav nav-mr" dropdown container="body"> <!--triggers="mouseenter:mouseleave mouseenter:click"-->
+     <a class="nav-link dropdown-link"  dropdownToggle (click)="false"  (mouseenter)="onMouseover(0,'propmenu')">
        <span [ngStyle]="addEllipsisOrg()" *ngIf="currentOrganization !== undefined && currentOrganization.length > 0" class="mr-2 large-orgname">{{currentOrganization}} &nbsp;</span>
        <span class="large-propname" [ngStyle]="addEllipsis()" *ngIf="currentProperty !== undefined && currentProperty.length > 0"> &amp; &nbsp; {{currentProperty.length > 0 ? convertAmpersand(currentProperty) : 'Select Property'}}</span>
        <span *ngIf="currentOrganization == undefined">Select Organization<span class="ml-2">&amp; &nbsp;</span></span>
        <span *ngIf="currentProperty == undefined"> Select Property</span>
       </a>
      <!--(orgPropertyMenu | async).response-->
-     <div *dropdownMenu>
+     <div *dropdownMenu (mouseleave)="onMouseout($event)">
        <div class="dropdown-wrapper">
          <!-- {{queryOID}}  | {{queryPID}} -->
       <ul class="dropdown-menu propMenu" [ngStyle]="addColumncount()"> <!--[ngStyle]="addColumncount()"-->
@@ -111,16 +111,15 @@
     </ul>
       <!--end of organization / property menu after login-->
     <ul class="navbar-nav"  #navMenu *ngIf="currentUser">
-      <li *ngFor="let menu of navigationMenu;" class="nav-item">
-        
-      <div *ngIf="menu.showlink" dropdown   #headerDropdown="bs-dropdown"  container="body"  (isOpenChange)="onOpenChange($event)"   [autoClose]="true"> <!--data-toggle="collapse"-->
+      <li *ngFor="let menu of navigationMenu; let q = index" class="nav-item">
+      <div *ngIf="menu.showlink" dropdown  #headerDropdown="bs-dropdown"   (mouseenter)="onMouseover(q)"  container="body" (isOpenChange)="onOpenChange($event)"   [autoClose]="true"> <!--data-toggle="collapse"-->
           <div *ngIf="!menu.subcategory" >
-            <a class="nav-link" routerLink="[menu.routerLink]" dropdownToggle [queryParams]="{oid:queryOID , pid:queryPID}"  [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
+            <a class="nav-link" routerLink="[menu.routerLink]" dropdownToggle  triggers="mouseenter:mouseleave mouseenter:click" [queryParams]="{oid:queryOID , pid:queryPID}"  [class.active]="menu.showlink === 'Billing' && isBillingActivelinkMatched" (click)="goto(menu)">
           {{ menu.showlink }}</a></div>
           <div *ngIf="menu.subcategory">
-            <a class="nav-link dropdown-toggle" dropdownToggle  [class.active]="menu.showlink === 'Privacy' && isPrivacyActivelinkMatched" *ngIf="menu.subcategory" (click)="true">
+            <a class="nav-link dropdown-toggle" dropdownToggle triggers="mouseenter:mouseleave mouseenter:click" [class.active]="menu.showlink === 'Privacy' && isPrivacyActivelinkMatched" *ngIf="menu.subcategory" (click)="true">
               {{ menu.showlink }}</a></div>
-          <ul id="dropdown-triggers-manual"  #dpTriggers  *dropdownMenu class="dropdown-menu">
+          <ul id="dropdown-triggers-manual"  #dpTriggers (mouseleave)="onMouseout($event)" *dropdownMenu class="dropdown-menu">
             <div class="d-flex">
               <div>
             <ul *ngFor="let item of menu.subcategory;let q = index;" style="margin: 0; padding: 0;">
@@ -173,7 +172,7 @@
   
   <!--end of general menu after login-->
   <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true" style="margin-left: 17px;">
-    <div class="responsive-notification" tooltip="Your cart">
+    <div class="responsive-notification" tooltip="Your cart" placement="left">
 
     <span  class="notification-number" style="background-color: white;color: black;">{{count}}</span> <!--[ngClass]="{'hide-notification-number':notificationsNumber == '0'}"-->
     <a class="nav-link dropdown-link p-0" routerLink="/settings/billing/cart" [queryParams]="{oid:queryOID , pid:queryPID}"  dropdownToggle>
@@ -183,11 +182,11 @@
     </div>
     </div>
   <!--Help center after login-->
-  <div class="navbar-right" *ngIf="currentUser"  dropdown [insideClick]="true">
-  <a (click)="clicktext()" triggers="mouseenter:mouseleave mouseenter:click"  class="nav-link dropdown-link mr-3" tooltip="Help Center" dropdownToggle>
+  <div class="navbar-right" *ngIf="currentUser"   dropdown #helpCenterDropdown="bs-dropdown"  container="body" (mouseenter)="onMouseover(0,'helpcentermenu')"  [insideClick]="true">
+  <a (click)="clicktext()" triggers="mouseenter"  class="nav-link dropdown-link mr-3" dropdownToggle>
     <i-feather name="help-circle" class="feather-20 tx-white"></i-feather>
   </a>
-  <ul class="dropdown-menu helpcenter-menu-right" *dropdownMenu>
+  <ul class="dropdown-menu helpcenter-menu-right" *dropdownMenu (mouseleave)="onMouseout($event)">
     <li>
       <div class="dropdown-headers">
         <!-- <a href="https://support.adzapier.com" target="_blank">Help center</a> -->
@@ -296,15 +295,15 @@
     
   <!--Help center after login ends-->
   <!--notification after login-->
-  <div class="navbar-right" *ngIf="currentUser" dropdown [insideClick]="true">
+  <div class="navbar-right" *ngIf="currentUser" dropdown container="body" #notificationDropdown="bs-dropdown"   (mouseenter)="onMouseover(0,'notifications')" placement="bottom right" [insideClick]="true">
     <div class="responsive-notification">
 
     <span  class="notification-number" [ngClass]="notificationsNumber == 0 ? 'hide-notification-number' : ''">{{notificationsNumber}}</span> <!--[ngClass]="{'hide-notification-number':notificationsNumber == '0'}"-->
-    <a triggers="mouseenter:mouseleave mouseenter:click" tooltip="Notifications" class="nav-link dropdown-link p-0" (click)="onClickNotificationBell();"  dropdownToggle>
+    <a class="nav-link dropdown-link p-0" (click)="onClickNotificationBell();"  dropdownToggle>
       <i-feather name="bell" class="feather-20 tx-white"></i-feather>
     </a>
     </div>
-    <ul class="dropdown-menu notification-menu-right" *dropdownMenu>
+    <ul class="dropdown-menu notification-menu-right" *dropdownMenu  (mouseleave)="onMouseout($event)">
     <li>
       <div class="dropdown-header">Notifications</div></li>
       <li class="nav-item notification-height">
@@ -342,11 +341,11 @@
           </a>
         </div>
         <div class="iconwrapper">
-          <div *ngIf="menu.items" dropdown container="body" placement="bottom right">
-            <a triggers="mouseenter:mouseleave mouseenter:click" tooltip="{{currentLoggedInUser}}" placement="left" class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
+          <div *ngIf="menu.items" dropdown container="body"  #userDropdown="bs-dropdown" (mouseenter)="onMouseover(0,'usermenu')" placement="bottom right"> <!--triggers="mouseenter:mouseleave mouseenter:click"-->
+            <a class="nav-link dropdown-link" routerLinkActive="active" dropdownToggle (click)="false">
               <span class="bg-white rounded-circle tx-white">{{nameInitials(currentLoggedInUser)}}</span>
             </a>
-            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right">
+            <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" (mouseleave)="onMouseout($event)">
               <ng-container *ngFor="let item of menu.items; first as isFirst; let i = index;">
                 <div *ngIf="isFirst" class="loggedin-user">
                   {{currentLoggedInUser}}

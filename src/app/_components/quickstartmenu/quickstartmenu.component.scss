@@ -173,6 +173,7 @@ accordion-group {
           display: flex;
           flex-direction: row;
           padding: 2px 0;
+          cursor: pointer;
         }
         &>div.panel-heading.card-header.panel-enabled {
             padding: 0;
