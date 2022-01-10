@@ -219,7 +219,7 @@
   overflow: hidden;
 }
 
-.example-list {
+.dsarcontrols-list {
   max-width: 100%;
   border: solid 1px #ccc;
   border-top:0;
@@ -287,7 +287,7 @@
   /*border: none;*/
 }
 
-.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+.dsarcontrols-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
@@ -462,7 +462,7 @@ text-align: center !important;
 .quilleditor p {
 text-align: left;
 width: 50%;
-margin: 0 auto;
+margin: 10px auto;
 // font-weight: 500;
 }
 

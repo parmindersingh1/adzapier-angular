@@ -62,7 +62,7 @@ export class QuickmenuService extends QuickStartMenuList {
         controlList[ctrlIdx].quicklinks[quicklinkIdx].islinkclicked = newItem.islinkclicked;
         // controlList[ctrlIdx].quicklinks[quicklinkIdx] = newItem;
         if(newItem.isactualbtnclicked){
-          this.addUpdateQuickStartLinks(controlList).subscribe((data)=>console.log(data,'qsmupdated..'));
+          this.addUpdateQuickStartLinks(controlList).subscribe((data)=>data);
         }
         localStorage.setItem('quickmenuList', JSON.stringify(controlList));
       }

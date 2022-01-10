@@ -29,7 +29,6 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   isOpen = true;
   showQuickStartMenu:boolean = true;
   customClass = 'customClass';
-  oneAtATime = true;
   windowWidth:number = 0;
   divguidetext:string;
   queryOID;
@@ -44,6 +43,8 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   @Input() istopmenuclicked : boolean;
   @Input() enablequickstartfromtopmenu : any;
   @Output() onClickQuickStart : EventEmitter<any> = new EventEmitter<any>();
+  @Output() onCloseQuickStart : EventEmitter<any> = new EventEmitter<any>();
+  @Output() onClickQuickStartHeading : EventEmitter<any> = new EventEmitter<any>();
   @Output() onClickEmitQSLinkobj : EventEmitter<any> = new EventEmitter<any>();
   @Output() onClickDismiss : EventEmitter<any> = new EventEmitter<any>();
   @ViewChildren(BsDropdownDirective) headerDropdown:QueryList<BsDropdownDirective>;
@@ -73,7 +74,6 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
         if(x !== null || x !== undefined)
         this.currentUser = true;        
       });
-      this.oneAtATime = true;
      }
 
   ngOnInit(): void {
@@ -143,6 +143,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
 
   onClickQuickStartlink(linkIndex, linkobj) {
     this.quickmenuService.isquickstartopen = false;
+    this.onClickQuickStartHeading.emit(false);
     if (this.checkForVistiedQSMLink(linkIndex, linkobj)) {
       if (linkIndex == 4 && linkobj.linkid == 17) {
         return false;
@@ -184,6 +185,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   }
 
   onClickQSLinkForProperty(linkIndex, linkobj) {
+    this.onClickQuickStartHeading.emit(false);
     this.quickmenuService.isquickstartopen = false;
     if(this.checkForVistiedQSMLink(linkIndex,linkobj)){
     if (linkIndex == 4 && linkobj.linkid == 17) {
@@ -206,6 +208,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
       this.alertType = 'info';
       return false;
     }
+    this.cdRef.detectChanges();
   }
   
   onCloseQuickstart($event){
@@ -214,8 +217,15 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
     this.showQuickStartMenu = !this.showQuickStartMenu;
     this.showGuidancediv = false;
     this.onClickQuickStart.emit(true);
-    this.quickmenuService.isquickstartopen = false;//true;
+    this.onCloseQuickStart.emit(true);
+    this.quickmenuService.isquickstartopen = true;//true;
     this.userService.onRevistQuickStartmenulink.next({quickstartid:0,reclickqslink:true,urlchanged:true}); 
+  }
+
+  onClickQSMHeading(event: boolean) {
+    if(event){
+      this.onClickQuickStartHeading.emit(true);
+    }
   }
 
   @HostListener('window',['$event'])
@@ -376,7 +386,6 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
 
   ngAfterViewChecked(){
     //this.quickmenuService.isQSMenuDissmissed.subscribe((status)=>this.enablequickstartfromtopmenu = status);
-    this.oneAtATime = true;
     this.cdRef.detectChanges();
   }
  
@@ -409,8 +418,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.cdRef.detectChanges();
-    if (this.checkchanges) {
+    if (changes.checkchanges !== undefined && changes.checkchanges.currentValue !== undefined) {
       this.getLoggedInUserDetails();
     }
     // let updatedqsMenu = this.quickmenuService.getQuerymenulist();
