@@ -118,13 +118,13 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.queryPID = params.get('pid');
       });
       this.scanForm = this.formBuilder.group({
-        loginurl: [''],
-        redirecturl:[''],
-        username:[''],
-        usernamevalue:[''],
-        password:[''],
-        passwordvalue:[''],
-        submitbutton:['']
+        loginurl: ['',Validators.required],
+        redirecturl:['',Validators.required],
+        username:['',Validators.required],
+        usernamevalue:['',Validators.required],
+        password:['',Validators.required],
+        passwordvalue:['',Validators.required],
+        submitbutton:['',Validators.required]
       });
 
       this.editscanForm = this.formBuilder.group({
@@ -152,6 +152,10 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   get f() {
     return this.editscanForm.controls;
+  }
+
+  get r(){
+    return this.scanForm.controls;
   }
 
   onGetCatList(event) {
@@ -321,6 +325,10 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ScanbehindLogin(){
+    this.submitted = true;
+    if(this.scanForm.invalid){
+      return false;
+    }
     const payload : any= {
         login_url:this.scanForm.value.loginurl,
         redirect_url:this.scanForm.value.redirecturl,
@@ -341,8 +349,19 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.next();        
       }
     }, error => {
-      this.loading.stop();
-      console.log(error);
+      if(error.error.Error){
+        this.loading.stop();
+        this.modalRef.hide();
+        this.alertMsg = error.error?.Error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+        }else{
+          this.loading.stop();
+          this.modalRef.hide();
+          this.alertMsg = error.error;
+          this.isOpen = true;
+          this.alertType = 'danger';
+        }
     });
   
   }
@@ -368,7 +387,6 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }, error => {
       this.loading.stop();
-      console.log(error);
     });
   
   }
@@ -395,14 +413,25 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loading.stop();
     if (result.status === 201 || result.status === 200) {
       this.isOpen = true;
-      this.alertMsg = result.message;
+      this.alertMsg = 'Your Login Information has been updated';
       this.alertType = 'success'    
       this.modalRef.hide();
       this.ScanbehindLoginrecord();
     }
   }, error => {
-    this.loading.stop();
-    console.log(error);
+    if(error.error.Error){
+      this.loading.stop();
+      this.modalRef.hide();
+      this.alertMsg = error.error?.Error;
+      this.isOpen = true;
+      this.alertType = 'danger';
+      }else{
+        this.loading.stop();
+        this.modalRef.hide();
+        this.alertMsg = error.error;
+        this.isOpen = true;
+        this.alertType = 'danger';
+      }
   });
   }
 
@@ -434,6 +463,12 @@ export class ScanDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onCancelClick(){
+    this.modalRef.hide();
+    this.scanForm.reset();
+    this.submitted = false;
+  }
+
+  onCancelClickUpdate(){
     this.modalRef.hide();
   }
 }
