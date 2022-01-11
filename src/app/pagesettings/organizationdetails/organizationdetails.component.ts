@@ -410,8 +410,8 @@ export class OrganizationdetailsComponent implements OnInit {
         this.orgService.isOrganizationUpdated.next(true);
         this.onCancelClick();
       }
-    }, (err) => {
-      this.alertMsg = err;
+    }, (error) => {
+      this.alertMsg = error.error;
       this.isOpen = true;
       this.alertType = 'danger';
     });
