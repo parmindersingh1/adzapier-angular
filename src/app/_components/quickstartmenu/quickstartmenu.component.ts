@@ -115,6 +115,7 @@ export class QuickstartmenuComponent implements OnInit, AfterViewInit,AfterViewC
   dismissQuickStartMenu() {
     this.isOpen = false;
     this.isClickedonDismissed = true;
+    this.quickmenuService.isquickstartopen = true;
     this.quickmenuService.dismissQuickStart(true).subscribe((data)=>{
       this.enablequickstartfromtopmenu = data.response.quickstart_dismissed;
       this.onClickDismiss.emit(data.response.quickstart_dismissed);
