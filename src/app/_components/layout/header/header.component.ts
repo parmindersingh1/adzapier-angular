@@ -686,7 +686,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         subcategory: [
           { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
           { showlink: 'Consent Records', routerLink: '/consent-preference/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
-          { showlink: 'Newsletter Configuration', routerLink: '/consent-preference/newsletter-config', icon: 'fas fa-cog feather-16',indexid:5,navmenuid:23 },
+          { showlink: 'Subscription Consent Banner', routerLink: '/consent-preference/subscription-consent-banner-configuration', icon: 'fas fa-cog feather-16',indexid:5,navmenuid:23 },
           { showlink: 'Setup', routerLink: '/consent-preference/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
         ]
       }
@@ -1178,7 +1178,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       }];
     }
 
-    if (link.routerLink === '/home/dashboard/consent-preference' || link.routerLink == '/consent-solutions/consent-records' || link.routerLink == '/consent-solutions/setup' ) {
+    if (link.routerLink === '/home/dashboard/consent-preference' || link.routerLink == '/consent-preference/consent-records' || link.routerLink == '/consent-preference/setup' ) {
       if (this.selectedOrgProperties.length > 0) {
         this.onCheckAllowConsentDashboard();
         if (!this.isShowDashboardConsent) {
@@ -2785,16 +2785,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
       }];
       this.userService.setSidemenulist(this.currentClickedMenuItem);
-    } else  if (this.location.path().indexOf('/home/dashboard/consent-preference') !== -1 || this.location.path().indexOf('/consent-solutions/consent-records') !== -1 || this.location.path().indexOf('/consent-solutions/setup') !== -1 || this.location.path().indexOf('consent') !== -1) {
+    } else  if (this.location.path().indexOf('/home/dashboard/consent-preference') !== -1 || this.location.path().indexOf('/consent-preference/consent-records') !== -1 || this.location.path().indexOf('/consent-preference/setup') !== -1 || this.location.path().indexOf('consent') !== -1) {
       this.showSidemenu = true;
       this.userService.isSideMenuVisible = this.showSidemenu;
       this.currentClickedMenuItem =  [{
         showlink: 'Consent Preference',
           subcategory: [
             { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
-            { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
-            { showlink: 'Newsletter Config', routerLink: '/consent-preference/newsletter-config', icon: 'fas fa-file-alt feather-16',indexid:5,navmenuid:23 },
-            { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
+            { showlink: 'Consent Records', routerLink: '/consent-preference/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
+            { showlink: 'Subscription Consent Banner', routerLink: '/consent-preference/subscription-consent-banner-configuration', icon: 'fas fa-file-alt feather-16',indexid:5,navmenuid:23 },
+            { showlink: 'Setup', routerLink: '/consent-preference/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
           ]
         }];
       this.userService.setSidemenulist(this.currentClickedMenuItem);
