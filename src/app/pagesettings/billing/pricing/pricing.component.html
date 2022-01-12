@@ -216,7 +216,7 @@
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a (click)="checkForQSTooltipForEnterprisebt()" href="(userRole$ | async)?.response.role == 'Organization Administrator' ? 'javascript:void(0)' : 'https://adzapier.com/get-started/'" target="_blank" 
+            <a (click)="checkForQSTooltipForEnterprisebt()"[attr.href]="(userRole$ | async)?.response.role == 'Organization Administrator' ? '#' : 'https://adzapier.com/get-started/'" target="_blank" 
               [ngClass]="[(userRole$ | async)?.response.role == 'Organization Administrator' ? 'enterprise-btndisabled' : '',(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : '']"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
@@ -332,7 +332,7 @@
             </ul>
             <h2 class="tx-rubik tx-normal ">Contact Us</h2>
             <p class="tx-size-10 mg-b-30 "></p>
-            <a (click)="checkForQSTooltipForEnterprisebt()" href="(userRole$ | async)?.response.role == 'Organization Administrator' ? 'javascript:void(0)' : 'https://adzapier.com/get-started/'" target="_blank"
+            <a (click)="checkForQSTooltipForEnterprisebt()" [attr.href]="(userRole$ | async)?.response.role == 'Organization Administrator' ? '#' : 'https://adzapier.com/get-started/'" target="_blank"
               [ngClass]="[(userRole$ | async)?.response.role == 'Organization Administrator' ? 'enterprise-btndisabled' : '',(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : '']"
               class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->

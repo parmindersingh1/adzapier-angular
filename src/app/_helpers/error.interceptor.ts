@@ -29,6 +29,12 @@ export class ErrorInterceptor implements HttpInterceptor {
              if(err.url.indexOf('api/v1/property') !== -1){
               return throwError(err.error);
             }
+            if(err.url.indexOf('api/v1/scanner/update/sbl') !== -1){
+              return throwError(err.error);
+            }
+            if(err.url.indexOf('api/v1/scanner/sbl') !== -1){
+              return throwError(err.error);
+            }
             if(err.url.indexOf('api/v1/start-cookie-scanning') !== -1){
               const error = err.error.error || err.statusText;
                return throwError(error);
