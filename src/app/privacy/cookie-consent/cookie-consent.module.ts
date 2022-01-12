@@ -4,6 +4,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from '../../_helpers';
 import {RouteguardService} from '../../_services/routeguard.service'
 import {LicenseguardPropertyService} from '../../_services/licenseguardproperty.service';
+import {HasUnsavedDataGuard} from '../../_helpers/formUnsaved.guard';
 
 const route: Routes = [
   {
@@ -12,7 +13,7 @@ const route: Routes = [
     path: 'cookie-banner', loadChildren: () => import('./cookie-banner/cookie-banner.module').then(m => m.CookieBannerModule), canActivate: [AuthGuard,RouteguardService,LicenseguardPropertyService]
   },
   {
-    path: 'banner-configuration', loadChildren: () => import('./banner-config/banner-config.module').then(m => m.BannerConfigModule), canActivate: [AuthGuard,RouteguardService,LicenseguardPropertyService]
+    path: 'banner-configuration', loadChildren: () => import('./banner-config/banner-config.module').then(m => m.BannerConfigModule), canActivate: [AuthGuard,RouteguardService,LicenseguardPropertyService], canDeactivate: [HasUnsavedDataGuard]
   },
   {
     path: 'cookie-category', loadChildren: () => import('./cookie-category/cookie-category.module').then(m => m.CookieCategoryModule), canActivate: [AuthGuard,RouteguardService,LicenseguardPropertyService]
@@ -27,6 +28,7 @@ const route: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(route)
-  ]
+  ],
+  providers: [HasUnsavedDataGuard]
 })
 export class CookieConsentModule { }
