@@ -164,13 +164,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
               identifier: 'terms_and_conditions',
               // version: '1.0.0',
               version: 1,
-              content: ''
+              content: 'https://adzapier.com/terms-of-service/'
           },
           {
               identifier: 'privacy_policy',
               // version: '1.0.0',
               version: 1,
-              content: ''
+              content: 'https://adzapier.com/privacy-policy/'
           }
 
       ],
@@ -182,7 +182,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
       ],
       autodetectIpAddress: true, // A parameter that enable or disable the ip autodetect. Default to: true
     }, res => {
-      console.log('consent response', res);
+      // console.log('consent response', res);
     });
   }
 
