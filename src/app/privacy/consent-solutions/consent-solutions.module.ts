@@ -32,7 +32,7 @@ import {InputNumberModule} from 'primeng/inputnumber';
 const path: Routes = [
   {path: 'consent-records', component: ConsentTableComponent},
   {path: 'consent-records/details/:id', component: ConsentDetailsComponent},
-  {path: 'SubscriptionConsentBanner-config', component: NewsletterConfigComponent},
+  {path: 'subscription-consent-banner-configuration', component: NewsletterConfigComponent},
   {path: 'setup', component: ConsentSetupComponent}
 ];
 
