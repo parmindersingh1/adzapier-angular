@@ -41,6 +41,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   @ViewChild('userDropdown',{static:false}) topUserDropdown:BsDropdownDirective;
   @ViewChild('notificationDropdown',{static:false}) topNotificationDropdown:BsDropdownDirective;
   @ViewChild('helpCenterDropdown',{static:false}) topHelpCenterDropdown:BsDropdownDirective;
+  @ViewChild('productMenu',{static:false}) productMenu:ElementRef;
+  @ViewChild('propertyMenu',{static:false}) propertyMenu:ElementRef;
+  @ViewChild('helpCenterMenu',{static:false}) helpCenterMenu:ElementRef;
+  @ViewChild('notificationMenu',{static:false}) notificationMenu:ElementRef;
+  @ViewChild('userMenu',{static:false}) userMenu:ElementRef;
   //@ViewChild('navMenu', { static: true }) navMenuEle: ElementRef;
   @ViewChild('navMenu', { static: false }) set navcontent(content:ElementRef){
     if(content){
@@ -55,6 +60,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   @ViewChild('dpTriggers',{static:false}) dropdownTriggers:ElementRef;
+  @ViewChild('dpTriggerPropertyMenu',{static:false}) propertyDropdownTriggers:ElementRef; 
+  @ViewChild('dpTriggerHelpMenu',{static:false}) helpCenterDropdownTriggers:ElementRef;  
+  @ViewChild('dpTriggerNotificationMenu',{static:false}) notificationDropdownTriggers:ElementRef;  
+  @ViewChild('dpTriggerUserMenu',{static:false}) dpTriggerUserMenu:ElementRef;  
+  
   @ViewChild('backDroparea',{static:false})  backDroparea:ElementRef;
   @ViewChild('orgPropNavBar', { static: false }) orgPropNavBar: ElementRef;
   qsMenuClick$ = this.userService.isClickedOnQSMenu;
@@ -192,6 +202,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   showSidemenu:boolean = false;
   isUserOptQSMenu:boolean = false;
   oidpidforstrip:any;
+  isMenuHovered:boolean;
+  isPropertyMenuHovered:boolean;
+  isHelpCenterMenuHovered:boolean;
+  isNotificationMenuHovered:boolean;
+  isUserMenuHovered:boolean;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -671,7 +686,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         subcategory: [
           { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
           { showlink: 'Consent Records', routerLink: '/consent-preference/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
-          { showlink: 'Newsletter Config', routerLink: '/consent-preference/newsletter-config', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:23 },
+          { showlink: 'Newsletter Config', routerLink: '/consent-preference/newsletter-config', icon: 'fas fa-file-alt feather-16',indexid:5,navmenuid:23 },
           { showlink: 'Setup', routerLink: '/consent-preference/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
         ]
       }
@@ -754,7 +769,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       else if(selectedItem !== undefined && selectedItem.response !== undefined && selectedItem.response.id !== undefined){
       this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id) || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.response.id);
       return this.isPropertySelected;
-      } else if(this.currentNavigationUrl[1] !== undefined && selectedItem.property_id === this.currentNavigationUrl[1]){ //this.isUrlWithPropID // this.findPropertyIDFromUrl(this.currentNavigationUrl)[1]
+      } else if(this.currentNavigationUrl !== undefined && this.currentNavigationUrl[1] !== undefined && selectedItem.property_id === this.currentNavigationUrl[1]){ //this.isUrlWithPropID // this.findPropertyIDFromUrl(this.currentNavigationUrl)[1]
         return true;
       }
 
@@ -772,7 +787,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       if (orgIndex == -1) {
         this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
       }
-      if (this.selectedOrgProperties !== undefined && this.selectedOrgProperties.length > 0) {
+      if (this.selectedOrgProperties !== undefined && this.selectedOrgProperties.length > 0 && this.selectedOrgProperties[orgIndex] !== undefined) {
         return this.selectedOrgProperties.some((t) => t.organization_id === selectedItem.id);
       }
     }
@@ -1062,16 +1077,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       if (orgIndex === -1) {
         this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
       }
-      this.isPropSelected(this.orgPropertyMenu[orgIndex]);
-      this.licenseAvailabilityForFormAndRequestPerOrg(this.orgPropertyMenu[orgIndex]);
-      this.licenseAvailabilityForProperty(this.orgPropertyMenu[orgIndex]);
+      if (orgIndex !== -1) {
+        this.isPropSelected(this.orgPropertyMenu[orgIndex]);
+        this.licenseAvailabilityForFormAndRequestPerOrg(this.orgPropertyMenu[orgIndex]);
+        this.licenseAvailabilityForProperty(this.orgPropertyMenu[orgIndex]);
 
-      // const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-      // if (orgDetails !== undefined && orgDetails.length > 0) {
-      if (this.orgPropertyMenu[orgIndex].user_id) { //=== this.userID
-        this.currentOrganization = this.orgPropertyMenu[orgIndex].organization_name !== '' ? this.orgPropertyMenu[orgIndex].organization_name : this.orgPropertyMenu[orgIndex].response.orgname;
-        this.currentProperty = this.orgPropertyMenu[orgIndex].property_name;
+        // const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        // if (orgDetails !== undefined && orgDetails.length > 0) {
+        if (this.orgPropertyMenu[orgIndex].user_id) { //=== this.userID
+          this.currentOrganization = this.orgPropertyMenu[orgIndex].organization_name !== '' ? this.orgPropertyMenu[orgIndex].organization_name : this.orgPropertyMenu[orgIndex].response.orgname;
+          this.currentProperty = this.orgPropertyMenu[orgIndex].property_name;
 
+        }
       }
       //  return this.currentProperty;
       // }
@@ -1458,22 +1475,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   licenseAvailabilityForFormAndRequestPerOrg(org) {
-    this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
-      let finalObj = {
-        ...results[0].response,
-        ...results[1].response,
-        ...results[2].response
-      }
-      this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
-      if (finalObj !== null && Object.keys(finalObj).length !== 0) {
-        this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
-        this.onCheckSubscriptionForOrg();
-      }else{
-        this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
-      }
-    }, (error) => {
-      console.log(error)
-    });
+    if (org !== undefined) {
+      this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
+        let finalObj = {
+          ...results[0].response,
+          ...results[1].response,
+          ...results[2].response
+        }
+        this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+        if (finalObj !== null && Object.keys(finalObj).length !== 0) {
+          this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
+          this.onCheckSubscriptionForOrg();
+        } else {
+          this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
+        }
+      }, (error) => {
+        console.log(error)
+      });
+    }
   }
 
   isLicenseLimitAvailable(requestType): boolean {
@@ -1486,13 +1505,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   licenseAvailabilityForProperty(prop) {
-    this.dataService.checkLicenseAvailabilityForProperty(prop).subscribe(result => {
-      this.dataService.setPropertyPlanToLocalStorage(result[0]);
-      this.onCheckSubscriptionForProperty();
-      this.onCheckConsentPreferenceSubscription();
-    }, (error) => {
-      console.log(error);
-    })
+    if (prop !== undefined) {
+      this.dataService.checkLicenseAvailabilityForProperty(prop).subscribe(result => {
+        this.dataService.setPropertyPlanToLocalStorage(result[0]);
+        this.onCheckSubscriptionForProperty();
+        this.onCheckConsentPreferenceSubscription();
+      }, (error) => {
+        console.log(error);
+      })
+    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -2016,15 +2037,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   @HostListener('document:click', ['$event.target'])
   outsideClick() {
     this.isqsmenuopen = this.quickmenuService.isquickstartopen;
-    if(this.isqsmclosed || this.isqsmenuopen){
+    if(this.isqsmclosed || this.isqsmenuopen || this.userclickedoutside || this.isquicklinkHeadingClicked){
       this.onClickBackdrop();
     }
     this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
-    if(this.userclickedoutside || this.isquicklinkHeadingClicked){
-      this.isqsmenuopen = true;
-      this.isquicklinkclicked = false;
-      return false;
-    }
     // if (this.isUserclickedActualLink) {
     //   this.onClickBackdrop();
     //   this.isUserclickedActualLink = false;
@@ -2075,9 +2091,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.lastopendp.length = 0;
       this.removeHightlightBorders();
       this.qslinkobj = {};
+      this.lastopendp = [];
+      this.isqsmenuopen = true; 
 
     } else {
-      if (this.navMenuEle !== undefined) {
+      if (this.dropdownTriggers !== undefined && this.navMenuEle !== undefined) {
         this.removeHightlightBorders();
       }
     }
@@ -2577,10 +2595,119 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     } 
   }
 
+  @HostListener('window:scroll', ['$event'])
   onMouseout($event) {
+    if ($event.clientY >= 58 && this.dropdownTriggers !== undefined && this.isMenuHovered && this.isPropertyMenuHovered && this.isHelpCenterMenuHovered && this.isNotificationMenuHovered ) {//&& this.quickDivID !== "" || this.quickDivID !== undefined || !this.isqsmenuopen
+      return false;
+    } else if (this.quickDivID == "" || this.quickDivID === undefined || this.isqsmenuopen || this.isMenuHovered && this.isPropertyMenuHovered && this.isHelpCenterMenuHovered && this.isNotificationMenuHovered) {
+      this.headerDropdown.forEach((el, index) => {
+        el.hide();
+      });
+    } else {
+     return false;
+    }
+  }
+
+  @HostListener('mousemove', ['$event'])
+  onMouseMove(e:MouseEvent){
+    if(e.clientX <= 170 ){
+      console.log(true,"mousemxfff");
+      this.isPropertyMenuHovered = false;
+    }
+  }
+
+  onMouseoverProductMenu(){
+    if(this.productMenu !== undefined ){
+      this.isMenuHovered = true; 
+    }
+  }
+
+  onMouseoverPropertyMenu($event) {
+    if (this.propertyMenu !== undefined) {
+      this.isPropertyMenuHovered = true;
+      this.renderer.addClass(this.propertyMenu.nativeElement.querySelector('a'), 'addpadding');
+    }
+  }
+
+  onMouseoutPropertyMenu($event) {
+    this.isPropertyMenuHovered = false;
+    if ($event.clientY >= 58  && this.propertyDropdownTriggers !== undefined) {
+      return false;
+    }
+     else {
+      this.headerDropdown.forEach((el, index) => {
+        el.hide();
+      });
+    }
+  }
+
+  onMouseoverHelpCenterMenu($event){
+    if(this.helpCenterMenu !== undefined ){
+      this.isHelpCenterMenuHovered = true;
+      this.renderer.addClass(this.propertyMenu.nativeElement.querySelector('a'), 'addpadding');
+    } 
+  }
+
+  onMouseoutHelpCenterMenu($event) {
+    this.isHelpCenterMenuHovered = false;
+    if ($event.clientY >= 58  && this.helpCenterDropdownTriggers !== undefined) {
+      return false;
+    }else{
+      this.headerDropdown.forEach((el, index) => {
+        el.hide();
+      });
+    }
+  }
+  
+// if user don't mouseover any opened dropdown menu
+  onMouseoverRibbon($event){
     if (this.quickDivID === "" || this.quickDivID === undefined || this.isqsmenuopen) {
-     // this.isHeaderNavbarClicked = true;
-    
+      this.headerDropdown.forEach((el, index) => {
+        el.hide();
+      });
+    }
+   
+  }
+
+  onMouseoutProductMenu($event) {
+    this.isMenuHovered = false;
+    if ($event.clientY >= 58  && this.dropdownTriggers !== undefined) {
+      return false;
+    } else {
+      this.headerDropdown.forEach((el, index) => {
+        el.hide();
+      });
+    }
+  }
+
+  onMouseoverNotificationMenu($event){
+    if(this.notificationMenu !== undefined ){
+      this.isNotificationMenuHovered = true;
+    } 
+  }
+
+  onMouseoutNotificationMenu($event) {
+    this.isNotificationMenuHovered = false;
+    if ($event.clientY >= 50  && this.notificationDropdownTriggers !== undefined) {
+      return false;
+    }else{
+      this.headerDropdown.forEach((el, index) => {
+        el.hide();
+      });
+    }
+  }
+
+  onMouseoverUserMenu($event){
+    if(this.userMenu !== undefined ){
+      this.isUserMenuHovered = true;
+    } 
+  }
+
+  onMouseoutUserMenu($event) {
+    this.isUserMenuHovered = false;
+    if ($event.clientY >= 58  && this.dpTriggerUserMenu !== undefined) {
+      return false;
+    }else{
       this.headerDropdown.forEach((el, index) => {
         el.hide();
       });
@@ -2666,6 +2793,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
           subcategory: [
             { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
             { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
+            { showlink: 'Newsletter Config', routerLink: '/consent-preference/newsletter-config', icon: 'fas fa-file-alt feather-16',indexid:5,navmenuid:23 },
             { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
           ]
         }];
