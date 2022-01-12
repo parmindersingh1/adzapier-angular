@@ -317,6 +317,11 @@ input[type='radio']:checked:after {
   border-color: #c0ccda;
 }
 
+.bs-datepicker{
+  right: 170px !important;
+  top:5px !important;
+}
+
 .datepickerwrapper .form-control {
   border-radius: 0!important;
 }
