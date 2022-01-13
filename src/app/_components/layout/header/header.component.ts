@@ -1793,7 +1793,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
      if(this.queryOID !== null && this.queryOID !== undefined){
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
      }else if(this.selectedOrgProperties.length !== 0){
-       this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.selectedOrgProperties[0].organization_id, pid: this.selectedOrgProperties[0].property_id },  skipLocationChange:false});
+       if (this.selectedOrgProperties[0] !== undefined) {
+         this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: this.selectedOrgProperties[0].organization_id, pid: this.selectedOrgProperties[0].property_id }, skipLocationChange: false });
+       }
      }else{
        this.router.navigate(['settings/organizations']);
      }
@@ -1988,6 +1990,43 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
     if(!this.isqsmenuopen && this.qslinkobj !== undefined ){
       if(Object.values(this.qslinkobj).length !==0 ){
         this.addBordertoDropdownMenu();
+      }
+    }
+    //Below check is trigger when there is gap between dropdown menu and navbar//
+
+    if(this.propertyDropdownTriggers !== undefined){
+      let parentDiv = this.propertyDropdownTriggers.nativeElement.querySelector('div > div');
+      let childDiv = this.propertyDropdownTriggers.nativeElement.querySelector('div > ul');
+      if(this.propertyDropdownTriggers.nativeElement.getBoundingClientRect().y >= 74){
+        this.renderer.addClass(parentDiv, 'change-psudeo');
+        this.renderer.addClass(childDiv, 'margin-top-10');
+      }
+    }
+
+    if(this.dropdownTriggers !== undefined){
+      if(this.dropdownTriggers.nativeElement.getBoundingClientRect().y >= 74){ 
+        this.dropdownTriggers.nativeElement.querySelector('div').parentElement.style.top = "-14px"
+      }
+    }
+
+    if(this.helpCenterDropdownTriggers !== undefined){
+      let helpDiv = this.helpCenterDropdownTriggers.nativeElement;
+      if(this.helpCenterDropdownTriggers.nativeElement.getBoundingClientRect().top >= 73){
+        this.renderer.addClass(helpDiv, 'margin-top-10');
+      }
+    }
+
+    if(this.notificationDropdownTriggers !== undefined){
+      let notificationDiv = this.notificationDropdownTriggers.nativeElement;
+      if(this.notificationDropdownTriggers.nativeElement.getBoundingClientRect().top >= 73){
+        this.renderer.addClass(notificationDiv, 'margin-top-10');
+      }
+    }
+
+    if(this.dpTriggerUserMenu !== undefined){
+      let userDiv =this.dpTriggerUserMenu.nativeElement.querySelector('div').parentElement;
+      if(this.dpTriggerUserMenu.nativeElement.getBoundingClientRect().top >= 73){
+        this.renderer.addClass(userDiv, 'margin-top-2');
       }
     }
   }
@@ -2793,7 +2832,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
           subcategory: [
             { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
             { showlink: 'Consent Records', routerLink: '/consent-preference/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
-            { showlink: 'Subscription Consent Banner', routerLink: '/consent-preference/subscription-consent-banner-configuration', icon: 'fas fa-file-alt feather-16',indexid:5,navmenuid:23 },
+            { showlink: 'Subscription Consent Banner', routerLink: '/consent-preference/subscription-consent-banner-configuration', icon: 'fas fa-cog feather-16',indexid:5,navmenuid:23 },
             { showlink: 'Setup', routerLink: '/consent-preference/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
           ]
         }];
