@@ -763,15 +763,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   isPropSelected(selectedItem): boolean {
     if (selectedItem !== undefined && selectedItem.property_id !== undefined) {
-      this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0 || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.property_id);
-      return this.isPropertySelected;
-    }
-      else if(selectedItem !== undefined && selectedItem.response !== undefined && selectedItem.response.id !== undefined){
-      this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id) || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.response.id);
-      return this.isPropertySelected;
-      } else if(this.currentNavigationUrl !== undefined && this.currentNavigationUrl[1] !== undefined && selectedItem.property_id === this.currentNavigationUrl[1]){ //this.isUrlWithPropID // this.findPropertyIDFromUrl(this.currentNavigationUrl)[1]
-        return true;
+      if (this.selectedOrgProperties[0] !== undefined) {
+        this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0 || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.property_id);
+        return this.isPropertySelected;
       }
+    }
+    else if (selectedItem !== undefined && selectedItem.response !== undefined && selectedItem.response.id !== undefined) {
+      if (this.selectedOrgProperties[0] !== undefined) {
+        this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id) || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.response.id);
+        return this.isPropertySelected;
+      }
+    } else if (this.currentNavigationUrl !== undefined && this.currentNavigationUrl[1] !== undefined && selectedItem.property_id === this.currentNavigationUrl[1]) { //this.isUrlWithPropID // this.findPropertyIDFromUrl(this.currentNavigationUrl)[1]
+      return true;
+    }
 
   }
 
@@ -965,33 +969,36 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             // console.log(propobj,'propobj..550');
           } else {
             let activePro;
+            let proIndex;
             if(this.oIDPIDFromURL !== undefined){
                const findOidIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.oIDPIDFromURL[0]) //finding oid
                if(findOidIndex !== -1){
                  activePro = this.orgPropertyMenu[findOidIndex] //based on oid finding propid
                }
+              if (activePro !== undefined) {
+                proIndex = activePro.property.findIndex((t) => t.property_id === this.oIDPIDFromURL[1]);
 
-              const proIndex = activePro.property.findIndex((t) => t.property_id === this.oIDPIDFromURL[1]);
-              this.activeProp = activePro.property[proIndex];
-              const obj = {
-                 organization_id: activePro.id,
-                 organization_name: activePro.orgname,
-                 property_id: activePro.property[proIndex].property_id,
-                 property_name: activePro.property[proIndex].property_name,
-                 user_id: this.userID
-               };
-               this.selectedOrgProperties.length = 0;
-               this.selectedOrgProperties.push(obj);
-              // this.orgservice.changeCurrentSelectedProperty(obj); //check this..
-               this.licenseAvailabilityForProperty(obj);
-               this.loadOrganizationPlanDetails(obj);
-             //  this.loading.start('1');
-               this.loadPropertyPlanDetails(obj);
+                this.activeProp = activePro.property[proIndex];
+                const obj = {
+                  organization_id: activePro.id,
+                  organization_name: activePro.orgname,
+                  property_id: activePro.property[proIndex].property_id,
+                  property_name: activePro.property[proIndex].property_name,
+                  user_id: this.userID
+                };
+                this.selectedOrgProperties.length = 0;
+                this.selectedOrgProperties.push(obj);
+                // this.orgservice.changeCurrentSelectedProperty(obj); //check this..
+                this.licenseAvailabilityForProperty(obj);
+                this.loadOrganizationPlanDetails(obj);
+                //  this.loading.start('1');
+                this.loadPropertyPlanDetails(obj);
 
-               this.isPropSelected(obj);
-               this.orgservice.changeCurrentSelectedProperty(obj); //check this..
-               //  this.loading.start('1');
-               this.licenseAvailabilityForFormAndRequestPerOrg(obj);
+                this.isPropSelected(obj);
+                this.orgservice.changeCurrentSelectedProperty(obj); //check this..
+                //  this.loading.start('1');
+                this.licenseAvailabilityForFormAndRequestPerOrg(obj);
+               
                if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
                 if(this.router.url.indexOf("oid") !== -1 && this.router.url.indexOf("pid") !== -1){
                   this.router.navigateByUrl(this.location.path());
@@ -1001,7 +1008,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
                } else {
                  this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
                }
-
+              }
           }
           else {
             let activePro;
@@ -2616,19 +2623,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.headerDropdown.forEach((el) => {
         el.hide();
       });
-    
+      this.lastopendp = [];
       this.opendropdownTrigger(1, 'dsar');
       this.removeHightlightBorders();
     } else if (menuindex == 1 && menutype !== "propmenu"  &&  menutype !== "usermenu" && menutype !== "notifications" && menutype !== "helpcentermenu") {
       this.headerDropdown.forEach((el) => {
         el.hide();
       });
+      this.lastopendp = [];
       this.opendropdownTrigger(2, 'cookie-consent');
       this.removeHightlightBorders();
     } else if (menuindex == 2 && menutype !== "propmenu"  &&  menutype !== "usermenu" && menutype !== "notifications" && menutype !== "helpcentermenu") {
       this.headerDropdown.forEach((el) => {
         el.hide();
       });
+      this.lastopendp = [];
       this.opendropdownTrigger(3, 'consentpreference');
       this.removeHightlightBorders();
     } 
