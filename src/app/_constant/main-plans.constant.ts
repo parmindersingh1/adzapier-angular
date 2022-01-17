@@ -3,7 +3,7 @@ export const mainPlans = {
     free: [
       {
         featureName: 'Monthly Pageviews\n',
-        featureValue: '5K per month'
+        featureValue: '1K per month'
       },
       {
         featureName: 'Record of Consent Storage\n',
@@ -28,6 +28,91 @@ export const mainPlans = {
       {
         featureName: 'Audit Trails\n',
         featureValue: null
+      },
+    ],basic: [
+      {
+        featureName: 'Monthly Pageviews\n',
+        featureValue: 'less than 5k per month'
+      },
+      {
+        featureName: 'Record of Consent Storage\n',
+        featureValue: '60k records per month\n'
+      },
+      {
+        featureName: 'Users Per Organization\n',
+        featureValue: 'up to 1\n'
+      },
+      {
+        featureName: 'Domain Scan\n',
+        featureValue: '2/Month\n'
+      },
+      {
+        featureName: 'Full conversion and visitor consent state reporting\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Cookie Consent Dashboard\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Audit Trails\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Consent Record Keeping Extract/Export\n',
+        featureValue: null
+      },
+      {
+        featureName: '1st Party Cookie Discovery\n',
+        featureValue: null
+      },
+      {
+        featureName: '3rd-party Cookie Blocking\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Multiple Languages Support\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Scripts/cookie-blocking system\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Multiple options for accepting/rejecting cookies\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Cookie banner with dynamic notice text\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Authenticated Consent\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Google Consent Mode\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Facebook Consent Mode\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Consent Manager Versioning & Rollback\n',
+        featureValue: null
+      },
+      {
+        featureName: 'UI Display Frequency\n',
+        featureValue: null
+      },
+      {
+        featureName: 'Custom branding\n',
+        featureValue: null
+      }, 
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '24 Hours'
       },
     ],
     essentials: [
@@ -589,7 +674,7 @@ export const highLightFeatures = {
     free: [
       {
         featureName: 'Monthly Pageviews\n',
-        featureValue: '5K per month'
+        featureValue: '1K per month'
       },
       {
         featureName: 'Domain Scan\n',
@@ -602,6 +687,24 @@ export const highLightFeatures = {
       {
         featureName: 'Support Response Time',
         featureValue: 'Best effort'
+      },
+    ],
+    basic: [
+      {
+        featureName: 'Monthly Pageviews\n',
+        featureValue: 'less than 5K per month'
+      },
+      {
+        featureName: 'Domain Scan\n',
+        featureValue: '2/Month\n'
+      },
+      {
+        featureName: 'Users Per Organization\n',
+        featureValue: 'up to 1\n'
+      },
+      {
+        featureName: 'Support Response Time\n',
+        featureValue: '24 Hours'
       },
     ],
     essentials: [
@@ -903,7 +1006,8 @@ export const featuresComparison = {
 
     {
       featureName: 'Monthly Pageviews',
-      free: '5K per month',
+      free: '1K per month',
+      basic:'less than 5k per month',
       essentials: '5K - 30K per month',
       professional: '30K - 50K per month',
       enterprise: 'Unlimited'
@@ -918,6 +1022,7 @@ export const featuresComparison = {
     {
       featureName: 'Users Per Organization',
       free: '1',
+      basic:'Up To 1',
       essentials: 'Up To 2',
       professional: 'Up To 5',
       enterprise: 'Unlimited'
@@ -925,6 +1030,7 @@ export const featuresComparison = {
     {
       featureName: 'Domain Scan\n',
       free: 'None\n',
+      basic:'2/month up to 100 pages',
       essentials: ' 2/Month\n',
       professional: '5/month\n',
       enterprise: 'Unlimited\n'
@@ -932,6 +1038,7 @@ export const featuresComparison = {
     {
       featureName: 'Full conversion and visitor consent state reporting\n',
       free: 'YES',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -939,6 +1046,7 @@ export const featuresComparison = {
     {
     featureName: 'Cookie Consent Dashboard\n',
     free: 'YES',
+    basic:'YES',
     essentials: 'YES',
     professional: 'YES',
     enterprise: 'YES'
@@ -947,6 +1055,7 @@ export const featuresComparison = {
     {
       featureName: 'Audit Trails\n',
       free: 'YES',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -954,6 +1063,7 @@ export const featuresComparison = {
     {
       featureName: 'Consent Record Keeping Extract/Export\n',
       free: 'NO',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -961,12 +1071,14 @@ export const featuresComparison = {
     {
       featureName: '1st Party Cookie Discovery\n',
       free: 'NO',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
     },  {
       featureName: '3rd-party Cookie Blocking\n',
       free: 'NO',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -974,6 +1086,7 @@ export const featuresComparison = {
     {
         featureName: 'Multiple Languages Support\n',
         free: 'NO',
+        basic:'YES',
         essentials: 'YES',
         professional: 'YES',
         enterprise: 'YES'
@@ -981,6 +1094,7 @@ export const featuresComparison = {
     {
       featureName: 'Scripts/cookie-blocking system\n',
       free: 'NO',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -988,6 +1102,7 @@ export const featuresComparison = {
     {
       featureName: 'Multiple options for accepting/rejecting cookies\n',
       free: 'NO',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -995,6 +1110,7 @@ export const featuresComparison = {
     {
       featureName: 'Cookie banner with dynamic notice text\n',
       free: 'NO',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -1002,6 +1118,7 @@ export const featuresComparison = {
     {
       featureName: 'Authenticated Consent\n',
       free: 'NO',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -1009,6 +1126,7 @@ export const featuresComparison = {
     {
       featureName: 'Google Consent Mode\n',
       free: 'NO',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -1016,6 +1134,7 @@ export const featuresComparison = {
     {
       featureName: 'Facebook Consent Mode\n',
       free: 'NO',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -1023,6 +1142,7 @@ export const featuresComparison = {
     {
       featureName: 'Consent Manager Versioning & Rollback\n',
       free: 'NO',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -1030,6 +1150,7 @@ export const featuresComparison = {
     {
       featureName: 'UI Display Frequency\n',
       free: 'NO',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -1037,6 +1158,7 @@ export const featuresComparison = {
     {
       featureName: 'Custom branding\n',
       free: 'NO',
+      basic:'YES',
       essentials: 'YES',
       professional: 'YES',
       enterprise: 'YES'
@@ -1044,6 +1166,7 @@ export const featuresComparison = {
     {
       featureName: 'CCPA Opt-Out Mode\n',
       free: 'NO',
+      basic:'NO',
       essentials: 'NO',
       professional: 'YES',
       enterprise: 'YES'
@@ -1051,6 +1174,7 @@ export const featuresComparison = {
     {
       featureName: 'Advanced Languages Edits\n',
       free: 'NO',
+      basic:'NO',
       essentials: 'NO',
       professional: 'YES',
       enterprise: 'YES'
@@ -1058,6 +1182,7 @@ export const featuresComparison = {
     {
       featureName: 'Geo-targeting',
       free: 'NO',
+      basic:'NO',
       essentials: 'NO',
       professional: 'YES',
       enterprise: 'YES'
@@ -1065,6 +1190,7 @@ export const featuresComparison = {
     {
       featureName: 'Highly configurable GDPR & CCPA consent settings\n',
       free: 'NO',
+      basic:'NO',
       essentials: 'NO',
       professional: 'YES',
       enterprise: 'YES'
@@ -1072,12 +1198,14 @@ export const featuresComparison = {
     {
       featureName: 'Google vendors & TCF vendors\n',
       free: 'NO',
+      basic:'NO',
       essentials: 'NO',
       professional: 'YES',
       enterprise: 'YES'
     },  {
       featureName: 'IAB Europe TCF Support\n',
       free: 'NO',
+      basic:'NO',
       essentials: 'NO',
       professional: 'YES',
       enterprise: 'YES'
@@ -1085,6 +1213,7 @@ export const featuresComparison = {
     {
       featureName: 'Compatible with the IAB Transparency & Consent Framework\n',
       free: 'NO',
+      basic:'NO',
       essentials: 'NO',
       professional: 'YES',
       enterprise: 'YES'
@@ -1092,6 +1221,7 @@ export const featuresComparison = {
     {
       featureName: 'Android Mobile SDK (beta)\n',
       free: 'NO',
+      basic:'NO',
       essentials: 'NO',
       professional: 'NO',
       enterprise: 'YES'
@@ -1099,6 +1229,7 @@ export const featuresComparison = {
     {
       featureName: 'Scan behind login\n',
       free: 'NO',
+      basic:'NO',
       essentials: 'NO',
       professional: 'NO',
       enterprise: 'YES'
@@ -1107,6 +1238,7 @@ export const featuresComparison = {
     {
       featureName: 'Remove "powered by Adzapier" branding\n',
       free: 'NO',
+      basic:'NO',
       essentials: 'NO',
       professional: 'NO',
       enterprise: 'YES'
@@ -1114,6 +1246,7 @@ export const featuresComparison = {
     {
       featureName: 'Support Response Time\n',
       free: 'Best effort\n',
+      basic:'24 Hours\n',
       essentials: '24 Hours\n',
       professional: '12 Hours\n',
       enterprise: '3 Hours\n'
