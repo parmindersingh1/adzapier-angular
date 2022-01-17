@@ -299,8 +299,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       localStorage.clear();
       this.selectedOrgProperties.length = 0;
       const a = this.location.path().split("/");
-      if (a[1].indexOf('/invited-user-verify-email') == -1) {
+      if (a[1].indexOf('/invited-user-verify-email') !== -1) {
         this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
+      } else if (a[1].indexOf('/signup') !== -1) {
+        this.router.navigate(['/signup'], { queryParams: { id: a[1].split('?')[1] } });
       }
     }
 
@@ -423,8 +425,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
           if (this.location.path().indexOf('/signup') !== -1 || this.location.path().indexOf('/verify-email') !== -1) {
             sessionStorage.clear();
             const a = this.location.path().split("?id=");
-            if(a[0].indexOf('/verify-email') == -1){
-              this.router.navigate([a[0]],{ queryParams: { id: a[1] }});
+            if(a[0].indexOf('/verify-email') !== -1){
+              this.router.navigate([a[1]],{ queryParams: { id: a[0].split('/')[2] }});
             }else{
               const tokenid = a[0].split("/verify-email/");
               this.router.navigate(["/signup"], { queryParams: { id: tokenid[1] } });
