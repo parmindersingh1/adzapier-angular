@@ -114,12 +114,6 @@
                   <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span>
                 </li>
               </ng-container>
-              <ng-container *ngIf="plan.name === 'Basic'">
-                <li class="text-left feature-list"
-                  *ngFor="let  features of highLightFeatures.cookieConsent.basic">
-                  {{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> -
-                    {{features.featureValue}}</span></li>
-              </ng-container>
               <ng-container *ngIf="plan.name === 'Essentials'">
                 <li class="text-left feature-list"
                   *ngFor="let  features of highLightFeatures.cookieConsent.essentials">
@@ -156,7 +150,7 @@
 
 
             <div class="form-group row mb-2 ">
-              <label class="property-type col-md-5" for="sel1">Property</label>
+              <label class="property-type col-md-6" for="sel1">Property</label>
               <!-- <select #planUnit style="height: 32px;" class="mb-2 col-md-5 form-control" id="sel1">
                 <option>1</option>
                 <ng-container *ngIf="plan.price > 0">
@@ -171,11 +165,11 @@
                   <option>10</option>
                 </ng-container>
               </select> -->
-              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: small;" (click)="Subs(planUnit,i)">-</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Subs(planUnit,i)">-</button>
 
               <input disabled [value]="1" style="width: 40px;text-align: center;" #planUnit type="text" id="sel1" min="1" required pattern="^[1-9][0-9]*$" oninput="if(!this.value.match('^[1-9][0-9]*$'))this.value='';"
               >
-              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: small;" (click)="Add(planUnit,i)">+</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary" style="font-size: large;" (click)="Add(planUnit,i)">+</button>
 
               </div>
 
@@ -224,7 +218,7 @@
             <p class="tx-size-10 mg-b-30 "></p>
             <a (click)="checkForQSTooltipForEnterprisebt()"[attr.href]="(userRole$ | async)?.response.role == 'Organization Administrator' ? '#' : 'https://adzapier.com/get-started/'" target="_blank" 
               [ngClass]="[(userRole$ | async)?.response.role == 'Organization Administrator' ? 'enterprise-btndisabled' : '',(quickDivID == 5 || quickDivID == 6 || quickDivID == 11 || quickDivID == 12 || quickDivID == 18 || quickDivID == 19) && quickDivID == currentLinkID && !iswindowclicked ? 'btn-qs-pricing-hightlight' : '']"
-              style="margin-top:108px;" class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
+              class="enterprise-btn btn mb-4 add-to-cart-btn btn-primary btn-block">Get Enterprise</a>
           </div><!-- col -->
         </div>
 
@@ -612,9 +606,6 @@
             <td *ngIf="currentFeature === 'cookieConsent'">
               <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Free</div>
             </td>
-            <td *ngIf="currentFeature === 'cookieConsent'">
-              <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Basic</div>
-            </td>
             <td>
               <div class="rounded-10 pd-y-10 pd-x-20 bg-ui-01">Essentials</div>
             </td>
@@ -645,15 +636,6 @@
                 <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
               </svg>
               <span *ngIf="feature.free !=='YES' && feature.free !== 'NO'">{{feature.free}}</span>
-            </td>
-            <td *ngIf="currentFeature === 'cookieConsent'">
-              <svg *ngIf="feature.basic === 'YES'" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" class="feather feather-check-square tx-primary">
-                <polyline points="9 11 12 14 22 4"></polyline>
-                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-              </svg>
-              <span *ngIf="feature.basic !=='YES' && feature.basic !== 'NO'">{{feature.basic}}</span>
             </td>
             <td>
               <svg *ngIf="feature.essentials === 'YES'" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
