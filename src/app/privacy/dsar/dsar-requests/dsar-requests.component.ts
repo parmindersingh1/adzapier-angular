@@ -835,7 +835,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onExportToCSV(){
-    const pagelimit = this.searchparams ? this.searchparams.replace("?limit=10","?limit=30") : '?limit=' + 30 + '&page=' + 1;
+    const pagelimit = this.searchparams ? this.searchparams.replace("?limit=10","?limit=500000") : '?limit=' + 500000 + '&page=' + 1;
     const sortOrder =  this.currentSortorder !== undefined ? this.currentSortorder : 'asc';
     const orderBy = '&order_by_date=' + sortOrder; //+ this.selectedDateRange;
     const isExport = '&export_to_csv=' + true;
