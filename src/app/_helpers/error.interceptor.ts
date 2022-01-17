@@ -39,6 +39,10 @@ export class ErrorInterceptor implements HttpInterceptor {
               const error = err.error.error || err.statusText;
                return throwError(error);
             }
+            if(err.url.indexOf('/api/v1/ccpa/data') !== -1){
+              const error = err.error || err.statusText; 
+              return throwError(error);
+            }
             if(err.url.indexOf('api/v1/invite/user/company') !== -1 && err.error.error.match("exist.") !== null || err.url.indexOf('/api/v1/login') == -1 && err.error.error.match("Incorrect") !== null){//
               this.authenticationService.logout();
               this.dataService.openUnAuthModal.next({isTrue: true, error: err})
