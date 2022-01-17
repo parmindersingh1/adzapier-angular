@@ -50,10 +50,6 @@
                   <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.free">{{features.featureName}}
                     <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
                 </ng-container>
-                <ng-container *ngIf="plan.name === 'Basic'">
-                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.basic">{{features.featureName}}
-                    <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
-                </ng-container>
                 <ng-container *ngIf="plan.name === 'Essentials'">
                   <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.essentials  | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
                 </ng-container>
@@ -228,10 +224,6 @@
                   <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.free">{{features.featureName}}
                     <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
                 </ng-container>
-                <ng-container *ngIf="plan.name === 'Basic'">
-                  <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.basic | slice : 0: showFeatureCount">{{features.featureName}}
-                    <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
-                </ng-container>
                 <ng-container *ngIf="plan.name === 'Essentials'">
                   <li class="text-left feature-list" *ngFor="let  features of mainFeatures.cookieConsent.essentials | slice : 0: showFeatureCount">{{features.featureName}} <span class="font-weight-bold" *ngIf="features.featureValue"> - {{features.featureValue}}</span></li>
                 </ng-container>
@@ -243,12 +235,12 @@
                 </ng-container>
                 <a *ngIf="plan.name !== 'Free' && showFeatureCount !== 31" (click)="showFeatureCount = 31" class="more-text" href="javascript:;">More ...</a>
                 <a *ngIf="plan.name !== 'Free'  && showFeatureCount === 31" (click)="showFeatureCount = 6" class="more-text" href="javascript:;">Hide ...</a>              </ul>
-              <h1 *ngIf="plan.price !== -1" class="text-color-nr tx-rubik tx-normal mb-3 mg-t-auto price-text" style="margin-top:130px;">
+              <h1 *ngIf="plan.price !== -1" class="text-color-nr tx-rubik tx-normal mb-3 mg-t-auto price-text">
                 <sup class="doller">$</sup>
                 <span *ngIf="billingCycle === 'monthly'" class="font-weight-bold">{{plan.price}} <span class="tx-15">/ Month</span></span>
                 <span *ngIf="billingCycle === 'yearly'" class="font-weight-bold">{{plan.price / 12 | number : '1.0-0'}} <span class="tx-15">/ Month</span></span>
               </h1>
-              <button (click)="onNavigate()" [ngStyle]="{marginTop: plan.price == -1 ? '195px' : '1rem'}"
+              <button (click)="onNavigate()" [ngStyle]="{marginTop: plan.price == -1 ? '55px' : '0.25rem'}"
                       class="btn mb-2 add-to-cart-btn btn-primary btn-block">
                 Choose Plan
               </button>
