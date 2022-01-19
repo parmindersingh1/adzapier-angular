@@ -222,6 +222,7 @@ export class AppComponent implements OnInit {
 
   onClickQSMHeading($event){
     this.isqsmheadingClicked = $event;
+    this.userService.onRevistQuickStartmenulink.next({quickstartid:0,reclickqslink:true,urlchanged:true}); 
   }
 
   onNavbarClick($event) {

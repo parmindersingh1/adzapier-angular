@@ -1,7 +1,7 @@
 import {
   AfterViewInit,
   ChangeDetectorRef,
-  Component, ElementRef,
+  Component, ElementRef, HostListener,
   OnDestroy,
   OnInit,
   TemplateRef, ViewChild,
@@ -856,6 +856,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertMsg = res.response;
         this.alertType = 'success';
         this.publishing = false;
+        this.BannerConfigurationForm.markAsPristine();
         this.onGetSavedBannerConfig();
         this.BannerConfigurationForm.patchValue({
           PreviewLanguage: {
@@ -911,6 +912,7 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
         this.alertType = 'success';
         this.publishing = false;
         this.onGetSavedBannerConfig();
+        this.BannerConfigurationForm.markAsPristine();
         this.BannerConfigurationForm.patchValue({
           PreviewLanguage: {
             title: 'English (United States)',
@@ -1227,5 +1229,15 @@ export class BannerConfigComponent implements OnInit, OnDestroy, AfterViewInit {
       PublishDate: new Date()
     });
     this.onSubmit();
+  }
+
+  hasUnsavedData() {
+    return this.BannerConfigurationForm.dirty;
+  }
+  @HostListener('window:beforeunload', ['$event'])
+  public onPageUnload($event: BeforeUnloadEvent) {
+    if (this.hasUnsavedData()) {
+      $event.returnValue = true;
+    }
   }
 }

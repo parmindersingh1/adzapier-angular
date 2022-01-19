@@ -41,6 +41,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   @ViewChild('userDropdown',{static:false}) topUserDropdown:BsDropdownDirective;
   @ViewChild('notificationDropdown',{static:false}) topNotificationDropdown:BsDropdownDirective;
   @ViewChild('helpCenterDropdown',{static:false}) topHelpCenterDropdown:BsDropdownDirective;
+  @ViewChild('productMenu',{static:false}) productMenu:ElementRef;
+  @ViewChild('propertyMenu',{static:false}) propertyMenu:ElementRef;
+  @ViewChild('helpCenterMenu',{static:false}) helpCenterMenu:ElementRef;
+  @ViewChild('notificationMenu',{static:false}) notificationMenu:ElementRef;
+  @ViewChild('userMenu',{static:false}) userMenu:ElementRef;
   //@ViewChild('navMenu', { static: true }) navMenuEle: ElementRef;
   @ViewChild('navMenu', { static: false }) set navcontent(content:ElementRef){
     if(content){
@@ -55,6 +60,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   @ViewChild('dpTriggers',{static:false}) dropdownTriggers:ElementRef;
+  @ViewChild('dpTriggerPropertyMenu',{static:false}) propertyDropdownTriggers:ElementRef; 
+  @ViewChild('dpTriggerHelpMenu',{static:false}) helpCenterDropdownTriggers:ElementRef;  
+  @ViewChild('dpTriggerNotificationMenu',{static:false}) notificationDropdownTriggers:ElementRef;  
+  @ViewChild('dpTriggerUserMenu',{static:false}) dpTriggerUserMenu:ElementRef;  
+  
   @ViewChild('backDroparea',{static:false})  backDroparea:ElementRef;
   @ViewChild('orgPropNavBar', { static: false }) orgPropNavBar: ElementRef;
   qsMenuClick$ = this.userService.isClickedOnQSMenu;
@@ -192,6 +202,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   showSidemenu:boolean = false;
   isUserOptQSMenu:boolean = false;
   oidpidforstrip:any;
+  isMenuHovered:boolean;
+  isPropertyMenuHovered:boolean;
+  isHelpCenterMenuHovered:boolean;
+  isNotificationMenuHovered:boolean;
+  isUserMenuHovered:boolean;
   constructor(
     private router: Router,
     private activatedroute: ActivatedRoute,
@@ -284,8 +299,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       localStorage.clear();
       this.selectedOrgProperties.length = 0;
       const a = this.location.path().split("/");
-      if (a[1].indexOf('/invited-user-verify-email') == -1) {
+      if (a[1].indexOf('/invited-user-verify-email') !== -1) {
         this.router.navigate(['/invited-user-verify-email'], { queryParams: { id: a[2] } });
+      } else if (a[1].indexOf('/signup') !== -1) {
+        this.router.navigate(['/signup'], { queryParams: { id: a[1].split('?')[1] } });
       }
     }
 
@@ -408,8 +425,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
           if (this.location.path().indexOf('/signup') !== -1 || this.location.path().indexOf('/verify-email') !== -1) {
             sessionStorage.clear();
             const a = this.location.path().split("?id=");
-            if(a[0].indexOf('/verify-email') == -1){
-              this.router.navigate([a[0]],{ queryParams: { id: a[1] }});
+            if(a[0].indexOf('/verify-email') !== -1){
+              this.router.navigate([a[1]],{ queryParams: { id: a[0].split('/')[2] }});
             }else{
               const tokenid = a[0].split("/verify-email/");
               this.router.navigate(["/signup"], { queryParams: { id: tokenid[1] } });
@@ -671,7 +688,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         subcategory: [
           { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
           { showlink: 'Consent Records', routerLink: '/consent-preference/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
-          { showlink: 'Newsletter Configuration', routerLink: '/consent-preference/newsletter-config', icon: 'fas fa-cog feather-16',indexid:5,navmenuid:23 },
+          { showlink: 'Subscription Consent Banner', routerLink: '/consent-preference/subscription-consent-banner-configuration', icon: 'fas fa-cog feather-16',indexid:5,navmenuid:23 },
           { showlink: 'Setup', routerLink: '/consent-preference/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
         ]
       }
@@ -748,15 +765,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
   isPropSelected(selectedItem): boolean {
     if (selectedItem !== undefined && selectedItem.property_id !== undefined) {
-      this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0 || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.property_id);
-      return this.isPropertySelected;
-    }
-      else if(selectedItem !== undefined && selectedItem.response !== undefined && selectedItem.response.id !== undefined){
-      this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id) || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.response.id);
-      return this.isPropertySelected;
-      } else if(this.currentNavigationUrl[1] !== undefined && selectedItem.property_id === this.currentNavigationUrl[1]){ //this.isUrlWithPropID // this.findPropertyIDFromUrl(this.currentNavigationUrl)[1]
-        return true;
+      if (this.selectedOrgProperties[0] !== undefined) {
+        this.isPropertySelected = this.selectedOrgProperties.filter((t) => t.property_id === selectedItem.property_id).length > 0 || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.property_id);
+        return this.isPropertySelected;
       }
+    }
+    else if (selectedItem !== undefined && selectedItem.response !== undefined && selectedItem.response.id !== undefined) {
+      if (this.selectedOrgProperties[0] !== undefined) {
+        this.isPropertySelected = this.selectedOrgProperties.some((t) => t.property_id === selectedItem.response.id) || this.selectedOrgProperties.some((t) => t.response !== undefined && t.response.id === selectedItem.response.id);
+        return this.isPropertySelected;
+      }
+    } else if (this.currentNavigationUrl !== undefined && this.currentNavigationUrl[1] !== undefined && selectedItem.property_id === this.currentNavigationUrl[1]) { //this.isUrlWithPropID // this.findPropertyIDFromUrl(this.currentNavigationUrl)[1]
+      return true;
+    }
 
   }
 
@@ -772,7 +793,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       if (orgIndex == -1) {
         this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
       }
-      if (this.selectedOrgProperties !== undefined && this.selectedOrgProperties.length > 0) {
+      if (this.selectedOrgProperties !== undefined && this.selectedOrgProperties.length > 0 && this.selectedOrgProperties[orgIndex] !== undefined) {
         return this.selectedOrgProperties.some((t) => t.organization_id === selectedItem.id);
       }
     }
@@ -950,33 +971,36 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
             // console.log(propobj,'propobj..550');
           } else {
             let activePro;
+            let proIndex;
             if(this.oIDPIDFromURL !== undefined){
                const findOidIndex = this.orgPropertyMenu.findIndex((t) => t.id == this.oIDPIDFromURL[0]) //finding oid
                if(findOidIndex !== -1){
                  activePro = this.orgPropertyMenu[findOidIndex] //based on oid finding propid
                }
+              if (activePro !== undefined) {
+                proIndex = activePro.property.findIndex((t) => t.property_id === this.oIDPIDFromURL[1]);
 
-              const proIndex = activePro.property.findIndex((t) => t.property_id === this.oIDPIDFromURL[1]);
-              this.activeProp = activePro.property[proIndex];
-              const obj = {
-                 organization_id: activePro.id,
-                 organization_name: activePro.orgname,
-                 property_id: activePro.property[proIndex].property_id,
-                 property_name: activePro.property[proIndex].property_name,
-                 user_id: this.userID
-               };
-               this.selectedOrgProperties.length = 0;
-               this.selectedOrgProperties.push(obj);
-              // this.orgservice.changeCurrentSelectedProperty(obj); //check this..
-               this.licenseAvailabilityForProperty(obj);
-               this.loadOrganizationPlanDetails(obj);
-             //  this.loading.start('1');
-               this.loadPropertyPlanDetails(obj);
+                this.activeProp = activePro.property[proIndex];
+                const obj = {
+                  organization_id: activePro.id,
+                  organization_name: activePro.orgname,
+                  property_id: activePro.property[proIndex].property_id,
+                  property_name: activePro.property[proIndex].property_name,
+                  user_id: this.userID
+                };
+                this.selectedOrgProperties.length = 0;
+                this.selectedOrgProperties.push(obj);
+                // this.orgservice.changeCurrentSelectedProperty(obj); //check this..
+                this.licenseAvailabilityForProperty(obj);
+                this.loadOrganizationPlanDetails(obj);
+                //  this.loading.start('1');
+                this.loadPropertyPlanDetails(obj);
 
-               this.isPropSelected(obj);
-               this.orgservice.changeCurrentSelectedProperty(obj); //check this..
-               //  this.loading.start('1');
-               this.licenseAvailabilityForFormAndRequestPerOrg(obj);
+                this.isPropSelected(obj);
+                this.orgservice.changeCurrentSelectedProperty(obj); //check this..
+                //  this.loading.start('1');
+                this.licenseAvailabilityForFormAndRequestPerOrg(obj);
+               
                if (this.location.path().indexOf("type=manage") == -1 && this.location.path().indexOf("manage?success") == -1) {
                 if(this.router.url.indexOf("oid") !== -1 && this.router.url.indexOf("pid") !== -1){
                   this.router.navigateByUrl(this.location.path());
@@ -986,7 +1010,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
                } else {
                  this.router.navigate(['/settings/billing/manage'], { queryParams: { oid: obj.organization_id, pid: obj.property_id }, queryParamsHandling: 'merge', skipLocationChange: false });
                }
-
+              }
           }
           else {
             let activePro;
@@ -1062,16 +1086,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       if (orgIndex === -1) {
         this.selectedOrgProperties.push(this.orgPropertyMenu[orgIndex]);
       }
-      this.isPropSelected(this.orgPropertyMenu[orgIndex]);
-      this.licenseAvailabilityForFormAndRequestPerOrg(this.orgPropertyMenu[orgIndex]);
-      this.licenseAvailabilityForProperty(this.orgPropertyMenu[orgIndex]);
+      if (orgIndex !== -1) {
+        this.isPropSelected(this.orgPropertyMenu[orgIndex]);
+        this.licenseAvailabilityForFormAndRequestPerOrg(this.orgPropertyMenu[orgIndex]);
+        this.licenseAvailabilityForProperty(this.orgPropertyMenu[orgIndex]);
 
-      // const orgDetails = this.orgservice.getCurrentOrgWithProperty();
-      // if (orgDetails !== undefined && orgDetails.length > 0) {
-      if (this.orgPropertyMenu[orgIndex].user_id) { //=== this.userID
-        this.currentOrganization = this.orgPropertyMenu[orgIndex].organization_name !== '' ? this.orgPropertyMenu[orgIndex].organization_name : this.orgPropertyMenu[orgIndex].response.orgname;
-        this.currentProperty = this.orgPropertyMenu[orgIndex].property_name;
+        // const orgDetails = this.orgservice.getCurrentOrgWithProperty();
+        // if (orgDetails !== undefined && orgDetails.length > 0) {
+        if (this.orgPropertyMenu[orgIndex].user_id) { //=== this.userID
+          this.currentOrganization = this.orgPropertyMenu[orgIndex].organization_name !== '' ? this.orgPropertyMenu[orgIndex].organization_name : this.orgPropertyMenu[orgIndex].response.orgname;
+          this.currentProperty = this.orgPropertyMenu[orgIndex].property_name;
 
+        }
       }
       //  return this.currentProperty;
       // }
@@ -1161,7 +1187,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       }];
     }
 
-    if (link.routerLink === '/home/dashboard/consent-preference' || link.routerLink == '/consent-solutions/consent-records' || link.routerLink == '/consent-solutions/setup' ) {
+    if (link.routerLink === '/home/dashboard/consent-preference' || link.routerLink == '/consent-preference/consent-records' || link.routerLink == '/consent-preference/setup' ) {
       if (this.selectedOrgProperties.length > 0) {
         this.onCheckAllowConsentDashboard();
         if (!this.isShowDashboardConsent) {
@@ -1458,22 +1484,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   licenseAvailabilityForFormAndRequestPerOrg(org) {
-    this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
-      let finalObj = {
-        ...results[0].response,
-        ...results[1].response,
-        ...results[2].response
-      }
-      this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
-      if (finalObj !== null && Object.keys(finalObj).length !== 0) {
-        this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
-        this.onCheckSubscriptionForOrg();
-      }else{
-        this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
-      }
-    }, (error) => {
-      console.log(error)
-    });
+    if (org !== undefined) {
+      this.dataService.checkLicenseAvailabilityPerOrganization(org).subscribe(results => {
+        let finalObj = {
+          ...results[0].response,
+          ...results[1].response,
+          ...results[2].response
+        }
+        this.dataService.setAvailableLicenseForFormAndRequestPerOrg(finalObj);
+        if (finalObj !== null && Object.keys(finalObj).length !== 0) {
+          this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: true });
+          this.onCheckSubscriptionForOrg();
+        } else {
+          this.dataService.isLicenseApplied.next({ requesttype: 'organization', hasaccess: false });
+        }
+      }, (error) => {
+        console.log(error)
+      });
+    }
   }
 
   isLicenseLimitAvailable(requestType): boolean {
@@ -1486,13 +1514,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   }
 
   licenseAvailabilityForProperty(prop) {
-    this.dataService.checkLicenseAvailabilityForProperty(prop).subscribe(result => {
-      this.dataService.setPropertyPlanToLocalStorage(result[0]);
-      this.onCheckSubscriptionForProperty();
-      this.onCheckConsentPreferenceSubscription();
-    }, (error) => {
-      console.log(error);
-    })
+    if (prop !== undefined) {
+      this.dataService.checkLicenseAvailabilityForProperty(prop).subscribe(result => {
+        this.dataService.setPropertyPlanToLocalStorage(result[0]);
+        this.onCheckSubscriptionForProperty();
+        this.onCheckConsentPreferenceSubscription();
+      }, (error) => {
+        console.log(error);
+      })
+    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -1772,7 +1802,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
      if(this.queryOID !== null && this.queryOID !== undefined){
        this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.queryOID, pid: this.queryPID },  skipLocationChange:false});
      }else if(this.selectedOrgProperties.length !== 0){
-       this.router.navigate(['/home/dashboard/analytics'],{ queryParams: { oid: this.selectedOrgProperties[0].organization_id, pid: this.selectedOrgProperties[0].property_id },  skipLocationChange:false});
+       if (this.selectedOrgProperties[0] !== undefined) {
+         this.router.navigate(['/home/dashboard/analytics'], { queryParams: { oid: this.selectedOrgProperties[0].organization_id, pid: this.selectedOrgProperties[0].property_id }, skipLocationChange: false });
+       }
      }else{
        this.router.navigate(['settings/organizations']);
      }
@@ -1969,6 +2001,43 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
         this.addBordertoDropdownMenu();
       }
     }
+    //Below check is trigger when there is gap between dropdown menu and navbar//
+
+    if(this.propertyDropdownTriggers !== undefined){
+      let parentDiv = this.propertyDropdownTriggers.nativeElement.querySelector('div > div');
+      let childDiv = this.propertyDropdownTriggers.nativeElement.querySelector('div > ul');
+      if(this.propertyDropdownTriggers.nativeElement.getBoundingClientRect().y >= 74){
+        this.renderer.addClass(parentDiv, 'change-psudeo');
+        this.renderer.addClass(childDiv, 'margin-top-10');
+      }
+    }
+
+    if(this.dropdownTriggers !== undefined){
+      if(this.dropdownTriggers.nativeElement.getBoundingClientRect().y >= 74){ 
+        this.dropdownTriggers.nativeElement.querySelector('div').parentElement.style.top = "-14px"
+      }
+    }
+
+    if(this.helpCenterDropdownTriggers !== undefined){
+      let helpDiv = this.helpCenterDropdownTriggers.nativeElement;
+      if(this.helpCenterDropdownTriggers.nativeElement.getBoundingClientRect().top >= 73){
+        this.renderer.addClass(helpDiv, 'margin-top-10');
+      }
+    }
+
+    if(this.notificationDropdownTriggers !== undefined){
+      let notificationDiv = this.notificationDropdownTriggers.nativeElement;
+      if(this.notificationDropdownTriggers.nativeElement.getBoundingClientRect().top >= 73){
+        this.renderer.addClass(notificationDiv, 'margin-top-10');
+      }
+    }
+
+    if(this.dpTriggerUserMenu !== undefined){
+      let userDiv =this.dpTriggerUserMenu.nativeElement.querySelector('div').parentElement;
+      if(this.dpTriggerUserMenu.nativeElement.getBoundingClientRect().top >= 73){
+        this.renderer.addClass(userDiv, 'margin-top-2');
+      }
+    }
   }
 
   onClickBackdrop() {
@@ -2016,15 +2085,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
   @HostListener('document:click', ['$event.target'])
   outsideClick() {
     this.isqsmenuopen = this.quickmenuService.isquickstartopen;
-    if(this.isqsmclosed || this.isqsmenuopen){
+    if(this.isqsmclosed || this.isqsmenuopen || this.userclickedoutside || this.isquicklinkHeadingClicked){
       this.onClickBackdrop();
     }
     this.userclickedoutside = this.quickmenuService.isclickeventoutsidemenu;
-    if(this.userclickedoutside || this.isquicklinkHeadingClicked){
-      this.isqsmenuopen = true;
-      this.isquicklinkclicked = false;
-      return false;
-    }
     // if (this.isUserclickedActualLink) {
     //   this.onClickBackdrop();
     //   this.isUserclickedActualLink = false;
@@ -2075,9 +2139,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.lastopendp.length = 0;
       this.removeHightlightBorders();
       this.qslinkobj = {};
+      this.lastopendp = [];
+      this.isqsmenuopen = true; 
 
     } else {
-      if (this.navMenuEle !== undefined) {
+      if (this.dropdownTriggers !== undefined && this.navMenuEle !== undefined) {
         this.removeHightlightBorders();
       }
     }
@@ -2559,28 +2625,139 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
       this.headerDropdown.forEach((el) => {
         el.hide();
       });
-    
+      this.lastopendp = [];
       this.opendropdownTrigger(1, 'dsar');
       this.removeHightlightBorders();
     } else if (menuindex == 1 && menutype !== "propmenu"  &&  menutype !== "usermenu" && menutype !== "notifications" && menutype !== "helpcentermenu") {
       this.headerDropdown.forEach((el) => {
         el.hide();
       });
+      this.lastopendp = [];
       this.opendropdownTrigger(2, 'cookie-consent');
       this.removeHightlightBorders();
     } else if (menuindex == 2 && menutype !== "propmenu"  &&  menutype !== "usermenu" && menutype !== "notifications" && menutype !== "helpcentermenu") {
       this.headerDropdown.forEach((el) => {
         el.hide();
       });
+      this.lastopendp = [];
       this.opendropdownTrigger(3, 'consentpreference');
       this.removeHightlightBorders();
     } 
   }
 
+  @HostListener('window:scroll', ['$event'])
   onMouseout($event) {
+    if ($event.clientY >= 58 && this.dropdownTriggers !== undefined && this.isMenuHovered && this.isPropertyMenuHovered && this.isHelpCenterMenuHovered && this.isNotificationMenuHovered ) {//&& this.quickDivID !== "" || this.quickDivID !== undefined || !this.isqsmenuopen
+      return false;
+    } else if (this.quickDivID == "" || this.quickDivID === undefined || this.isqsmenuopen || this.isMenuHovered && this.isPropertyMenuHovered && this.isHelpCenterMenuHovered && this.isNotificationMenuHovered) {
+      this.headerDropdown.forEach((el, index) => {
+        el.hide();
+      });
+    } else {
+     return false;
+    }
+  }
+
+  @HostListener('mousemove', ['$event'])
+  onMouseMove(e:MouseEvent){
+    if(e.clientX <= 170 ){
+      console.log(true,"mousemxfff");
+      this.isPropertyMenuHovered = false;
+    }
+  }
+
+  onMouseoverProductMenu(){
+    if(this.productMenu !== undefined ){
+      this.isMenuHovered = true; 
+    }
+  }
+
+  onMouseoverPropertyMenu($event) {
+    if (this.propertyMenu !== undefined) {
+      this.isPropertyMenuHovered = true;
+      this.renderer.addClass(this.propertyMenu.nativeElement.querySelector('a'), 'addpadding');
+    }
+  }
+
+  onMouseoutPropertyMenu($event) {
+    this.isPropertyMenuHovered = false;
+    if ($event.clientY >= 58  && this.propertyDropdownTriggers !== undefined) {
+      return false;
+    }
+     else {
+      this.headerDropdown.forEach((el, index) => {
+        el.hide();
+      });
+    }
+  }
+
+  onMouseoverHelpCenterMenu($event){
+    if(this.helpCenterMenu !== undefined ){
+      this.isHelpCenterMenuHovered = true;
+      this.renderer.addClass(this.propertyMenu.nativeElement.querySelector('a'), 'addpadding');
+    } 
+  }
+
+  onMouseoutHelpCenterMenu($event) {
+    this.isHelpCenterMenuHovered = false;
+    if ($event.clientY >= 58  && this.helpCenterDropdownTriggers !== undefined) {
+      return false;
+    }else{
+      this.headerDropdown.forEach((el, index) => {
+        el.hide();
+      });
+    }
+  }
+  
+// if user don't mouseover any opened dropdown menu
+  onMouseoverRibbon($event){
     if (this.quickDivID === "" || this.quickDivID === undefined || this.isqsmenuopen) {
-     // this.isHeaderNavbarClicked = true;
-    
+      this.headerDropdown.forEach((el, index) => {
+        el.hide();
+      });
+    }
+   
+  }
+
+  onMouseoutProductMenu($event) {
+    this.isMenuHovered = false;
+    if ($event.clientY >= 58  && this.dropdownTriggers !== undefined) {
+      return false;
+    } else {
+      this.headerDropdown.forEach((el, index) => {
+        el.hide();
+      });
+    }
+  }
+
+  onMouseoverNotificationMenu($event){
+    if(this.notificationMenu !== undefined ){
+      this.isNotificationMenuHovered = true;
+    } 
+  }
+
+  onMouseoutNotificationMenu($event) {
+    this.isNotificationMenuHovered = false;
+    if ($event.clientY >= 50  && this.notificationDropdownTriggers !== undefined) {
+      return false;
+    }else{
+      this.headerDropdown.forEach((el, index) => {
+        el.hide();
+      });
+    }
+  }
+
+  onMouseoverUserMenu($event){
+    if(this.userMenu !== undefined ){
+      this.isUserMenuHovered = true;
+    } 
+  }
+
+  onMouseoutUserMenu($event) {
+    this.isUserMenuHovered = false;
+    if ($event.clientY >= 58  && this.dpTriggerUserMenu !== undefined) {
+      return false;
+    }else{
       this.headerDropdown.forEach((el, index) => {
         el.hide();
       });
@@ -2658,15 +2835,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, AfterViewChecked,
 
       }];
       this.userService.setSidemenulist(this.currentClickedMenuItem);
-    } else  if (this.location.path().indexOf('/home/dashboard/consent-preference') !== -1 || this.location.path().indexOf('/consent-solutions/consent-records') !== -1 || this.location.path().indexOf('/consent-solutions/setup') !== -1 || this.location.path().indexOf('consent') !== -1) {
+    } else  if (this.location.path().indexOf('/home/dashboard/consent-preference') !== -1 || this.location.path().indexOf('/consent-preference/consent-records') !== -1 || this.location.path().indexOf('/consent-preference/setup') !== -1 || this.location.path().indexOf('consent') !== -1) {
       this.showSidemenu = true;
       this.userService.isSideMenuVisible = this.showSidemenu;
       this.currentClickedMenuItem =  [{
         showlink: 'Consent Preference',
           subcategory: [
             { showlink: 'Dashboard', routerLink: '/home/dashboard/consent-preference', icon: 'bar-chart-2',indexid:5,navmenuid:22 },
-            { showlink: 'Consent Records', routerLink: '/consent-solutions/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
-            { showlink: 'Setup', routerLink: '/consent-solutions/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
+            { showlink: 'Consent Records', routerLink: '/consent-preference/consent-records', icon: 'fas fa-tasks feather-16',indexid:5,navmenuid:21 },
+            { showlink: 'Subscription Consent Banner', routerLink: '/consent-preference/subscription-consent-banner-configuration', icon: 'fas fa-cog feather-16',indexid:5,navmenuid:23 },
+            { showlink: 'Setup', routerLink: '/consent-preference/setup', icon: 'fas fa-wrench feather-16',indexid:5,navmenuid:20 },
           ]
         }];
       this.userService.setSidemenulist(this.currentClickedMenuItem);

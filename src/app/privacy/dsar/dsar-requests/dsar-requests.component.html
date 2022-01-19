@@ -12,7 +12,7 @@
         Data Subject Access Requests
     </span>
       <div class="datepickerwrapper col-sm-9 pr-0 mr-0 ml-auto">
-          <button (click)="onExportToCSV()" type="button" tooltip="Export DSAR records as a CSV file"
+          <button (click)="onExportToCSV()" type="button" [disabled]="requestsList.length === 0" tooltip="Export DSAR records as a CSV file"
             class="btn btn-sm btn-uppercase btn-outline-secondary pt-2 lineheight-22 mr-2"
             style="text-transform: none;font-size: 12px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -258,7 +258,7 @@
     </form>
   </ng-template>
 
-  <div class="col-sm-5 mt-3 mr-0 float-right">
+  <div class="col-sm-5 mt-3 mr-0 float-right flotingdiv-dsartable">
     <alert *ngIf="isOpen" [type]="alertType" dismissOnTimeout="5000" [dismissible]="dismissible"
       (onClosed)="onClosed(alertMsg)">{{alertMsg}}</alert>
   </div>

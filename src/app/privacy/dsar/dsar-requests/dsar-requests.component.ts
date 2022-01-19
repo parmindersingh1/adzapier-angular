@@ -636,11 +636,13 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
     this.isSelected = true;
     this.selectedDateRange = "";
     this.searchbydaterange = "";
+    this.searchparams = "";
     this.clearDueInSearchfield();    
     this.onRefreshDSARList();
   }
 
   onRefreshDSARList(){
+    this.searchparams = "";
     const pagelimit = '?limit=' + 10 + '&page=' + 1;
     const sortOrder =  this.currentSortorder !== undefined ? this.currentSortorder : 'asc';
     const orderBy = '&order_by_date=' + sortOrder + this.selectedDateRange;
@@ -833,7 +835,7 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
   }
 
   onExportToCSV(){
-    const pagelimit = this.searchparams !== undefined ? this.searchparams : '?limit=' + 5000 + '&page=' + 1;
+    const pagelimit = this.searchparams ? this.searchparams.replace("?limit=10","?limit=500000") : '?limit=' + 500000 + '&page=' + 1;
     const sortOrder =  this.currentSortorder !== undefined ? this.currentSortorder : 'asc';
     const orderBy = '&order_by_date=' + sortOrder; //+ this.selectedDateRange;
     const isExport = '&export_to_csv=' + true;
@@ -845,9 +847,10 @@ export class DsarRequestsComponent implements OnInit, AfterViewInit, AfterConten
       .subscribe((data) => { 
           const fileName = 'DSAR-Requests' + '.csv';
           this.downLoadFile(data, 'text/csv', fileName );
-      }, error => {
+      }, async error => {
         this.loading.stop();
-        this.alertMsg = error;
+        const text =  JSON.parse(await error.text()); 
+        this.alertMsg = text.error;
         this.isOpen = true;
         this.alertType = 'danger';
       });

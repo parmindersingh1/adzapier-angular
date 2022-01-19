@@ -421,7 +421,7 @@ export class ConsentTableComponent implements OnInit {
     await this.consentSolutionService.onPushConsentData(consentRecord);
     //await this.router.navigateByUrl('/consent-solutions/consent-records/details/' + consentRecord.id);
     if (consentRecord.id !== undefined) {
-      await this.router.navigate(['/consent-solutions/consent-records/details/', consentRecord.id], { queryParams: { oid: this.queryOID, pid: this.queryPID }, skipLocationChange: false });
+      await this.router.navigate(['/consent-preference/consent-records/details/', consentRecord.id], { queryParams: { oid: this.queryOID, pid: this.queryPID }, skipLocationChange: false });
     }
   }
 
