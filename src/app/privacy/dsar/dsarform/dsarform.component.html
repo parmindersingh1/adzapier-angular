@@ -10,12 +10,32 @@
     </nav>
   </div>
   <div class="shadowdiv" *ngIf="webFormControlList">
-    <div class="webformheading p-3">
-      <h3 class="tx-14 mb-0 tx-spacing-1 tx-color-02 tx-semibold">Web form name: <span class="text-capitalize text-primary mr-2">{{formName}}</span> <span class="badge tx-11" [ngClass]="showFormStatus() === 'Publish' ? 'badge-primary':'badge-secondary'">{{showFormStatus() === 'Publish' ? 'Active': 'Draft'}}</span></h3>
+    <div class="webformheading p-3 d-flex">
+      <h3 class="tx-14 mb-0 tx-spacing-1 tx-color-02 tx-semibold flex-grow-1">Web form name: <span class="text-capitalize text-primary mr-2">{{formName}}</span> <span class="badge tx-11" [ngClass]="showFormStatus() === 'Publish' ? 'badge-primary':'badge-secondary'">{{showFormStatus() === 'Publish' ? 'Active': 'Draft'}}</span></h3>
+      <div class="button-wrapper" [ngClass]="{ 'min-width-75' : isWebFormPublished && isDraftWebForm, 'min-width-170': crid !== null}">
+        <button  class="btn btn-link cancel-link" style="text-transform: none;font-size: 12px;" (click)="navigateToWebForm()">Back</button>
+        <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn text-white btn-uppercase lineheight-22 btn-warning" [ngClass]="isWebFormPublished && !isEditingPublishedForm || active === 4 ? 'hide' : ''" style="text-transform: none;font-size: 12px;">
+          <i-feather class="feather-24 mr-1" name="save" ></i-feather>Save</button>
+
+        <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm text-white pd-x-15 lineheight-22 btn-primary btn-uppercase mg-l-5 ng-star-inserted"
+                
+                (click)="togglePublish()" style="text-transform: none;font-size: 12px; background-color: #607d8b;">
+          <!--i-feather *ngIf="isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable" class="feather-24" name="edit-2"></i-feather-->
+          <!-- <i-feather class="feather-24 mr-1" name="save" ></i-feather> -->
+          <i-feather *ngIf="isWebFormPublished && isEditingPublishedForm || !(isWebFormPublished && isEditingPublishedForm || isWebFormPublished)" name="upload-cloud"></i-feather>
+          {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Save':' Publish'}}</button>
+
+        <a target="_blank" *ngIf="crid !== null" role="button" (click)="previewCCPAForm()" class="btn btn-sm text-white pd-x-15 lineheight-22 btn-primary btn-uppercase mg-l-5 ng-star-inserted" style="text-transform: none;font-size: 12px;">
+          <i-feather name="file-text" class="feather-24"></i-feather>
+          Preview</a>
+      </div>
     </div>
-    <ul ngbNav #nav="ngbNav"  (navChange)="onNavChange($event)"  [(activeId)]="active" class="nav-tabs">
-      <li [ngbNavItem]="1" [destroyOnHide]="false">
-        <a ngbNavLink>1 Basic</a>
+    <div class="d-flex dsar-formwrapper">
+    <ul ngbNav #nav="ngbNav"  (navChange)="onNavChange($event)"  [(activeId)]="active" class="nav-tabs justify-content-start" orientation="vertical">
+      <li [ngbNavItem]="1" [destroyOnHide]="false" style="height: 80px">
+        <a style="height: 90px" ngbNavLink class="d-flex flex-column justify-content-center align-items-center">
+          <p class="mt-3"><i class="fas fa-user-tie fa-3x"></i></p>
+          <p>Basic</p> </a>
         <ng-template ngbNavContent>
           <form [formGroup]="basicForm">
             <div id="step-1" class="p-10 mt-2 tab-pane step-content" style="display: block;">
@@ -53,9 +73,11 @@
         </ng-template>
         <!-- End Step-1-->
       </li>
-      <li [ngbNavItem]="2" [destroyOnHide]="false">
+      <li [ngbNavItem]="2" [destroyOnHide]="false" style="height: 80px">
         <!--[disabled]="disabled"-->
-        <a ngbNavLink>2 Form</a>
+        <a  style="height: 90px" ngbNavLink class="d-flex flex-column justify-content-center align-items-center">
+         <p class="mt-3"><i class="far fa-file-alt fa-3x"></i></p> 
+         <p>Form</p> </a>
         <ng-template ngbNavContent>
           <div class="row">
             <div class="col-sm-4 form-field-section bordermargin">
@@ -469,19 +491,6 @@
                       <div class="col-sm-12 mb-1">
                         <div class="formgroup d-flex justify-content">
                           <div class="col-md-5 p-0">
-                            <label class="col-form-label-sm tx-11 tx-medium tx-spacing-1">Footer Color</label>
-                          </div>
-                          <div class="col-md-6 d-flex color-controlwrapper">
-                            <input type="color" [(ngModel)]="footerBackgroundColor" (ngModelChange)="onColorSelection($event,'footerBackgroundColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm ? '' : null" />
-                            <input type="text" class="form-control form-control-sm ml-1" (ngModelChange)="onColorSelection($event,'footerBackgroundColor')" [attr.disabled]="isWebFormPublished && !isEditingPublishedForm? '' : null"
-                                   [(ngModel)]="footerBackgroundColor" />
-                          </div>
-
-                        </div>
-                      </div>
-                      <div class="col-sm-12 mb-1">
-                        <div class="formgroup d-flex justify-content">
-                          <div class="col-md-5 p-0">
                             <label class="col-form-label-sm tx-11 tx-medium tx-spacing-1">Footer Text Color</label>
                           </div>
                           <div class="col-md-6 d-flex color-controlwrapper">
@@ -549,7 +558,7 @@
                 </div>
               </div>
 
-              <div cdkDropList [cdkDropListData]="webFormControlList" class="dsarcontrols-list"
+              <div cdkDropList [cdkDropListData]="webFormControlList" class="example-list"
                    (cdkDropListDropped)="drop($event)">
 
                 <form #registerForm="ngForm" (ngSubmit)="register(registerForm)">
@@ -858,7 +867,7 @@
                   </div>
 
                 </form>
-                <div class="quilleditor-wrapper p-0 mt-3 border-top">
+                <div class="quilleditor-wrapper py-2 border-top">
                   <div class="quilleditor" [ngStyle]="footerStyle()"
                        [innerHTML]="editorDataFooter?(editorDataFooter | safe: 'html'):footerText">
                   </div>
@@ -870,8 +879,9 @@
           </div>
         </ng-template>
       </li>
-      <li [ngbNavItem]="3" [destroyOnHide]="false">
-        <a ngbNavLink>3 Settings</a>
+      <li [ngbNavItem]="3" [destroyOnHide]="false" style="height: 90px">
+        <a style="height: 100px" ngbNavLink class="d-flex flex-column justify-content-center align-items-center">
+          <p class="mt-2"> <i class="fas fa-tools fa-3x"></i></p>Settings</a>
         <ng-template ngbNavContent>
           <div class="col-5 margin-auto">
             <form #settingsForm="ngForm">
@@ -977,15 +987,19 @@
 
         </ng-template>
       </li>
-      <li [ngbNavItem]="4" [destroyOnHide]="true">
-        <a ngbNavLink>4 System</a>
+      <li [ngbNavItem]="4" [destroyOnHide]="true" style="height: 90px">
+        <a style="height: 100px" ngbNavLink class="d-flex flex-column justify-content-center align-items-center">
+          <p class="mt-3"><i class="fas fa-desktop fa-3x"></i></p>
+          <p>System</p></a>
         <ng-template ngbNavContent>
           <app-dsar-system  [formObject]="formObject" [formID]="crid"></app-dsar-system>
         </ng-template>
       </li>
 
-      <li [ngbNavItem]="5" [destroyOnHide]="false">
-        <a ngbNavLink>5 Integrate</a>
+      <li [ngbNavItem]="5" [destroyOnHide]="false" style="height: 90px">
+        <a style="height: 100px" ngbNavLink class="d-flex flex-column justify-content-center align-items-center">
+          <p class="mt-3"><i class="fas fa-user-cog fa-3x"></i></p>
+          <p>Integrate</p></a>
         <ng-template ngbNavContent>
           <div class="publishwrapper">
             <ul ngbNav #nav="ngbNav" class="nav-tabs"
@@ -1059,30 +1073,14 @@
 
         </ng-template>
       </li>
-      <li>
-        <div class="button-wrapper" [ngClass]="{ 'min-width-75' : isWebFormPublished && isDraftWebForm, 'min-width-170': crid !== null}">
-          <button  class="btn btn-link cancel-link" style="text-transform: none;font-size: 12px;" (click)="navigateToWebForm()">Back</button>
-          <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn btn-uppercase lineheight-22 btn-outline-secondary" [ngClass]="isWebFormPublished && !isEditingPublishedForm || active === 4 ? 'hide' : ''" style="text-transform: none;font-size: 12px;">
-            <i-feather class="feather-24 mr-1" name="save" ></i-feather>Save</button>
-
-          <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm pd-x-15 lineheight-22 btn-outline-secondary btn-uppercase ml-2 mr-1"
-                  
-                  (click)="togglePublish()" style="text-transform: none;font-size: 12px;">
-            <!--i-feather *ngIf="isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable" class="feather-24" name="edit-2"></i-feather-->
-            <i-feather class="feather-24 mr-1" name="save" ></i-feather>
-            <i-feather *ngIf="isWebFormPublished && isEditingPublishedForm || !(isWebFormPublished && isEditingPublishedForm || isWebFormPublished)" name="upload-cloud"></i-feather>
-            {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Save':' Publish'}}</button>
-
-          <a target="_blank" *ngIf="crid !== null" role="button" (click)="previewCCPAForm()" class="btn btn-sm pd-x-15 txt-gray lineheight-22 btn-outline-secondary btn-uppercase mg-l-5" style="text-transform: none;font-size: 12px;">
-            <i-feather name="file-text" class="feather-24"></i-feather>
-            Preview</a>
-        </div>
-      </li>
+      
     </ul>
 
-    <div [ngbNavOutlet]="nav">
+    <div [ngbNavOutlet]="nav" class="flex-grow-1  border-left">
 
     </div>
+  </div>
+    
 
   </div>
 </div>
