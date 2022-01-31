@@ -9,6 +9,7 @@ import { LicenseguardPropertyService } from './_services/licenseguardproperty.se
 import { LicenseGuardConsentPreferenceService } from './_services/licenseguardconsentpreference.service';
 
 const routes: Routes = [
+  {path : 'share',loadChildren : () => import('./share/share.module').then(m => m.ShareModule)},
   {path : 'signout',loadChildren : () => import('./signout-page/signout-page.module').then(m => m.SignoutPageModule)},
 
   { path: 'login', loadChildren: () => import('./login/login.module').then(m => m.LoginModule) },

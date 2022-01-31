@@ -13,10 +13,16 @@
     <div class="webformheading p-3 d-flex">
       <h3 class="tx-14 mb-0 tx-spacing-1 tx-color-02 tx-semibold flex-grow-1">Web form name: <span class="text-capitalize text-primary mr-2">{{formName}}</span> <span class="badge tx-11" [ngClass]="showFormStatus() === 'Publish' ? 'badge-primary':'badge-secondary'">{{showFormStatus() === 'Publish' ? 'Active': 'Draft'}}</span></h3>
       <div class="button-wrapper" [ngClass]="{ 'min-width-75' : isWebFormPublished && isDraftWebForm, 'min-width-170': crid !== null}">
-        <button  class="btn btn-link cancel-link" style="text-transform: none;font-size: 12px;" (click)="navigateToWebForm()">Back</button>
-        <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn text-white btn-uppercase lineheight-22 btn-warning" [ngClass]="isWebFormPublished && !isEditingPublishedForm || active === 4 ? 'hide' : ''" style="text-transform: none;font-size: 12px;">
+        <button  class="btn btn-link cancel-link" style="text-trFvransform: none;font-size: 12px;" (click)="navigateToWebForm()">Back</button>
+       
+        <a target="_blank" *ngIf="crid !== null" role="button" (click)="previewCCPAForm()" class="btn btn-sm text-white pd-x-15 lineheight-22 btn-primary btn-uppercase mg-l-5 ng-star-inserted" style="text-transform: none;font-size: 12px;">
+          <i-feather name="file-text" class="feather-24"></i-feather>
+          Preview</a>
+        
+          <button (click)="addUpdateDSARForm('save')" class="btn btn-sm pd-x-15 savebtn text-white btn-uppercase lineheight-22 btn-warning" [ngClass]="isWebFormPublished && !isEditingPublishedForm || active === 4 ? 'hide' : ''" style="text-transform: none;font-size: 12px;">
           <i-feather class="feather-24 mr-1" name="save" ></i-feather>Save</button>
 
+          
         <button type="button" *ngIf="crid !== null" type="button" class="btn btn-sm text-white pd-x-15 lineheight-22 btn-primary btn-uppercase mg-l-5 ng-star-inserted"
                 
                 (click)="togglePublish()" style="text-transform: none;font-size: 12px; background-color: #607d8b;">
@@ -25,9 +31,7 @@
           <i-feather *ngIf="isWebFormPublished && isEditingPublishedForm || !(isWebFormPublished && isEditingPublishedForm || isWebFormPublished)" name="upload-cloud"></i-feather>
           {{isWebFormPublished && !isEditingPublishedForm && !isResetlinkEnable ? 'Save':' Publish'}}</button>
 
-        <a target="_blank" *ngIf="crid !== null" role="button" (click)="previewCCPAForm()" class="btn btn-sm text-white pd-x-15 lineheight-22 btn-primary btn-uppercase mg-l-5 ng-star-inserted" style="text-transform: none;font-size: 12px;">
-          <i-feather name="file-text" class="feather-24"></i-feather>
-          Preview</a>
+        
       </div>
     </div>
     <div class="d-flex dsar-formwrapper">
