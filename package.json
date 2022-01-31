@@ -40,6 +40,7 @@
     "angular2-query-builder": "^0.6.2",
     "bootstrap": "^4.4.1",
     "chart.js": "^2.9.3",
+    "classnames": "^2.3.1",
     "feather-icons": "^4.28.0",
     "ionicons": "^4.6.3",
     "jquery": "^3.5.1",
