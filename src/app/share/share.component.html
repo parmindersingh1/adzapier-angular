@@ -16,42 +16,18 @@
         [(ngModel)]="url" name="url">
       </div>
     </div>
+
+    <button class="btn  btn-success btn-sm" (click)="onUpdate()">Update</button>
+
   </div>
   </div>
   <div *ngIf="position">
-    <share-icon-component [align-icons]="position" [link]="url"></share-icon-component>
+   
   </div>
+
+  
 </div>
 
 <!--Loader-->
-<div *ngIf="publishing" class="w-100 card mt-3 publish-loader">
-  <h5 class="text-center">Creating Your Banner ...</h5>
-  <div class="loading text-center">
-    <div class="spinner-grow text-primary" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-    <div class="spinner-grow text-secondary" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-    <div class="spinner-grow text-success" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-    <div class="spinner-grow text-danger" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-    <div class="spinner-grow text-warning" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-    <div class="spinner-grow text-info" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-    <div class="spinner-grow text-light" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-    <div class="spinner-grow text-dark" role="status">
-      <span class="sr-only">Loading...</span>
-    </div>
-  </div>
-</div>
 
 

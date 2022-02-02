@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ShareIconWrapperComponent } from './share-icon-component/ShareIconWrapperComponent';
 import { ShareRoutingModule } from './share-routing.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 // import {AlertModule} from 'ngx-bootstrap';
@@ -12,7 +11,7 @@ import { ShareComponent } from './share.component'
 
 
 @NgModule({
-  declarations:[ShareIconWrapperComponent, ShareComponent],
+  declarations:[ShareComponent],
   imports: [
     CommonModule,
     ShareRoutingModule,
