@@ -4,18 +4,25 @@
 <div class="row">
   <div class="col-6 m-auto">
     <div class="text-center mt-4">
-      <button class="btn btn-primary mx-1" (click)="changeLayout('top')">Top</button>
+      <!-- <button class="btn btn-primary mx-1" (click)="changeLayout('top')">Top</button>
       <button class="btn btn-primary mx-1" (click)="changeLayout('bottom')">Bottom</button>
       <button class="btn btn-primary mx-1" (click)="changeLayout('left')">Left</button>
-      <button class="btn btn-primary mx-1" (click)="changeLayout('right')">Right</button>
+      <button class="btn btn-primary mx-1" (click)="changeLayout('right')">Right</button> -->
+      <form #f="ngForm">
+        <div class="form-group">
+          <input value="top" type="radio" name="position" [(ngModel)]="position">Top
+          <input value="bottom" type="radio" name="position" [(ngModel)]="position">Bottom
+          <input value="left" type="radio" name="position" [(ngModel)]="position">Left
+          <input value="right" type="radio" name="position" [(ngModel)]="position">Right
+        </div>
 
-      <div class="form-group">
-        <label>URL</label>
-        <input type="text" class="form-control" id="url"
-        required
-        [(ngModel)]="url" name="url">
-      </div>
-    </div>
+        <div class="form-group">
+          <label>URL</label>
+          <input type="text" class="form-control" id="url"
+          required
+          [(ngModel)]="url" name="url">
+        </div>
+      </form>
 
     <button class="btn  btn-success btn-sm" (click)="onUpdate()">Update</button>
 
